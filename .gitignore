@@ -1,0 +1,7 @@
+/bin/
+/.settings/
+/src/cloc-1.62.exe
+/src/count.bat
+
+.classpath
+.project
