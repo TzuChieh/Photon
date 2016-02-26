@@ -62,11 +62,14 @@ public class ClassicMaterialScene extends Scene
 		}
 		
 		CookTorrance triangleMatl = new CookTorrance();
-		RawModel triangleModel = new RawModel(new Triangle(new Vector3f(1.0f, -5.0f, 1.0f),
-				                                           new Vector3f(-1.0f, -5.0f, 0.0f),
-				                                           new Vector3f(1.0f, -5.0f, -1.0f)), triangleMatl);
-		triangleMatl.setRoughness(0.1f);
-		triangleMatl.setF0(0.9f, 0.9f, 0.9f);
+		RawModel triangleModel = new RawModel(new Triangle(new Vector3f(10.0f, -6.0f, 10.0f),
+				                                           new Vector3f(10.0f, -6.0f, -10.0f),
+				                                           new Vector3f(-10.0f, -6.0f, -10.0f)), triangleMatl);
+//		RawModel triangleModel = new RawModel(new Triangle(new Vector3f(1.0f, -5.0f, 1.0f),
+//                                                           new Vector3f(1.0f, -5.0f, -1.0f),
+//                                                           new Vector3f(-1.0f, -5.0f, -1.0f)), triangleMatl);
+		triangleMatl.setRoughness(0.3f);
+		triangleMatl.setF0(0.3f, 0.3f, 0.3f);
 		addModel(triangleModel);
 		
 		

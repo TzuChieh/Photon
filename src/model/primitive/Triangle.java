@@ -57,7 +57,7 @@ public class Triangle implements Primitive
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		float dist = ray.getOrigin().sub(m_vA).absDot(m_normal) / (-ray.getDir().dot(m_normal));
+		float dist = ray.getOrigin().sub(m_vA).dot(m_normal) / (-ray.getDir().dot(m_normal));
 		
 		// reject by distance
 		if(dist < EPSILON || dist > Float.MAX_VALUE || dist != dist) 
@@ -75,8 +75,8 @@ public class Triangle implements Primitive
 			// X dominant, projection plane is YZ
 			if(Math.abs(m_normal.x) > Math.abs(m_normal.z))
 			{
-				hitPu = dist * ray.getDir().y + ray.getOrigin().y;
-				hitPv = dist * ray.getDir().z + ray.getOrigin().z;
+				hitPu = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
+				hitPv = dist * ray.getDir().z + ray.getOrigin().z - m_vA.z;
 				abPu  = m_AB.y;
 				abPv  = m_AB.z;
 				acPu  = m_AC.y;
@@ -85,8 +85,8 @@ public class Triangle implements Primitive
 			// Z dominant, projection plane is XY
 			else
 			{
-				hitPu = dist * ray.getDir().x + ray.getOrigin().x;
-				hitPv = dist * ray.getDir().y + ray.getOrigin().y;
+				hitPu = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
+				hitPv = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
 				abPu  = m_AB.x;
 				abPv  = m_AB.y;
 				acPu  = m_AC.x;
@@ -96,8 +96,8 @@ public class Triangle implements Primitive
 		// Y dominant, projection plane is ZX
 		else if(Math.abs(m_normal.y) > Math.abs(m_normal.z))
 		{
-			hitPu = dist * ray.getDir().z + ray.getOrigin().z;
-			hitPv = dist * ray.getDir().x + ray.getOrigin().x;
+			hitPu = dist * ray.getDir().z + ray.getOrigin().z - m_vA.z;
+			hitPv = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
 			abPu  = m_AB.z;
 			abPv  = m_AB.x;
 			acPu  = m_AC.z;
@@ -106,8 +106,8 @@ public class Triangle implements Primitive
 		// Z dominant, projection plane is XY
 		else
 		{
-			hitPu = dist * ray.getDir().x + ray.getOrigin().x;
-			hitPv = dist * ray.getDir().y + ray.getOrigin().y;
+			hitPu = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
+			hitPv = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
 			abPu  = m_AB.x;
 			abPv  = m_AB.y;
 			acPu  = m_AC.x;
