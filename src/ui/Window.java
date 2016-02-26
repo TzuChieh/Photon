@@ -38,7 +38,7 @@ public class Window
 	
 	public Window(int widthPx, int heightPx)
 	{
-		m_frame = new JFrame("Path Tracer ver. 0.0");
+		m_frame = new JFrame("Photon ver. 0.1");
 		m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m_frame.getContentPane().setPreferredSize(new Dimension(widthPx, heightPx));
 //		m_frame.setLocationRelativeTo(null);

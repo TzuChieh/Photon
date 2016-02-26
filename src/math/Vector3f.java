@@ -80,6 +80,11 @@ public class Vector3f
 		return Math.max(x, Math.max(y, z));
 	}
 	
+	public float absMax()
+	{
+		return Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z)));
+	}
+	
 	public Vector3f max(Vector3f r)
 	{
 		return new Vector3f(Math.max(x, r.getX()), Math.max(y, r.getY()), Math.max(z, r.getZ()));

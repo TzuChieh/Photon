@@ -26,14 +26,18 @@ import main.Intersection;
 import main.Ray;
 import math.Vector3f;
 
-public class AnalyticalSphere implements Primitive
+public class Sphere implements Primitive
 {
+	// Notice that we've confirmed that radii larger than 10000 will
+	// produce floating point precision artefact on rendered surface.
+	// Radii around 1000 are fine, but no guarantee on higher values.
+	
 	private static final float EPSILON = 0.0001f;
 	
 	private Vector3f m_center;
 	private float    m_radius;
 	
-	public AnalyticalSphere(float x, float y, float z, float radius)
+	public Sphere(float x, float y, float z, float radius)
 	{
 		m_center = new Vector3f(x, y, z);
 		m_radius = radius;
@@ -76,8 +80,8 @@ public class AnalyticalSphere implements Primitive
 		{
 			D = (float)Math.sqrt(D);
 			
-//			t = (t = b - D) > EPSILON ? t : ((t = b + D) > EPSILON ? t : 0.0f);// pick closest point in front of ray origin
-			t = b - D;
+			// pick closest point in front of ray origin
+			t = (t = b - D) > EPSILON ? t : ((t = b + D) > EPSILON ? t : 0.0f);
 			
 			if(t > 0.0f)
 			{

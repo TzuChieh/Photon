@@ -50,6 +50,7 @@ public class PathTracer
 				camera.calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
 //				Vector3f accuRadiance = pathTrace(scene, ray, 10);
+//				Vector3f accuRadiance = pathTrace(scene, ray, 20);
 				Vector3f accuRadiance = pathTrace(scene, ray, Integer.MAX_VALUE);
 				
 				sampleResult.setPixelRgb(x, y, accuRadiance.x, accuRadiance.y, accuRadiance.z);

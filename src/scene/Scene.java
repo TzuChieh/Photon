@@ -59,11 +59,6 @@ public class Scene
 				
 				if(currentSquareDist < squareDist)
 				{
-					if(ray.getDir().mul(-1.0f).dot(intersection.intersectNormal) < 0.0001f)
-					{
-						continue;
-					}
-					
 					squareDist = currentSquareDist;
 					model = currentModel;
 					intersectPoint  = intersection.intersectPoint;

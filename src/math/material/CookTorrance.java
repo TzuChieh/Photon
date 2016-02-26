@@ -233,14 +233,7 @@ public final class CookTorrance implements Material
 		{
 			sampleDirResult.set(genDiffuseSampleDirIS(N, V));
 			
-			if(sampleDirResult.dot(N) < 0.0001f)
-			{
-				reflectance.set(0.0f, 0.0f, 0.0f);
-			}
-			else
-			{
-				reflectance.set(m_albedo);
-			}
+			reflectance.set(m_albedo);
 		}
 		
 		return reflectance;

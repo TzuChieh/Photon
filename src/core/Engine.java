@@ -30,7 +30,7 @@ import main.SampleManager;
 import main.TraceWorker;
 import math.material.CookTorrance;
 import model.RawModel;
-import model.primitive.AnalyticalSphere;
+import model.primitive.Sphere;
 import scene.ClassicMaterialScene;
 import scene.FiveBallsScene;
 import scene.Scene;

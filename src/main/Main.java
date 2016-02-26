@@ -27,7 +27,7 @@ import math.Rand;
 import math.Vector3f;
 import math.material.CookTorrance;
 import model.RawModel;
-import model.primitive.AnalyticalSphere;
+import model.primitive.Sphere;
 import ui.Window;
 import util.Time;
 

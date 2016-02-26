@@ -23,9 +23,11 @@
 package scene;
 
 import math.Rand;
+import math.Vector3f;
 import math.material.CookTorrance;
 import model.RawModel;
-import model.primitive.AnalyticalSphere;
+import model.primitive.Sphere;
+import model.primitive.Triangle;
 
 public class ClassicMaterialScene extends Scene
 {
@@ -50,7 +52,7 @@ public class ClassicMaterialScene extends Scene
 				material.setF0(f0, f0, f0);
 				material.setAlbedo(Rand.getFloat0_1(), Rand.getFloat0_1(), Rand.getFloat0_1());
 //				material.setAlbedo(0.9f, 0.9f, 0.9f);
-				RawModel model = new RawModel(new AnalyticalSphere(x, -6.0f, z, 0.6f), material);
+				RawModel model = new RawModel(new Sphere(x, -6.0f, z, 0.6f), material);
 				addModel(model);
 				
 				roughness -= 0.1f;
@@ -59,23 +61,32 @@ public class ClassicMaterialScene extends Scene
 			f0 -= 0.1f;
 		}
 		
-//		CookTorrance lightMaterial = new CookTorrance();
-//		RawModel lightSphere = new RawModel(new AnalyticalSphere(0.0f, -2.0f, 0.0f, 1.5f), lightMaterial);
-////		lightMaterial.setAlbedo(1.0f, 0.0f, 0.0f);
-////		lightMaterial.setEmissivity(1.5f, 1.5f, 1.5f);
-//		lightMaterial.setEmissivity(15.0f, 19.0f, 13.0f);
-////		lightMaterial.setF0(1.0f, 1.0f, 1.0f);
-////		lightMaterial.setBaseColor(0.1f, 0.1f, 0.1f);
-////		lightMaterial.setRoughness(0.2f);
-//		addModel(lightSphere);
+		CookTorrance triangleMatl = new CookTorrance();
+		RawModel triangleModel = new RawModel(new Triangle(new Vector3f(1.0f, -5.0f, 1.0f),
+				                                           new Vector3f(-1.0f, -5.0f, 0.0f),
+				                                           new Vector3f(1.0f, -5.0f, -1.0f)), triangleMatl);
+		triangleMatl.setRoughness(0.1f);
+		triangleMatl.setF0(0.9f, 0.9f, 0.9f);
+		addModel(triangleModel);
+		
+		
+		CookTorrance lightMaterial = new CookTorrance();
+		RawModel lightSphere = new RawModel(new Sphere(0.0f, -2.0f, 0.0f, 1.5f), lightMaterial);
+//		lightMaterial.setAlbedo(1.0f, 0.0f, 0.0f);
+//		lightMaterial.setEmissivity(1.5f, 1.5f, 1.5f);
+		lightMaterial.setEmissivity(15.0f, 19.0f, 13.0f);
+//		lightMaterial.setF0(1.0f, 1.0f, 1.0f);
+//		lightMaterial.setBaseColor(0.1f, 0.1f, 0.1f);
+//		lightMaterial.setRoughness(0.2f);
+		addModel(lightSphere);
 		
 		// construct Cornell box
 		
-		float wallR = 10000.0f;
+		float wallR = 1000.0f;
 		float halfSize = 10.0f;
 		
 		CookTorrance leftWallMatl = new CookTorrance();
-		RawModel leftWall = new RawModel(new AnalyticalSphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
+		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
 		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
@@ -85,15 +96,15 @@ public class ClassicMaterialScene extends Scene
 		addModel(leftWall);
 		
 		CookTorrance rightWallMatl = new CookTorrance();
-		RawModel rightWall = new RawModel(new AnalyticalSphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
+		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
 		rightWallMatl.setAlbedo(0.0f, 0.0f, 1.0f);
-		rightWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
+//		rightWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		rightWallMatl.setF0(1.0f, 1.0f, 1.0f);
 		rightWallMatl.setRoughness(0.2f);
 		addModel(rightWall);
 		
 		CookTorrance backWallMatl = new CookTorrance();
-		RawModel backWall = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -wallR - halfSize, wallR), backWallMatl);
+		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize, wallR), backWallMatl);
 		backWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
 //		backWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -101,7 +112,7 @@ public class ClassicMaterialScene extends Scene
 		addModel(backWall);
 		
 		CookTorrance groundWallMatl = new CookTorrance();
-		RawModel groundWall = new RawModel(new AnalyticalSphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
+		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
 		groundWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
 //		groundWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -109,7 +120,7 @@ public class ClassicMaterialScene extends Scene
 		addModel(groundWall);
 		
 		CookTorrance topWallMatl = new CookTorrance();
-		RawModel topWall = new RawModel(new AnalyticalSphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
+		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
 		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
 //		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
@@ -117,7 +128,7 @@ public class ClassicMaterialScene extends Scene
 		addModel(topWall);
 		
 		CookTorrance frontWallMatl = new CookTorrance();
-		RawModel frontWall = new RawModel(new AnalyticalSphere(0.0f, 0.0f, wallR + halfSize, wallR), frontWallMatl);
+		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + halfSize, wallR), frontWallMatl);
 		frontWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setRoughness(0.0f);
