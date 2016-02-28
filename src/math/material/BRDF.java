@@ -107,39 +107,88 @@ public final class BRDF
 			                                      Vector3f N, Vector3f V, Vector3f L, Vector3f H,
                                                   float roughness, Vector3f inRadiance)
 	{
+		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
+		
+		
 		float NoV = Func.clamp(N.dot(V), 0.0f, 1.0f);
 		float NoL = Func.clamp(N.dot(L), 0.0f, 1.0f);
 		float VoH = Func.clamp(V.dot(H), 0.0f, 1.0f);
-		float LoH = Func.clamp(L.dot(H), 0.0f, 1.0f);
 		float HoN = Func.clamp(H.dot(N), 0.0f, 1.0f);
+		float HoL = Func.clamp(H.dot(L), 0.0f, 1.0f);
 		
 //		float NoV = N.dot(V);
 //		float NoL = N.dot(L);
 //		float VoH = V.dot(H);
-//		float LoH = L.dot(H);
 //		float HoN = H.dot(N);
 		
-		Vector3f F = new Vector3f(fresnelTerm);
-		float    G = G_CookTorrance(HoN, VoH, NoV, LoH, NoL, roughness);
+		// Fresnel: Schlick approximated
+//		Vector3f F = m_f0.complement().mulLocal((float)Math.pow(1.0f - VoH, 5)).addLocal(m_f0);
+		float randomProb = Rand.getFloat0_1();
+//		float Ks = F.avg();
 		
-		// why +0.05? to prevent divide by 0?
-//		float denominator = Func.clamp(4 * (NoV * HoN + 0.00001f), 0.0f, 1.0f);
-//		float denominator = 4 * (NoV + 0.0001f);
-//		float denominator = 4 * (NoV * HoN + 0.0001f);
-		float denominator = (float)(4.0f * 3.14159265f * roughness*roughness * Math.pow(HoN, 4.0f)) * NoV + 0.0001f;
-//		float denominator = 3.14159265f * NoV * HoN + 0.0001f;
-//		float denominator = (float)(3.14159265f * roughness*roughness * Math.pow(HoN, 4.0f)* NoV) * 4 * (NoV * HoN) + 0.0001f;
+		// as specular lighting (reflected)
+//		if(randomProb < Ks)
+		{
+//			sampleDirResult.set(L);
+			
+			// Geometry Shadowing: Cook-Torrance
+			float g1 = 2.0f * HoN * NoV / (VoH + 0.0001f);
+			float g2 = 2.0f * HoN * NoL / (VoH + 0.0001f);
+			float G = Math.min(1.0f, Math.min(g1, g2));
+			
+			
+			// Geometry visibility test
+//			boolean v1 = VoH * NoV < 0.0001f;
+//			boolean v2 = HoL * NoL < 0.0001f;
+//			
+//			G *= !v1 && !v2 ? 1.0f : 0.0f;
+			
+			// GGX Smith
+//			float factor1 = VoH/NoV > 0.0f ? 1.0f : 0.0f;
+//			float VoH2 = VoH*VoH;
+//			float tan2_1 = (1.0f - VoH2) / VoH2;
+//			float partialG1 = (factor1 * 2.0f) / (1.0f + (float)Math.sqrt(1 + m_roughness*m_roughness*tan2_1));
+//			float factor2 = HoL/NoL > 0.0f ? 1.0f : 0.0f;
+//			float LoH2 = HoL*HoL;
+//			float tan2_2 = (1.0f - LoH2) / LoH2;
+//			float partialG2 = (factor2 * 2.0f) / (1.0f + (float)Math.sqrt(1 + m_roughness*m_roughness*tan2_2));
+//			float G = partialG1 * partialG2;
+			
+			
+			// GGX Smith approximated (relative error less than 0.35%)
+//			float c1 = NoV / (m_roughness * (float)Math.sqrt(1.0f - NoV*NoV));
+//			float c2 = NoL / (m_roughness * (float)Math.sqrt(1.0f - NoL*NoL));
+//			c1 = c1 < 1.6f ? (3.535f*c1 + 2.181f*c1*c1)/(1.0f + 2.276f*c1 + 2.577f*c1*c1) : 1.0f;
+//			c2 = c2 < 1.6f ? (3.535f*c2 + 2.181f*c2*c2)/(1.0f + 2.276f*c2 + 2.577f*c2*c2) : 1.0f;
+//			float sign = VoH / NoV > 0.0f ? 1.0f : 0.0f;
+//			float G = sign * c1 * c2;
+			
+			float denominator = NoV * HoN;
+			float constTerm = G * HoL / denominator;
+			
+			
+//			if(denominator < 0.0001f)
+			if(constTerm != constTerm || constTerm == Float.POSITIVE_INFINITY || constTerm < 0.0f)
+			{
+				reflectance.set(0.0f, 0.0f, 0.0f);
+			}
+			else
+			{
+//				reflectance.set(F.mul(constTerm));
+			}
+		}
+		// as diffuse lighting (Kd)
+//		else
+		{
+			// if is transparent >> transmitted
+			// else assume diffused
+			
+//			sampleDirResult.set(genDiffuseSampleDirIS(N, V));
+			
+//			reflectance.set(m_albedo);
+		}
 		
-//		System.out.println(denominator);
-		
-		
-//		Vector3f outRadiance = new Vector3f(F.mulLocal(G * (float)Math.sqrt(1.0f - NoL*NoL) / denominator));
-		Vector3f outRadiance = new Vector3f(F.mulLocal(G / denominator)).clampLocal(0.0f, 1.0f);
-//		Vector3f outRadiance = new Vector3f(F.mulLocal(G * (float)Math.sqrt(1.0f - HoN*HoN) / denominator)).clampLocal(0.0f, 1.0f);
-		outRadiance.mulLocal(inRadiance);
-		
-		return outRadiance;
-//		return Func.min(outRadiance, inRadiance);
+		return reflectance;
 	}
 	
 	public static Vector3f cookTorranceSpecular(Vector3f fresnelTerm,

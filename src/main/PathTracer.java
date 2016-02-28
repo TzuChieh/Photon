@@ -49,82 +49,39 @@ public class PathTracer
 //				camera.calcRayFromPixel(ray, widthPx, heightPx, x, y);
 				camera.calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
-//				Vector3f accuRadiance = pathTrace(scene, ray, 10);
-//				Vector3f accuRadiance = pathTrace(scene, ray, 20);
-				Vector3f accuRadiance = pathTrace(scene, ray, Integer.MAX_VALUE);
 				
-				sampleResult.setPixelRgb(x, y, accuRadiance.x, accuRadiance.y, accuRadiance.z);
+				pathTraceIterative(scene, ray, Integer.MAX_VALUE);
+				sampleResult.setPixelRgb(x, y, ray.getRadiance().x, ray.getRadiance().y, ray.getRadiance().z);
 			}
 		}
 	}
 	
-	private Vector3f pathTrace(Scene scene, Ray ray, int numBounces)
+	private void pathTraceIterative(Scene scene, final Ray ray, int numBounces)
 	{
-		Vector3f accuRadiance = new Vector3f(0.0f, 0.0f, 0.0f);
-		
-		if(numBounces == -1)
+		for(int nBounce = 0; nBounce <= numBounces; nBounce++)
 		{
-			return accuRadiance;
-		}
-		
-		Intersection intersection = new Intersection();
-		
-		// FIXME: front facing normal
-		// FIXME: PureEmissive
-		
-		if(scene.findClosestIntersection(ray, intersection))
-		{
-			Material material = intersection.model.getMaterial();
+			Intersection intersection = new Intersection();
 			
-			if(material.getEmissivity().x != 0.0f)
+			// FIXME: front facing normal
+			// FIXME: PureEmissive
+			
+			if(scene.findClosestIntersection(ray, intersection))
 			{
-//				float weight = intersection.intersectNormal.dot(ray.getDir().mul(-1.0f));
+				Material material = intersection.model.getMaterial();
+				Vector3f N        = new Vector3f(intersection.intersectNormal);
 				
-				return accuRadiance.addLocal(material.getEmissivity());
-			}
-			
-			Vector3f N = new Vector3f(intersection.intersectNormal);
-			Vector3f V = ray.getDir().mul(-1.0f);
-			
-			
-			Vector3f sampleDirResult = new Vector3f();
-			
-			Vector3f reflectance = material.calcReflectance(N, V, sampleDirResult);
-			
-			float rrSurviveProb = Func.clamp(reflectance.avg(), 0.0f, 1.0f);
-//			float rrSurviveProb = 0.5f;
-			float rrScale = 1.0f / (rrSurviveProb + 0.00001f);
-			float rrSpin = Rand.getFloat0_1();
-			
-			// russian roulette >> dead
-			if(rrSpin > rrSurviveProb)
-			{
-				return new Vector3f(0.0f, 0.0f, 0.0f);
+				if(!material.sample(N, ray))
+				{
+					return;
+				}
+				
+				// offset a little to prevent self intersection artefact
+				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.intersectPoint));
 			}
 			else
 			{
-				reflectance.mulLocal(rrScale);
+				return;
 			}
-			
-//			if(reflectance.x > 2.0f || reflectance.y > 2.0f || reflectance.z > 2.0f)
-//			{
-//				System.out.println("reflectance wow");
-//			}
-			
-			ray.setDir(sampleDirResult);
-			
-			// offset a little to prevent self intersection artefact
-//			ray.setOrigin(N.mul(0.001f).addLocal(intersection.intersectPoint));
-			
-			ray.setOrigin(intersection.intersectPoint);
-			
-			Vector3f inRadiance = pathTrace(scene, ray, numBounces - 1);
-			Vector3f outRadiance = inRadiance.mul(reflectance);
-			
-			accuRadiance.addLocal(outRadiance);
-			return accuRadiance;
 		}
-		
-		return accuRadiance;
 	}
 }

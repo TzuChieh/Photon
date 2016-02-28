@@ -22,15 +22,10 @@
 
 package math.material;
 
+import main.Ray;
 import math.Vector3f;
 
 public interface Material
 {
-	public abstract Vector3f genDiffuseSampleDirIS(Vector3f N, Vector3f V);
-	public abstract Vector3f genSpecularSampleDirIS(Vector3f N, Vector3f V);
-	public abstract Vector3f calcReflectance(Vector3f N, Vector3f V, Vector3f sampleDirResult);
-	public abstract Vector3f getAlbedo();
-	public abstract Vector3f getEmissivity();
-	public abstract Vector3f getF0();
-	public abstract float getRoughness();
+	public abstract boolean sample(Vector3f N, Ray ray);
 }

@@ -38,7 +38,7 @@ public class FiveBallsScene extends Scene
 //		camera.setDir(0.3f, -0.0f, -1.0f);
 //		camera.setPos(-4.5f, 0.03f, 5.01f);
 		
-		float wallR = 10000.0f;
+		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
 		CookTorrance sphere1Matl = new CookTorrance();

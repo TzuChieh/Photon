@@ -28,17 +28,20 @@ public class Ray
 {
 	private Vector3f m_origin;
 	private Vector3f m_dir;
+	private Vector3f m_radiance;
+	private Vector3f m_weight;
 	
 	public Ray(Vector3f origin, Vector3f dir)
 	{
-		m_origin = new Vector3f(origin);
-		m_dir    = new Vector3f(dir);
+		m_origin   = new Vector3f(origin);
+		m_dir      = new Vector3f(dir);
+		m_radiance = new Vector3f(0.0f, 0.0f, 0.0f);
+		m_weight   = new Vector3f(1.0f, 1.0f, 1.0f);
 	}
 	
 	public Ray()
 	{
-		m_origin = new Vector3f(0.0f, 0.0f, 0.0f);
-		m_dir    = new Vector3f(0.0f, 0.0f, -1.0f);
+		this(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 0.0f, -1.0f));
 	}
 	
 	public Vector3f getOrigin()
@@ -51,14 +54,14 @@ public class Ray
 		return m_dir;
 	}
 	
-	public void setOrigin(Vector3f origin)
+	public Vector3f getRadiance()
 	{
-		m_origin.set(origin);
+		return m_radiance;
 	}
 	
-	public void setDir(Vector3f dir)
+	public Vector3f getWeight()
 	{
-		m_dir.set(dir).normalizeLocal();
+		return m_weight;
 	}
 	
 	@Override

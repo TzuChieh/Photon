@@ -37,8 +37,11 @@ public class Main
 	{
 		float a = 1.0f / 0.0f;
 		float b = 1.0f / 0.0f;
-		System.out.println(a * 0.0f);
+//		System.out.println(a * 0.0f);
 		
+//		System.out.println(Rand.getFloat0_1());
+//		System.out.println(Rand.getFloat0_1());
+//		System.out.println(Rand.getFloat0_1());
 		
 		Engine engine = new Engine();
 		

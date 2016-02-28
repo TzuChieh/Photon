@@ -79,8 +79,8 @@ public class Camera
 		rightDir.mulLocal(pixelPosX);
 		upDir.mulLocal(pixelPosY);
 		
-		ray.setDir(m_dir.add(rightDir.addLocal(upDir)).normalizeLocal());
-		ray.setOrigin(m_pos);
+		ray.getDir().set(m_dir.add(rightDir.addLocal(upDir)).normalizeLocal());
+		ray.getOrigin().set(m_pos);
 	}
 	
 	public void calcRayFromPixelDistributed(Ray ray, int xRes, int yRes, int xPx, int yPx)
@@ -102,7 +102,7 @@ public class Camera
 		rightDir.mulLocal(pixelPosX);
 		upDir.mulLocal(pixelPosY);
 		
-		ray.setDir(m_dir.add(rightDir.addLocal(upDir)).normalizeLocal());
-		ray.setOrigin(m_pos);
+		ray.getDir().set(m_dir.add(rightDir.addLocal(upDir)).normalizeLocal());
+		ray.getOrigin().set(m_pos);
 	}
 }
