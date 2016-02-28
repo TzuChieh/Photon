@@ -76,7 +76,7 @@ public final class CookTorrance implements Material
 			add(v.mulLocal(elevation)).normalizeLocal();
 	}
 
-	private Vector3f genSpecularSampleDirIS(Vector3f N, Vector3f V)
+	private Vector3f genMicrofacetNormalIS(Vector3f N, Vector3f V)
 	{
 		float rand1 = Rand.getFloat0_1();
 		float rand2 = Rand.getFloat0_1();
@@ -108,8 +108,9 @@ public final class CookTorrance implements Material
 		sampleDirGlobal.addLocal(v.mulLocal(sampleDirLocal.y));
 		sampleDirGlobal.addLocal(w.mulLocal(sampleDirLocal.z));
 		
-		Vector3f reflectionDir = V.mul(-1.0f).reflectLocal(sampleDirGlobal).normalizeLocal();
-		return reflectionDir;
+//		Vector3f reflectionDir = V.mul(-1.0f).reflectLocal(sampleDirGlobal).normalizeLocal();
+//		return reflectionDir;
+		return sampleDirGlobal.normalizeLocal();
 	}
 	
 	@Override
@@ -125,8 +126,8 @@ public final class CookTorrance implements Material
 		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
 		
 		Vector3f V = ray.getDir().mul(-1.0f);
-		Vector3f L = genSpecularSampleDirIS(N, V);
-		Vector3f H = V.add(L).normalizeLocal();
+		Vector3f H = genMicrofacetNormalIS(N, V);
+		Vector3f L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
 		
 		float NoV = Func.clamp(N.dot(V), 0.0f, 1.0f);
 		float NoL = Func.clamp(N.dot(L), 0.0f, 1.0f);
@@ -136,12 +137,15 @@ public final class CookTorrance implements Material
 		
 		// Fresnel: Schlick approximated
 		Vector3f F = m_f0.complement().mulLocal((float)Math.pow(1.0f - VoH, 5)).addLocal(m_f0);
-		float randomProb = Rand.getFloat0_1();
-		float Ks = F.avg();
+		float pathProb = Rand.getFloat0_1();
+		float reflectionProb = F.avg() + 0.00001f;
 		
 		// as specular lighting (reflected)
-		if(randomProb < Ks)
+		if(pathProb < reflectionProb)
 		{
+			// account for probability
+			F.divLocal(reflectionProb);
+			
 			// Geometry Shadowing: Cook-Torrance
 			float g1 = 2.0f * HoN * NoV / (VoH);
 			float g2 = 2.0f * HoN * NoL / (VoH);
@@ -173,7 +177,12 @@ public final class CookTorrance implements Material
 			{
 				L = genDiffuseSampleDirIS(N, V);
 				
-				reflectance.set(m_albedo);
+				Vector3f diffuseReflectivity = F.complement();
+				
+				// account for probability
+				diffuseReflectivity.divLocal(1.0f - reflectionProb);
+				
+				reflectance.set(diffuseReflectivity.mulLocal(m_albedo));
 			}
 		}
 		
