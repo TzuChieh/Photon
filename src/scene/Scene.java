@@ -25,6 +25,7 @@ package scene;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Camera;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
@@ -33,10 +34,12 @@ import model.Model;
 public class Scene
 {
 	private List<Model> m_models;
+	private Camera      m_camera;
 	
 	public Scene()
 	{
 		m_models = new ArrayList<>();
+		m_camera = new Camera();
 	}
 	
 	public void addModel(Model model)
@@ -76,5 +79,10 @@ public class Scene
 		}
 		
 		return false;
+	}
+	
+	public Camera getCamera()
+	{
+		return m_camera;
 	}
 }

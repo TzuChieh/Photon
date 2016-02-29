@@ -25,7 +25,7 @@ package main;
 import core.Engine;
 import math.Rand;
 import math.Vector3f;
-import math.material.CookTorrance;
+import math.material.AbradedOpaque;
 import model.RawModel;
 import model.primitive.Sphere;
 import ui.Window;

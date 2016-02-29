@@ -22,9 +22,11 @@
 
 package scene;
 
+import main.Camera;
 import math.Rand;
 import math.Vector3f;
-import math.material.CookTorrance;
+import math.material.AbradedOpaque;
+import math.material.AbradedTranslucent;
 import model.RawModel;
 import model.primitive.Sphere;
 import model.primitive.Triangle;
@@ -34,6 +36,11 @@ public class ClassicMaterialScene extends Scene
 	public ClassicMaterialScene()
 	{
 		super();
+		
+		Camera camera = getCamera();
+		camera.setPos(-5.07f, 7.03f, 9.91f);
+		camera.setDir(0.2f, -1.5f, -1.0f);
+//		camera.setPos(-4.5f, 0.03f, 5.01f);
 		
 		float roughness;
 		float f0;
@@ -46,7 +53,7 @@ public class ClassicMaterialScene extends Scene
 			
 			for(float z = -7; z < 7; z += 1.4f)
 			{
-				CookTorrance material = new CookTorrance();
+				AbradedOpaque material = new AbradedOpaque();
 //				material.setRoughness(roughness);
 				material.setRoughness(roughness * roughness);
 				material.setF0(f0, f0, f0);
@@ -72,9 +79,24 @@ public class ClassicMaterialScene extends Scene
 //		triangleMatl.setF0(0.3f, 0.3f, 0.3f);
 //		addModel(triangleModel);
 		
+		AbradedTranslucent sphere4Matl = new AbradedTranslucent();
+		RawModel sphere4 = new RawModel(new Sphere(-5.0f, -2.0f, 1.5f, 2.0f), sphere4Matl);
+//		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
+//		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
+//		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
+//		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
+		sphere4Matl.setRoughness(0.0f);
+		sphere4Matl.setIor(1.55f);
+//		sphere4Matl.setF0(0.0f, 0.0f, 0.0f);
+//		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
+//		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
+//		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
+//		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
+		addModel(sphere4);
 		
-		CookTorrance lightMaterial = new CookTorrance();
-		RawModel lightSphere = new RawModel(new Sphere(0.0f, -2.0f, 0.0f, 1.5f), lightMaterial);
+		
+		AbradedOpaque lightMaterial = new AbradedOpaque();
+		RawModel lightSphere = new RawModel(new Sphere(0.0f, -1.0f, 0.0f, 1.5f), lightMaterial);
 //		lightMaterial.setAlbedo(1.0f, 0.0f, 0.0f);
 //		lightMaterial.setEmissivity(1.5f, 1.5f, 1.5f);
 		lightMaterial.setEmissivity(15.0f, 19.0f, 13.0f);
@@ -88,9 +110,9 @@ public class ClassicMaterialScene extends Scene
 		float wallR = 1000.0f;
 		float halfSize = 10.0f;
 		
-		CookTorrance leftWallMatl = new CookTorrance();
+		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
-		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
+		leftWallMatl.setAlbedo(1.0f, 0.5f, 0.5f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		leftWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -98,7 +120,7 @@ public class ClassicMaterialScene extends Scene
 		leftWallMatl.setRoughness(0.2f);
 		addModel(leftWall);
 		
-		CookTorrance rightWallMatl = new CookTorrance();
+		AbradedOpaque rightWallMatl = new AbradedOpaque();
 		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
 		rightWallMatl.setAlbedo(0.0f, 0.0f, 1.0f);
 //		rightWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
@@ -106,7 +128,7 @@ public class ClassicMaterialScene extends Scene
 		rightWallMatl.setRoughness(0.2f);
 		addModel(rightWall);
 		
-		CookTorrance backWallMatl = new CookTorrance();
+		AbradedOpaque backWallMatl = new AbradedOpaque();
 		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize, wallR), backWallMatl);
 		backWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
@@ -114,7 +136,7 @@ public class ClassicMaterialScene extends Scene
 //		backWallMatl.setRoughness(0.1f);
 		addModel(backWall);
 		
-		CookTorrance groundWallMatl = new CookTorrance();
+		AbradedOpaque groundWallMatl = new AbradedOpaque();
 		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
 		groundWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
@@ -122,7 +144,7 @@ public class ClassicMaterialScene extends Scene
 //		groundWallMatl.setRoughness(0.2f);
 		addModel(groundWall);
 		
-		CookTorrance topWallMatl = new CookTorrance();
+		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
 		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
@@ -130,7 +152,7 @@ public class ClassicMaterialScene extends Scene
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 		addModel(topWall);
 		
-		CookTorrance frontWallMatl = new CookTorrance();
+		AbradedOpaque frontWallMatl = new AbradedOpaque();
 		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + halfSize, wallR), frontWallMatl);
 		frontWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);

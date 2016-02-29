@@ -28,7 +28,7 @@ import main.PathTracer;
 import main.Ray;
 import main.SampleManager;
 import main.TraceWorker;
-import math.material.CookTorrance;
+import math.material.AbradedOpaque;
 import model.RawModel;
 import model.primitive.Sphere;
 import scene.ClassicMaterialScene;
@@ -53,7 +53,6 @@ public class Engine
 	private Window window;
 	private Frame frame;
 	private Scene scene;
-	private Camera camera;
 	
 	private SampleManager sampleManager;
 	
@@ -66,51 +65,36 @@ public class Engine
 		
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
-		// FiveBallsScene
-//		camera = new Camera();
-////		camera.setPos(0.07f, 0.03f, 5.01f);
-//		camera.setDir(0.3f, -0.0f, -1.0f);
-//		camera.setPos(-4.5f, 0.03f, 5.01f);
 		
-		// ClassicMaterialScene
-		camera = new Camera();
-		camera.setPos(-5.07f, 7.03f, 9.91f);
-		camera.setDir(0.4f, -1.5f, -1.0f);
-//		camera.setPos(-4.5f, 0.03f, 5.01f);
-		
-//		scene = new FiveBallsScene();
-		scene = new ClassicMaterialScene();
+		scene = new FiveBallsScene();
+//		scene = new ClassicMaterialScene();
 		
 		
-		
-		
-		
-		
-		Runnable tracer1 = new TraceWorker(scene, camera, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		Runnable tracer1 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		Thread tread1 = new Thread(tracer1);
 		tread1.start();
 		
 		Util.threadSleep(100);
 		
-		Runnable tracer2 = new TraceWorker(scene, camera, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		Runnable tracer2 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		Thread tread2 = new Thread(tracer2);
 		tread2.start();
 		
 		Util.threadSleep(100);
 		
-		Runnable tracer3 = new TraceWorker(scene, camera, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		Runnable tracer3 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		Thread tread3 = new Thread(tracer3);
 		tread3.start();
 		
 		Util.threadSleep(100);
 		
-		Runnable tracer4 = new TraceWorker(scene, camera, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		Runnable tracer4 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		Thread tread4 = new Thread(tracer4);
 		tread4.start();
 		
 		Util.threadSleep(100);
 		
-//		Runnable tracer5 = new TraceWorker(scene, camera, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+//		Runnable tracer5 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 //		Thread tread5 = new Thread(tracer5);
 //		tread5.start();
 //		

@@ -27,16 +27,14 @@ import scene.Scene;
 public class TraceWorker implements Runnable
 {
 	private Scene m_scene;
-	private Camera m_camera;
 	private SampleManager m_sampleManager;
 	
 	private PathTracer m_pathTracer;
 	private Frame m_sampleResult;
 	
-	public TraceWorker(Scene scene, Camera camera, SampleManager sampleManager, int xRes, int yRes)
+	public TraceWorker(Scene scene, SampleManager sampleManager, int xRes, int yRes)
 	{
 		m_scene = scene;
-		m_camera = camera;
 		m_sampleManager = sampleManager;
 		
 		m_pathTracer = new PathTracer();
@@ -48,7 +46,7 @@ public class TraceWorker implements Runnable
 	{
 		while(true)
 		{
-			m_pathTracer.trace(m_scene, m_camera, m_sampleResult);
+			m_pathTracer.trace(m_scene, m_sampleResult);
 			m_sampleManager.addSample(m_sampleResult);
 		}
 	}

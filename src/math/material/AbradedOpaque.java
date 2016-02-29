@@ -27,15 +27,16 @@ import math.Rand;
 import math.Vector3f;
 import util.Func;
 
-public final class CookTorrance implements Material
+public final class AbradedOpaque implements Material
 {
 	// All input vectors are expected to be normalized.
 	//
 	// N:  surface normal
 	// L:  direction to light
 	// V:  direction from incident point to the viewer
-	// L:  direction to incoming light
+	// L:  direction toward incoming light
 	// H:  normalize(V + L)
+	// T:  direction toward transmitted light
 	// F0: reflectivity at normal incidence
 	// o:  vector dot
 	
@@ -44,9 +45,7 @@ public final class CookTorrance implements Material
 	private Vector3f m_albedo;
 	private Vector3f m_emissivity;
 	
-	private boolean m_isTranslucent;
-	
-	public CookTorrance()
+	public AbradedOpaque()
 	{
 		m_roughness = 0.5f;
 		
@@ -55,8 +54,6 @@ public final class CookTorrance implements Material
 		
 		m_albedo = new Vector3f(0.0f, 0.0f, 0.0f);
 		m_emissivity = new Vector3f(0.0f, 0.0f, 0.0f);
-		
-		m_isTranslucent = false;
 	}
 	
 	private Vector3f genDiffuseSampleDirIS(Vector3f N, Vector3f V)
@@ -140,7 +137,7 @@ public final class CookTorrance implements Material
 		float pathProb = Rand.getFloat0_1();
 		float reflectionProb = F.avg() + 0.00001f;
 		
-		// as specular lighting (reflected)
+		// as specular (Ks)
 		if(pathProb < reflectionProb)
 		{
 			// account for probability
@@ -160,30 +157,17 @@ public final class CookTorrance implements Material
 				reflectance.set(F.mul(constTerm));
 			}
 		}
-		// as diffuse lighting (Kd)
+		// if the object is opaque, assume the resting energy is diffused (Kd)
 		else
 		{
-			// if is transparent >> transmitted
-			// else assume diffused
+			L = genDiffuseSampleDirIS(N, V);
 			
-			// if the object is translucent, calculate transmission effects
-			if(m_isTranslucent)
-			{
-				
-			}
-			// if the object is opaque (or its transparency is low enough to be considered as opaque), we
-			// assume the resting energy is diffused
-			else
-			{
-				L = genDiffuseSampleDirIS(N, V);
-				
-				Vector3f diffuseReflectivity = F.complement();
-				
-				// account for probability
-				diffuseReflectivity.divLocal(1.0f - reflectionProb);
-				
-				reflectance.set(diffuseReflectivity.mulLocal(m_albedo));
-			}
+			Vector3f diffuseReflectivity = F.complement();
+			
+			// account for probability
+			diffuseReflectivity.divLocal(1.0f - reflectionProb);
+			
+			reflectance.set(diffuseReflectivity.mulLocal(m_albedo));
 		}
 		
 		float rrSurviveProb = Func.clamp(reflectance.avg(), 0.0f, 1.0f);

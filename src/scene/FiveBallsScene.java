@@ -23,7 +23,8 @@
 package scene;
 
 import main.Camera;
-import math.material.CookTorrance;
+import math.material.AbradedOpaque;
+import math.material.AbradedTranslucent;
 import model.RawModel;
 import model.primitive.Sphere;
 
@@ -33,49 +34,51 @@ public class FiveBallsScene extends Scene
 	{
 		super();
 		
-//		camera = new Camera();
-////		camera.setPos(0.07f, 0.03f, 5.01f);
-//		camera.setDir(0.3f, -0.0f, -1.0f);
-//		camera.setPos(-4.5f, 0.03f, 5.01f);
+		Camera camera = getCamera();
+//		camera.setPos(0.07f, 0.03f, 5.01f);
+		camera.setDir(0.3f, -0.0f, -1.0f);
+		camera.setPos(-4.5f, 0.03f, 5.01f);
 		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
-		CookTorrance sphere1Matl = new CookTorrance();
+		AbradedOpaque sphere1Matl = new AbradedOpaque();
 		RawModel sphere1 = new RawModel(new Sphere(-halfSize + 0.25f, -halfSize + 0.25f, -10.0f, 0.25f), sphere1Matl);
 		sphere1Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 		sphere1Matl.setRoughness(0.0f);
 		sphere1Matl.setF0(1.0f, 1.0f, 1.0f);
 		addModel(sphere1);
 		
-		CookTorrance sphere2Matl = new CookTorrance();
+		AbradedOpaque sphere2Matl = new AbradedOpaque();
 		RawModel sphere2 = new RawModel(new Sphere(-halfSize + 1.5f, -halfSize + 0.5f, -10.0f, 0.5f), sphere2Matl);
 		sphere2Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 		sphere2Matl.setRoughness(0.0f);
 		sphere2Matl.setF0(1.0f, 1.0f, 1.0f);
 		addModel(sphere2);
 		
-		CookTorrance sphere3Matl = new CookTorrance();
+		AbradedOpaque sphere3Matl = new AbradedOpaque();
 		RawModel sphere3 = new RawModel(new Sphere(-halfSize + 4.0f, -halfSize + 1.0f, -10.0f, 1.0f), sphere3Matl);
 		sphere3Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 		sphere3Matl.setRoughness(0.0f);
 		sphere3Matl.setF0(1.0f, 1.0f, 1.0f);
 		addModel(sphere3);
 		
-		CookTorrance sphere4Matl = new CookTorrance();
-		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 7.0f, 3.0f), sphere4Matl);
+		AbradedTranslucent sphere4Matl = new AbradedTranslucent();
+		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 7.0f + 5.0f, 3.0f), sphere4Matl);
 //		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
 //		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
 //		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
 //		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
 		sphere4Matl.setRoughness(0.0f);
+		sphere4Matl.setIor(1.55f);
+		sphere4Matl.setF0(0.0f, 0.0f, 0.0f);
 //		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
 //		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
 //		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
 //		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
 		addModel(sphere4);
 		
-		CookTorrance sphere5Matl = new CookTorrance();
+		AbradedOpaque sphere5Matl = new AbradedOpaque();
 		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
 		sphere5Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 		sphere5Matl.setRoughness(0.0f);
@@ -88,7 +91,7 @@ public class FiveBallsScene extends Scene
 //		scene.addModel(whiteSphereLight);
 		
 		
-		CookTorrance leftWallMatl = new CookTorrance();
+		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
 		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
@@ -98,14 +101,15 @@ public class FiveBallsScene extends Scene
 		leftWallMatl.setRoughness(0.2f);
 		addModel(leftWall);
 		
-		CookTorrance rightWallMatl = new CookTorrance();
+		AbradedOpaque rightWallMatl = new AbradedOpaque();
 		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
 		rightWallMatl.setAlbedo(0.0f, 0.0f, 1.0f);
+//		rightWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		rightWallMatl.setF0(1.0f, 1.0f, 1.0f);
 		rightWallMatl.setRoughness(0.2f);
 		addModel(rightWall);
 		
-		CookTorrance backWallMatl = new CookTorrance();
+		AbradedOpaque backWallMatl = new AbradedOpaque();
 		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize - 10.0f, wallR), backWallMatl);
 		backWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
@@ -113,7 +117,7 @@ public class FiveBallsScene extends Scene
 //		backWallMatl.setRoughness(0.1f);
 		addModel(backWall);
 		
-		CookTorrance groundWallMatl = new CookTorrance();
+		AbradedOpaque groundWallMatl = new AbradedOpaque();
 		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
 		groundWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
@@ -121,7 +125,7 @@ public class FiveBallsScene extends Scene
 //		groundWallMatl.setRoughness(0.2f);
 		addModel(groundWall);
 		
-		CookTorrance topWallMatl = new CookTorrance();
+		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
 		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
@@ -129,7 +133,7 @@ public class FiveBallsScene extends Scene
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 		addModel(topWall);
 		
-		CookTorrance frontWallMatl = new CookTorrance();
+		AbradedOpaque frontWallMatl = new AbradedOpaque();
 		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + 5.5f, wallR), frontWallMatl);
 		frontWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);

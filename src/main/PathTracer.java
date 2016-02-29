@@ -36,7 +36,7 @@ public class PathTracer
 		
 	}
 	
-	public void trace(Scene scene, Camera camera, Frame sampleResult)
+	public void trace(Scene scene, Frame sampleResult)
 	{
 		int widthPx  = sampleResult.getWidthPx();
 		int heightPx = sampleResult.getHeightPx();
@@ -47,7 +47,7 @@ public class PathTracer
 			{
 				Ray ray = new Ray();
 //				camera.calcRayFromPixel(ray, widthPx, heightPx, x, y);
-				camera.calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
+				scene.getCamera().calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
 				
 				pathTraceIterative(scene, ray, Integer.MAX_VALUE);
