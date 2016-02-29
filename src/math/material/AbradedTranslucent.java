@@ -115,74 +115,101 @@ public final class AbradedTranslucent implements Material
 		
 		Vector3f V = ray.getDir().mul(-1.0f);
 		
-		if(N.dot(V) < 0.0f)
+		boolean isBackFaceIncident = V.dot(N) < 0.0f;
+		
+		// make N and V on the same hemisphere
+		if(isBackFaceIncident)
 		{
 			N.mulLocal(-1.0f);
 		}
 		
 		Vector3f H = genMicrofacetNormalIS(N, V);
-		Vector3f L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
+		Vector3f L;
 		
-		float signedHoV = H.dot(V);
-		float iorRatio = signedHoV < 0.0f ? m_ior / 1.0f : 1.0f / m_ior;
-		float sqrValue = 1.0f - iorRatio*iorRatio*(1.0f - signedHoV*signedHoV);
 		
-		// TIR (total internal reflection)
-		if(sqrValue < 0.0f)
+		
+		float VoH = Func.clamp(V.dot(H), 0.0f, 1.0f);
+		
+		// Fresnel: Schlick approximated
+		Vector3f F = m_f0.complement().mulLocal((float)Math.pow(1.0f - VoH, 5)).addLocal(m_f0);
+		float pathProb = Rand.getFloat0_1();
+		float reflectionProb = F.avg() + 0.00001f;
+		
+		// as reflection (Ks)
+		if(pathProb < reflectionProb)
 		{
-			Vector3f T = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
-			L.set(T);
-			reflectance.set(0.9f, 0.9f, 0.9f);
+			L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
+			
+			float NoV = Func.clamp(N.dot(V), 0.0f, 1.0f);
+			float NoL = Func.clamp(N.dot(L), 0.0f, 1.0f);
+			float HoN = Func.clamp(H.dot(N), 0.0f, 1.0f);
+			float HoL = Func.clamp(H.dot(L), 0.0f, 1.0f);
+			
+			// account for probability
+			F.divLocal(reflectionProb);
+			
+			// Geometry Shadowing: Cook-Torrance
+			float g1 = 2.0f * HoN * NoV / (VoH);
+			float g2 = 2.0f * HoN * NoL / (VoH);
+			float G = Math.min(1.0f, Math.min(g1, g2));
+			
+			float denominator = NoV * HoN;
+			float constTerm = G * HoL / denominator;
+			
+			// check for NaN and assume no crazy sample weight 
+			if(constTerm < 10000.0f)
+			{
+				reflectance.set(F.mul(constTerm));
+			}
 		}
-		// reflect or refract
+		// as refraction (Kr)
 		else
 		{
-			// Fresnel: Schlick approximated
-			Vector3f F = m_f0.complement().mulLocal((float)Math.pow(1.0f - V.absDot(H), 5)).addLocal(m_f0);
-			float pathProb = Rand.getFloat0_1();
-			float reflectionProb = F.avg() + 0.00001f;
+			float HoV = H.dot(V);
 			
-			// as reflection (Ks)
-			if(pathProb < reflectionProb)
+			// assume the outside medium has an IOR of 1.0 (which is true in most cases)
+			float iorRatio = isBackFaceIncident ? m_ior / 1.0f : 1.0f / m_ior;
+			float sqrValue = 1.0f - iorRatio*iorRatio*(1.0f - HoV*HoV);
+			
+			Vector3f T;
+			
+			// TIR (total internal reflection)
+			if(sqrValue < 0.0f)
 			{
-				float NoV = Func.clamp(N.dot(V), 0.0f, 1.0f);
-				float NoL = Func.clamp(N.dot(L), 0.0f, 1.0f);
-				float VoH = Func.clamp(V.dot(H), 0.0f, 1.0f);
-				float HoN = Func.clamp(H.dot(N), 0.0f, 1.0f);
-				float HoL = Func.clamp(H.dot(L), 0.0f, 1.0f);
+				T = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
 				
-				// account for probability
-				F.divLocal(reflectionProb);
-				
-				// Geometry Shadowing: Cook-Torrance
-				float g1 = 2.0f * HoN * NoV / (VoH);
-				float g2 = 2.0f * HoN * NoL / (VoH);
-				float G = Math.min(1.0f, Math.min(g1, g2));
-				
-				float denominator = NoV * HoN;
-				float constTerm = G * HoL / denominator;
-				
-				// check for NaN and assume no crazy sample weight 
-				if(constTerm < 10000.0f)
-				{
-					reflectance.set(F.mul(constTerm));
-				}
+//				System.out.println("TIR");
 			}
-			// as refraction (Kr)
+			// refraction
 			else
 			{
-				float Hfactor =  iorRatio*signedHoV - (float)Math.sqrt(sqrValue);
+				float Hfactor =  iorRatio*HoV - (float)Math.sqrt(sqrValue);
 				float Vfactor = -iorRatio;
-				Vector3f T = H.mul(Hfactor).addLocal(V.mul(Vfactor)).normalizeLocal();
-				L.set(T);
-				reflectance.set(0.9f, 0.9f, 0.9f);
-				
-				if(T.dot(N) > 0.1f)
-				{
-					System.out.println(T.dot(N));
-				}
-//	
-//				System.out.println("HI");
+				T = H.mul(Hfactor).addLocal(V.mul(Vfactor)).normalizeLocal();
+			}
+			
+			L = new Vector3f(T);
+			
+			// account for probability
+			Vector3f refractivity = F.complement().divLocal(1.0f - reflectionProb);
+			
+			float NoV = N.absDot(V);
+			float NoL = N.absDot(L);
+			float HoN = H.absDot(N);
+			float HoL = H.absDot(L);
+			
+			// Geometry Shadowing: Cook-Torrance
+			float g1 = 2.0f * HoN * NoV / (VoH);
+			float g2 = 2.0f * HoN * NoL / (VoH);
+			float G = Math.min(1.0f, Math.min(g1, g2));
+			
+			float denominator = NoV * HoN;
+			float constTerm = G * HoL / denominator;
+			
+			// check for NaN and assume no crazy sample weight 
+			if(constTerm < 10000.0f)
+			{
+				reflectance.set(refractivity.mul(constTerm));
 			}
 		}
 		

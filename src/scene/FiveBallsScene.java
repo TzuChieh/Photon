@@ -78,12 +78,12 @@ public class FiveBallsScene extends Scene
 //		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
 		addModel(sphere4);
 		
-		AbradedOpaque sphere5Matl = new AbradedOpaque();
-		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
-		sphere5Matl.setAlbedo(0.0f, 1.0f, 0.0f);
-		sphere5Matl.setRoughness(0.0f);
-		sphere5Matl.setF0(1.0f, 1.0f, 1.0f);
-		addModel(sphere5);
+//		AbradedOpaque sphere5Matl = new AbradedOpaque();
+//		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
+//		sphere5Matl.setAlbedo(0.0f, 1.0f, 0.0f);
+//		sphere5Matl.setRoughness(0.0f);
+//		sphere5Matl.setF0(1.0f, 1.0f, 1.0f);
+//		addModel(sphere5);
 		
 //		RawModel whiteSphereLight = new RawModel(new AnalyticalSphere(1.0f, 1.0f, -10.0f, 0.5f));
 //		whiteSphereLight.getMaterial().setBaseColor(1.0f, 1.0f, 1.0f);
