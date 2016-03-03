@@ -49,7 +49,7 @@ public class PathTracer
 //				camera.calcRayFromPixel(ray, widthPx, heightPx, x, y);
 				scene.getCamera().calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
-				
+//				pathTraceIterative(scene, ray, 10);
 				pathTraceIterative(scene, ray, Integer.MAX_VALUE);
 				sampleResult.setPixelRgb(x, y, ray.getRadiance().x, ray.getRadiance().y, ray.getRadiance().z);
 			}

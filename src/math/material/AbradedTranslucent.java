@@ -55,23 +55,6 @@ public final class AbradedTranslucent implements Material
 		m_albedo = new Vector3f(0.0f, 0.0f, 0.0f);
 		m_ior = 1.0f;
 	}
-	
-	private Vector3f genDiffuseSampleDirIS(Vector3f N, Vector3f V)
-	{
-		float phi       = Rand.getFloat0_1() * 2.0f * 3.14159265f;
-		float elevation = (float)Math.sqrt(Rand.getFloat0_1());
-		float planeR    = (float)Math.sqrt(1.0f - elevation*elevation);
-		
-		Vector3f u = new Vector3f();
-		Vector3f v = new Vector3f(N);
-		Vector3f w = new Vector3f();
-		
-		v.calcOrthBasisAsYaxis(u, w);
-		
-		return  u.mulLocal((float)Math.cos(phi) * planeR).
-			add(w.mulLocal((float)Math.sin(phi) * planeR)).
-			add(v.mulLocal(elevation)).normalizeLocal();
-	}
 
 	private Vector3f genMicrofacetNormalIS(Vector3f N, Vector3f V)
 	{
@@ -111,65 +94,37 @@ public final class AbradedTranslucent implements Material
 	@Override
 	public boolean sample(Vector3f N, Ray ray)
 	{
-		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
-		
 		Vector3f V = ray.getDir().mul(-1.0f);
-		
-		boolean isBackFaceIncident = V.dot(N) < 0.0f;
-		
-		// make N and V on the same hemisphere
-		if(isBackFaceIncident)
-		{
-			N.mulLocal(-1.0f);
-		}
-		
 		Vector3f H = genMicrofacetNormalIS(N, V);
-		Vector3f L;
+		Vector3f L = new Vector3f();
 		
-		
-		
-		float VoH = Func.clamp(V.dot(H), 0.0f, 1.0f);
+		float VoH = V.dot(H);
+		float NoV = N.dot(V);
+		float HoN = H.dot(N);
 		
 		// Fresnel: Schlick approximated
-		Vector3f F = m_f0.complement().mulLocal((float)Math.pow(1.0f - VoH, 5)).addLocal(m_f0);
+		Vector3f reflectivity = m_f0.complement().mulLocal((float)Math.pow(1.0f - Math.abs(VoH), 5)).addLocal(m_f0);
 		float pathProb = Rand.getFloat0_1();
-		float reflectionProb = F.avg() + 0.00001f;
+		float reflectionProb = reflectivity.avg() + 0.00001f;
+		
+		Vector3f BSDF;
 		
 		// as reflection (Ks)
 		if(pathProb < reflectionProb)
 		{
 			L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
 			
-			float NoV = Func.clamp(N.dot(V), 0.0f, 1.0f);
-			float NoL = Func.clamp(N.dot(L), 0.0f, 1.0f);
-			float HoN = Func.clamp(H.dot(N), 0.0f, 1.0f);
-			float HoL = Func.clamp(H.dot(L), 0.0f, 1.0f);
-			
 			// account for probability
-			F.divLocal(reflectionProb);
-			
-			// Geometry Shadowing: Cook-Torrance
-			float g1 = 2.0f * HoN * NoV / (VoH);
-			float g2 = 2.0f * HoN * NoL / (VoH);
-			float G = Math.min(1.0f, Math.min(g1, g2));
-			
-			float denominator = NoV * HoN;
-			float constTerm = G * HoL / denominator;
-			
-			// check for NaN and assume no crazy sample weight 
-			if(constTerm < 10000.0f)
-			{
-				reflectance.set(F.mul(constTerm));
-			}
+			BSDF = reflectivity.div(reflectionProb);
 		}
 		// as refraction (Kr)
 		else
 		{
-			float HoV = H.dot(V);
+			float signNoV = NoV < 0.0f ? -1.0f : 1.0f;
 			
 			// assume the outside medium has an IOR of 1.0 (which is true in most cases)
-			float iorRatio = isBackFaceIncident ? m_ior / 1.0f : 1.0f / m_ior;
-			float sqrValue = 1.0f - iorRatio*iorRatio*(1.0f - HoV*HoV);
+			float iorRatio = signNoV < 0.0f ? m_ior / 1.0f : 1.0f / m_ior;
+			float sqrValue = 1.0f - iorRatio*iorRatio*(1.0f - VoH*VoH);
 			
 			Vector3f T;
 			
@@ -177,13 +132,11 @@ public final class AbradedTranslucent implements Material
 			if(sqrValue < 0.0f)
 			{
 				T = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
-				
-//				System.out.println("TIR");
 			}
 			// refraction
 			else
 			{
-				float Hfactor =  iorRatio*HoV - (float)Math.sqrt(sqrValue);
+				float Hfactor =  iorRatio*VoH - signNoV * (float)Math.sqrt(sqrValue);
 				float Vfactor = -iorRatio;
 				T = H.mul(Hfactor).addLocal(V.mul(Vfactor)).normalizeLocal();
 			}
@@ -191,29 +144,38 @@ public final class AbradedTranslucent implements Material
 			L = new Vector3f(T);
 			
 			// account for probability
-			Vector3f refractivity = F.complement().divLocal(1.0f - reflectionProb);
-			
-			float NoV = N.absDot(V);
-			float NoL = N.absDot(L);
-			float HoN = H.absDot(N);
-			float HoL = H.absDot(L);
-			
-			// Geometry Shadowing: Cook-Torrance
-			float g1 = 2.0f * HoN * NoV / (VoH);
-			float g2 = 2.0f * HoN * NoL / (VoH);
-			float G = Math.min(1.0f, Math.min(g1, g2));
-			
-			float denominator = NoV * HoN;
-			float constTerm = G * HoL / denominator;
-			
-			// check for NaN and assume no crazy sample weight 
-			if(constTerm < 10000.0f)
-			{
-				reflectance.set(refractivity.mul(constTerm));
-			}
+			BSDF = reflectivity.complement().divLocal(1.0f - reflectionProb);
 		}
 		
-		float rrSurviveProb = Func.clamp(reflectance.avg(), 0.0f, 1.0f);
+		float NoL = N.dot(L);
+		float HoL = H.dot(L);
+		
+		float absNoV = Math.abs(NoV);
+		float absHoN = Math.abs(HoN);
+		float absHoL = Math.abs(HoL);
+		float absNoL = Math.abs(NoL);
+		float absVoH = Math.abs(VoH);
+		
+		// Geometry Shadowing: Cook-Torrance
+		float g1 = 2.0f * absHoN * absNoV / absVoH;
+		float g2 = 2.0f * absHoN * absNoL / absVoH;
+		float G = Math.min(1.0f, Math.min(g1, g2));
+		
+		// Geometry visibility test
+		boolean v1 = VoH / NoV > 0.0f;
+		boolean v2 = HoL / NoL > 0.0f;
+		G *= v1 && v2 ? 1.0f : 0.0f;
+		
+		float denominator = absNoV * absHoN;
+		float constTerm = G * absHoL / denominator;
+		
+		// check for NaN and assume no crazy sample weight 
+		if(constTerm < 10000.0f)
+		{
+			BSDF.mulLocal(constTerm);
+		}
+		
+		float rrSurviveProb = Func.clamp(BSDF.avg(), 0.0f, 1.0f);
 		float rrScale = 1.0f / (rrSurviveProb + 0.00001f);
 		float rrSpin = Rand.getFloat0_1();
 		
@@ -225,8 +187,8 @@ public final class AbradedTranslucent implements Material
 		// russian roulette >> alive
 		else
 		{
-			reflectance.mulLocal(rrScale);
-			ray.getWeight().mulLocal(reflectance);
+			BSDF.mulLocal(rrScale);
+			ray.getWeight().mulLocal(BSDF);
 			ray.getDir().set(L);
 			
 			return true;
