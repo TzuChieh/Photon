@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import main.Intersection;
 import main.Ray;
+import math.Vector3f;
 
 public class TriangleMesh implements Primitive
 {
@@ -39,7 +40,38 @@ public class TriangleMesh implements Primitive
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		// TODO Auto-generated method stub
+		float closestSquareDist = Float.MAX_VALUE;
+		Vector3f closestHitPoint = null;
+		Vector3f closestHitNormal = null;
+		
+		for(Triangle triangle : m_triangles)
+		{
+			intersection.intersectPoint = null;
+			intersection.intersectNormal = null;
+			
+			triangle.isIntersect(ray, intersection);
+			
+			if(intersection.intersectPoint != null)
+			{
+				float squareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
+				
+				if(squareDist < closestSquareDist)
+				{
+					closestSquareDist = squareDist;
+					closestHitPoint = intersection.intersectPoint;
+					closestHitNormal = intersection.intersectNormal;
+				}
+			}
+		}
+		
+		if(closestHitPoint != null)
+		{
+			intersection.intersectPoint = closestHitPoint;
+			intersection.intersectNormal = closestHitNormal;
+			
+			return true;
+		}
+		
 		return false;
 	}
 	

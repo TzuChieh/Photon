@@ -54,6 +54,7 @@ public class Triangle implements Primitive
 	// Reference: Ingo Wald's PhD paper "Real Time Ray Tracing and Interactive Global Illumination".
 	// This implementation is twice as fast as Moeller-Trumbore's method (stated by others, haven't profiled
 	// that myself).
+	// FIXME: implement the 2x faster algorithm!
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{

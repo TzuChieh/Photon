@@ -22,28 +22,45 @@
 
 package model.obj;
 
+import math.Vector3f;
+import math.material.AbradedOpaque;
 import math.material.Material;
 import model.Model;
 import model.primitive.Primitive;
+import model.primitive.Triangle;
+import model.primitive.TriangleMesh;
 
 public class ObjModel implements Model
 {
-	public ObjModel()
+	private TriangleMesh m_triangleMesh;
+	private Material     m_defaultMaterial;
+	
+	public ObjModel(String fullFilename)
 	{
+		m_triangleMesh = new TriangleMesh();
+		m_defaultMaterial = new AbradedOpaque();
 		
+		IndexedMesh indexedMesh = new ObjParser(fullFilename).toIndexedMesh();
+		
+		for(int i = 0; i < indexedMesh.getIndices().size(); i += 3)
+		{
+			Vector3f posA = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i));
+			Vector3f posB = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 1));
+			Vector3f posC = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 2));
+			
+			m_triangleMesh.addTriangle(new Triangle(posA, posB, posC));
+		}
 	}
 	
 	@Override
 	public Primitive getPrimitive()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return m_triangleMesh;
 	}
 
 	@Override
 	public Material getMaterial()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return m_defaultMaterial;
 	}
 }

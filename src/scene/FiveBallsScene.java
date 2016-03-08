@@ -26,6 +26,7 @@ import main.Camera;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
 import model.RawModel;
+import model.obj.ObjModel;
 import model.primitive.Sphere;
 
 public class FiveBallsScene extends Scene
@@ -36,47 +37,51 @@ public class FiveBallsScene extends Scene
 		
 		Camera camera = getCamera();
 //		camera.setPos(0.07f, 0.03f, 5.01f);
-		camera.setDir(0.3f, -0.0f, -1.0f);
-		camera.setPos(-4.5f, 0.03f, 5.01f);
+//		camera.setDir(0.3f, -0.0f, -1.0f);
+//		camera.setPos(-4.5f, 0.03f, 5.01f);
+		camera.setPos(0.07f, 0.03f, 4.95f);
 		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
-		AbradedOpaque sphere1Matl = new AbradedOpaque();
-		RawModel sphere1 = new RawModel(new Sphere(-halfSize + 0.25f, -halfSize + 0.25f, -10.0f, 0.25f), sphere1Matl);
-		sphere1Matl.setAlbedo(0.0f, 1.0f, 0.0f);
-		sphere1Matl.setRoughness(0.0f);
-		sphere1Matl.setF0(1.0f, 1.0f, 1.0f);
-		addModel(sphere1);
+		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
+		addModel(bunnyModel);
 		
-		AbradedOpaque sphere2Matl = new AbradedOpaque();
-		RawModel sphere2 = new RawModel(new Sphere(-halfSize + 1.5f, -halfSize + 0.5f, -10.0f, 0.5f), sphere2Matl);
-		sphere2Matl.setAlbedo(0.0f, 1.0f, 0.0f);
-		sphere2Matl.setRoughness(0.0f);
-		sphere2Matl.setF0(1.0f, 1.0f, 1.0f);
-		addModel(sphere2);
-		
-		AbradedOpaque sphere3Matl = new AbradedOpaque();
-		RawModel sphere3 = new RawModel(new Sphere(-halfSize + 4.0f, -halfSize + 1.0f, -10.0f, 1.0f), sphere3Matl);
-		sphere3Matl.setAlbedo(0.0f, 1.0f, 0.0f);
-		sphere3Matl.setRoughness(0.0f);
-		sphere3Matl.setF0(1.0f, 1.0f, 1.0f);
-		addModel(sphere3);
-		
-		AbradedTranslucent sphere4Matl = new AbradedTranslucent();
-		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 7.0f + 5.0f, 3.0f), sphere4Matl);
-//		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
-//		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
-//		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
-//		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
-		sphere4Matl.setRoughness(0.0f);
-		sphere4Matl.setIor(1.55f);
-		sphere4Matl.setF0(0.0f, 0.0f, 0.0f);
-//		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
-//		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
-//		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
-//		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
-		addModel(sphere4);
+//		AbradedOpaque sphere1Matl = new AbradedOpaque();
+//		RawModel sphere1 = new RawModel(new Sphere(-halfSize + 0.25f, -halfSize + 0.25f, -10.0f, 0.25f), sphere1Matl);
+//		sphere1Matl.setAlbedo(0.0f, 1.0f, 0.0f);
+//		sphere1Matl.setRoughness(0.0f);
+//		sphere1Matl.setF0(1.0f, 1.0f, 1.0f);
+//		addModel(sphere1);
+//		
+//		AbradedOpaque sphere2Matl = new AbradedOpaque();
+//		RawModel sphere2 = new RawModel(new Sphere(-halfSize + 1.5f, -halfSize + 0.5f, -10.0f, 0.5f), sphere2Matl);
+//		sphere2Matl.setAlbedo(0.0f, 1.0f, 0.0f);
+//		sphere2Matl.setRoughness(0.0f);
+//		sphere2Matl.setF0(1.0f, 1.0f, 1.0f);
+//		addModel(sphere2);
+//		
+//		AbradedOpaque sphere3Matl = new AbradedOpaque();
+//		RawModel sphere3 = new RawModel(new Sphere(-halfSize + 4.0f, -halfSize + 1.0f, -10.0f, 1.0f), sphere3Matl);
+//		sphere3Matl.setAlbedo(0.0f, 1.0f, 0.0f);
+//		sphere3Matl.setRoughness(0.0f);
+//		sphere3Matl.setF0(1.0f, 1.0f, 1.0f);
+//		addModel(sphere3);
+//		
+//		AbradedTranslucent sphere4Matl = new AbradedTranslucent();
+//		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 7.0f + 5.0f, 3.0f), sphere4Matl);
+////		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
+////		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
+////		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
+////		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
+//		sphere4Matl.setRoughness(0.0f);
+//		sphere4Matl.setIor(1.55f);
+//		sphere4Matl.setF0(0.0f, 0.0f, 0.0f);
+////		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
+////		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
+////		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
+////		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
+//		addModel(sphere4);
 		
 //		AbradedOpaque sphere5Matl = new AbradedOpaque();
 //		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
