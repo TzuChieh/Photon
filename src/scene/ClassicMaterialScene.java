@@ -53,7 +53,9 @@ public class ClassicMaterialScene extends Scene
 			
 			for(float z = -7; z < 7; z += 1.4f)
 			{
-				AbradedOpaque material = new AbradedOpaque();
+//				AbradedOpaque material = new AbradedOpaque();
+				AbradedTranslucent material = new AbradedTranslucent();
+				material.setIor(1.5f);
 //				material.setRoughness(roughness);
 				material.setRoughness(roughness * roughness);
 				material.setF0(f0, f0, f0);
@@ -112,7 +114,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
-		leftWallMatl.setAlbedo(1.0f, 0.5f, 0.5f);
+		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		leftWallMatl.setF0(1.0f, 1.0f, 1.0f);

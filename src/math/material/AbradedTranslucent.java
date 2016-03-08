@@ -68,7 +68,6 @@ public final class AbradedTranslucent implements Material
 		float roughness = (1.2f - 0.2f * (float)Math.sqrt(V.absDot(N))) * m_roughness;
 		float theta    = (float)Math.atan(Math.sqrt(-(roughness*roughness) * Math.log(1.0f - rand2)));
 		
-		
 		float cosTheta = (float)Math.cos(theta);
 		float sinTheta = (float)Math.sin(theta);
 		
@@ -170,7 +169,7 @@ public final class AbradedTranslucent implements Material
 		float constTerm = G * absHoL / denominator;
 		
 		// check for NaN and assume no crazy sample weight 
-		if(constTerm < 10000.0f)
+		if(constTerm < 100.0f)
 		{
 			BSDF.mulLocal(constTerm);
 		}

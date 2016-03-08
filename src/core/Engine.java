@@ -43,11 +43,11 @@ public class Engine
 //	private static final int FRAME_WIDTH_PX  = 1366;
 //	private static final int FRAME_HEIGHT_PX = 768;
 	
-	private static final int FRAME_WIDTH_PX  = 800;
-	private static final int FRAME_HEIGHT_PX = 500;
+//	private static final int FRAME_WIDTH_PX  = 800;
+//	private static final int FRAME_HEIGHT_PX = 500;
 	
-//	private static final int FRAME_WIDTH_PX  = 1280;
-//	private static final int FRAME_HEIGHT_PX = 800;
+	private static final int FRAME_WIDTH_PX  = 1280;
+	private static final int FRAME_HEIGHT_PX = 800;
 	
 	private PathTracer tracer;
 	private Window window;
@@ -66,8 +66,8 @@ public class Engine
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		
-		scene = new FiveBallsScene();
-//		scene = new ClassicMaterialScene();
+//		scene = new FiveBallsScene();
+		scene = new ClassicMaterialScene();
 		
 		
 		Runnable tracer1 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);

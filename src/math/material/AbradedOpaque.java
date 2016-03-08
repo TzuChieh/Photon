@@ -152,7 +152,7 @@ public final class AbradedOpaque implements Material
 			float constTerm = G * HoL / denominator;
 			
 			// check for NaN and assume no crazy sample weight 
-			if(constTerm < 10000.0f)
+			if(constTerm < 100.0f)
 			{
 				reflectance.set(F.mul(constTerm));
 			}
