@@ -11,14 +11,14 @@ import util.IOUtil;
 import util.Logger;
 import util.StringUtil;
 
-public class OBJParser 
+public class ObjParser 
 {
 	private String m_fullFileName;
 	
 	private List<Vector3f> positions;
 	private List<Vector2f> texCoords;
 	private List<Vector3f> normals;
-	private List<OBJIndex> objIndices;
+	private List<ObjIndex> objIndices;
 	
 //	private List<List<Vector2i>> m_mtlIndexPairs;
 //	private List<Vector2i>       m_currentIndexPairs;
@@ -31,7 +31,7 @@ public class OBJParser
 	
 	private Logger m_logger;
 	
-	public OBJParser(String fullFileName)
+	public ObjParser(String fullFileName)
 	{
 		m_logger = new Logger("OBJ Model Loading: " + fullFileName);
 		
@@ -171,10 +171,10 @@ public class OBJParser
 				                 Float.valueOf(rawZ)));
 	}
 	
-	private OBJIndex parseOBJIndex(String rawVertexIndices)
+	private ObjIndex parseOBJIndex(String rawVertexIndices)
 	{
 		String[] indicesData = rawVertexIndices.split("/");
-		OBJIndex result      = new OBJIndex();
+		ObjIndex result      = new ObjIndex();
 		
 		// OpenGL starts counting from 0 while obj is from 1, so we subtract it by 1
 		result.positionIndex = Integer.parseInt(indicesData[0]) - 1;
@@ -261,14 +261,14 @@ public class OBJParser
 	{
 		IndexedMesh indexedMesh = new IndexedMesh();
 		
-		Map<OBJIndex, Integer> objIndexMap      = new HashMap<>();
+		Map<ObjIndex, Integer> objIndexMap      = new HashMap<>();
 		Map<Vector3f, Integer> positionIndexMap = new HashMap<>();
 		
 		int objIndicesSize = objIndices.size();
 		
 		for(int i = 0; i < objIndicesSize; i++)
 		{
-			OBJIndex currentOBJIndex = objIndices.get(i);
+			ObjIndex currentOBJIndex = objIndices.get(i);
 			
 			Vector3f currentPosition = positions.get(currentOBJIndex.positionIndex);
 			Vector2f currentTexCoord;

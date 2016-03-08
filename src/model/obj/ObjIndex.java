@@ -1,6 +1,6 @@
 package model.obj;
 
-public class OBJIndex
+public class ObjIndex
 {
 	public int positionIndex;
 	public int texCoordIndex;
@@ -9,7 +9,7 @@ public class OBJIndex
 	@Override
 	public boolean equals(Object obj)
 	{
-		OBJIndex index = (OBJIndex)obj;
+		ObjIndex index = (ObjIndex)obj;
 
 		return positionIndex == index.positionIndex &&
 			   texCoordIndex == index.texCoordIndex &&
