@@ -66,8 +66,8 @@ public class Engine
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		
-//		scene = new FiveBallsScene();
-		scene = new ClassicMaterialScene();
+		scene = new FiveBallsScene();
+//		scene = new ClassicMaterialScene();
 		
 		
 		Runnable tracer1 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
