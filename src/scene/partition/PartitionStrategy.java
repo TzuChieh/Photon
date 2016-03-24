@@ -20,16 +20,12 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.primitive;
+package scene.partition;
 
-import main.Intersection;
 import main.Ray;
-import math.Vector3f;
-import model.bounding.AABB;
+import model.primitive.Primitive;
 
-public interface Primitive
+public interface PartitionStrategy
 {
-	public abstract boolean isIntersect(Ray ray, Intersection intersection);
-	
-	public abstract boolean isIntersect(AABB aabb);
+	public abstract Primitive findClosestPrimitive(Ray ray);
 }

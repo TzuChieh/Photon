@@ -20,16 +20,23 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.primitive;
+package scene.partition.kdtree;
 
-import main.Intersection;
 import main.Ray;
-import math.Vector3f;
-import model.bounding.AABB;
+import model.primitive.Primitive;
+import scene.partition.PartitionStrategy;
 
-public interface Primitive
+public class KdTree implements PartitionStrategy
 {
-	public abstract boolean isIntersect(Ray ray, Intersection intersection);
+	public KdTree()
+	{
+		
+	}
 	
-	public abstract boolean isIntersect(AABB aabb);
+	@Override
+	public Primitive findClosestPrimitive(Ray ray)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

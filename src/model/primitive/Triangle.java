@@ -25,6 +25,7 @@ package model.primitive;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
+import model.bounding.AABB;
 
 public class Triangle implements Primitive
 {
@@ -132,5 +133,12 @@ public class Triangle implements Primitive
 		intersection.intersectNormal = new Vector3f(m_normal);
 		
 		return true;
+	}
+
+	@Override
+	public boolean isIntersect(AABB aabb)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

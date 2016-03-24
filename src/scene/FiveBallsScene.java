@@ -38,13 +38,18 @@ public class FiveBallsScene extends Scene
 		Camera camera = getCamera();
 //		camera.setPos(0.07f, 0.03f, 5.01f);
 //		camera.setDir(0.3f, -0.0f, -1.0f);
-//		camera.setPos(-4.5f, 0.03f, 5.01f);
-		camera.setPos(0.07f, 0.03f, 4.95f);
+		camera.setPos(-1.5f, 2.43f, 4.01f);
+//		camera.setPos(0.07f, 0.03f, 4.95f);
+		camera.setDir(0.2f, -0.25f, -1.0f);
 		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
-		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/venusm_low_poly.obj");
+		ObjModel bunnyModel = new ObjModel("./resource/model/icosphere.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
 		addModel(bunnyModel);
 		
 //		AbradedOpaque sphere1Matl = new AbradedOpaque();

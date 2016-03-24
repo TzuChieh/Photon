@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
+import model.bounding.AABB;
 
 public class TriangleMesh implements Primitive
 {
@@ -78,5 +79,12 @@ public class TriangleMesh implements Primitive
 	public void addTriangle(Triangle triangle)
 	{
 		m_triangles.add(triangle);
+	}
+
+	@Override
+	public boolean isIntersect(AABB aabb)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

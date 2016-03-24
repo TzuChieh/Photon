@@ -22,6 +22,7 @@
 
 package model;
 
+import math.Transform;
 import math.material.Material;
 import model.primitive.Primitive;
 
@@ -29,4 +30,5 @@ public interface Model
 {
 	public abstract Primitive getPrimitive();
 	public abstract Material  getMaterial();
+	public abstract Transform getTransform();
 }

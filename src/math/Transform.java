@@ -20,16 +20,12 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.primitive;
+package math;
 
-import main.Intersection;
-import main.Ray;
-import math.Vector3f;
-import model.bounding.AABB;
-
-public interface Primitive
+public class Transform
 {
-	public abstract boolean isIntersect(Ray ray, Intersection intersection);
-	
-	public abstract boolean isIntersect(AABB aabb);
+	public Transform()
+	{
+		
+	}
 }

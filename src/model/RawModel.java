@@ -22,6 +22,7 @@
 
 package model;
 
+import math.Transform;
 import math.material.Material;
 import model.primitive.Primitive;
 
@@ -46,5 +47,12 @@ public class RawModel implements Model
 	public Material getMaterial()
 	{
 		return m_material;
+	}
+
+	@Override
+	public Transform getTransform()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

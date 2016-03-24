@@ -20,16 +20,27 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.primitive;
+package model.bounding;
 
-import main.Intersection;
 import main.Ray;
 import math.Vector3f;
-import model.bounding.AABB;
 
-public interface Primitive
+public class AABB implements BoundingVolume
 {
-	public abstract boolean isIntersect(Ray ray, Intersection intersection);
+	private Vector3f m_minVertex;
+	private Vector3f m_maxVertex;
 	
-	public abstract boolean isIntersect(AABB aabb);
+	public AABB(Vector3f minVertex, Vector3f maxVertex)
+	{
+		m_minVertex = new Vector3f(minVertex);
+		m_maxVertex = new Vector3f(maxVertex);
+	}
+	
+	@Override
+	public boolean isIntersect(Ray ray)
+	{
+		// TODO
+		
+		return false;
+	}
 }

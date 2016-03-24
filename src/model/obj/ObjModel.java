@@ -22,8 +22,10 @@
 
 package model.obj;
 
+import math.Transform;
 import math.Vector3f;
 import math.material.AbradedOpaque;
+import math.material.AbradedTranslucent;
 import math.material.Material;
 import model.Model;
 import model.primitive.Primitive;
@@ -38,7 +40,11 @@ public class ObjModel implements Model
 	public ObjModel(String fullFilename)
 	{
 		m_triangleMesh = new TriangleMesh();
-		m_defaultMaterial = new AbradedOpaque();
+//		m_defaultMaterial = new AbradedOpaque();
+		AbradedTranslucent matl = new AbradedTranslucent();
+		m_defaultMaterial = matl;
+		matl.setIor(1.5f);
+		matl.setRoughness(0.0f);
 		
 		IndexedMesh indexedMesh = new ObjParser(fullFilename).toIndexedMesh();
 		
@@ -62,5 +68,12 @@ public class ObjModel implements Model
 	public Material getMaterial()
 	{
 		return m_defaultMaterial;
+	}
+
+	@Override
+	public Transform getTransform()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
