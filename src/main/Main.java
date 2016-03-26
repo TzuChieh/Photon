@@ -27,7 +27,9 @@ import math.Rand;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import model.RawModel;
+import model.primitive.AABB;
 import model.primitive.Sphere;
+import model.primitive.Triangle;
 import ui.Window;
 import util.Time;
 
@@ -35,13 +37,12 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		float a = 1.0f / 0.0f;
-		float b = 1.0f / 0.0f;
-//		System.out.println(a * 0.0f);
+		Triangle triangle = new Triangle(new Vector3f(12, 9, 9), new Vector3f(9, 12, 9), new Vector3f(19, 19, 20));
+		AABB aabb = new AABB(new Vector3f(-10, -10, -10), new Vector3f(10, 10, 10));
 		
-//		System.out.println(Rand.getFloat0_1());
-//		System.out.println(Rand.getFloat0_1());
-//		System.out.println(Rand.getFloat0_1());
+		System.out.println(triangle.isIntersect(aabb));
+//		System.out.println(aabb.isIntersect(aabb));
+		
 		
 		Engine engine = new Engine();
 		

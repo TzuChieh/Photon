@@ -48,4 +48,17 @@ public class Debug
 	{
 		System.exit(1);
 	}
+	
+	public static void printTodoErr()
+	{
+		StringBuilder todoErrorMsg = new StringBuilder("NOT IMPLEMENTED YET! \n");
+		StackTraceElement[] stes = Thread.currentThread().getStackTrace();
+		
+		for(StackTraceElement ste : stes)
+		{
+			todoErrorMsg.append(ste + "\n");
+		}
+		
+		printErr(todoErrorMsg);
+	}
 }

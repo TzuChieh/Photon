@@ -25,7 +25,6 @@ package model.primitive;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
-import model.bounding.AABB;
 
 public interface Primitive
 {

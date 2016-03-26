@@ -402,6 +402,60 @@ public class Vector3f
 		return this;
 	}
 	
+	// (x, y, z) = (min, mid, max)
+	public void sort(Vector3f result)
+	{
+		// test AABB face normals (x-, y- and z-axes)
+		if(x > y)
+		{
+			if(x > z)
+			{
+				result.z = x;
+				
+				if(y < z)
+				{
+					result.x = y;
+					result.y = z;
+				}
+				else
+				{
+					result.x = z;
+					result.y = y;
+				}
+			}
+			else
+			{
+				result.z = z;
+				result.y = x;
+				result.x = y;
+			}
+		}
+		else
+		{
+			if(x < z)
+			{
+				result.x = x;
+				
+				if(y > z)
+				{
+					result.z = y;
+					result.y = z;
+				}
+				else
+				{
+					result.z = z;
+					result.y = y;
+				}
+			}
+			else
+			{
+				result.x = z;
+				result.y = x;
+				result.z = y;
+			}
+		}
+	}
+	
 	@Override
 	public String toString()
 	{

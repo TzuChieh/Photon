@@ -25,7 +25,7 @@ package model.primitive;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
-import model.bounding.AABB;
+import util.Debug;
 
 public class Sphere implements Primitive
 {
@@ -102,6 +102,7 @@ public class Sphere implements Primitive
 	public boolean isIntersect(AABB aabb)
 	{
 		// TODO Auto-generated method stub
+		Debug.printTodoErr();
 		return false;
 	}
 }

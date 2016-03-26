@@ -23,8 +23,7 @@
 package scene.partition.kdtree;
 
 import math.Vector3f;
-import model.bounding.AABB;
-import model.primitive.Sphere;
+import model.primitive.AABB;
 
 public class NodeCell extends AABB
 {
@@ -32,12 +31,5 @@ public class NodeCell extends AABB
 	{
 		super(minVertex, maxVertex);
 		// TODO Auto-generated constructor stub
-	}
-
-	protected boolean isIntersect(Sphere sphere)
-	{
-		// TODO
-		
-		return false;
 	}
 }

@@ -20,11 +20,55 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.bounding;
+package model.primitive;
 
+import main.Intersection;
 import main.Ray;
+import math.Vector3f;
+import util.Debug;
 
-public interface BoundingVolume
+public class AABB implements Primitive
 {
-	public abstract boolean isIntersect(Ray ray);
+	private Vector3f m_minVertex;
+	private Vector3f m_maxVertex;
+	private Vector3f m_center;
+	
+	public AABB(Vector3f minVertex, Vector3f maxVertex)
+	{
+		m_minVertex = new Vector3f(minVertex);
+		m_maxVertex = new Vector3f(maxVertex);
+		
+		m_center = minVertex.add(maxVertex).divLocal(2.0f);
+	}
+
+	@Override
+	public boolean isIntersect(Ray ray, Intersection intersection)
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return false;
+	}
+
+	@Override
+	public boolean isIntersect(AABB aabb)
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return false;
+	}
+	
+	public Vector3f getCenter()
+	{
+		return m_center;
+	}
+	
+	public Vector3f getMinVertex()
+	{
+		return m_minVertex;
+	}
+	
+	public Vector3f getMaxVertex()
+	{
+		return m_maxVertex;
+	}
 }
