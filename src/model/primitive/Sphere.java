@@ -24,6 +24,7 @@ package model.primitive;
 
 import main.Intersection;
 import main.Ray;
+import math.Transform;
 import math.Vector3f;
 import util.Debug;
 
@@ -104,5 +105,13 @@ public class Sphere implements Primitive
 		// TODO Auto-generated method stub
 		Debug.printTodoErr();
 		return false;
+	}
+	
+	@Override
+	public Transform getTransform()
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return null;
 	}
 }

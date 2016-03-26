@@ -48,11 +48,4 @@ public class RawModel implements Model
 	{
 		return m_material;
 	}
-
-	@Override
-	public Transform getTransform()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

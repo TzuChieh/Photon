@@ -24,6 +24,7 @@ package model.primitive;
 
 import main.Intersection;
 import main.Ray;
+import math.Transform;
 import math.Vector3f;
 import util.Debug;
 
@@ -70,5 +71,13 @@ public class AABB implements Primitive
 	public Vector3f getMaxVertex()
 	{
 		return m_maxVertex;
+	}
+
+	@Override
+	public Transform getTransform()
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return null;
 	}
 }

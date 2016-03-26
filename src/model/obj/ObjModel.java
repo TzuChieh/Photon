@@ -69,11 +69,4 @@ public class ObjModel implements Model
 	{
 		return m_defaultMaterial;
 	}
-
-	@Override
-	public Transform getTransform()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

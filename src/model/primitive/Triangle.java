@@ -24,7 +24,9 @@ package model.primitive;
 
 import main.Intersection;
 import main.Ray;
+import math.Transform;
 import math.Vector3f;
+import util.Debug;
 
 public class Triangle implements Primitive
 {
@@ -275,5 +277,13 @@ public class Triangle implements Primitive
 	public Vector3f getNormal()
 	{
 		return m_normal;
+	}
+	
+	@Override
+	public Transform getTransform()
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return null;
 	}
 }
