@@ -34,42 +34,50 @@ public class TriangleMesh implements Primitive
 {
 	private ArrayList<Triangle> m_triangles;
 	
+	private Transform m_transform;
+	
 	public TriangleMesh()
 	{
 		m_triangles = new ArrayList<>();
+		m_transform = new Transform();
 	}
 	
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
+		Vector3f localRayOrigin = m_transform.getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
+		Vector3f localRayDir    = m_transform.getInverseModelMatrix().mul(ray.getDir(), 0.0f);
+		
+		Ray localRay = new Ray(localRayOrigin, localRayDir);
+		
 		float closestSquareDist = Float.MAX_VALUE;
-		Vector3f closestHitPoint = null;
-		Vector3f closestHitNormal = null;
+		Vector3f localClosestHitPoint = null;
+		Vector3f localClosestHitNormal = null;
 		
 		for(Triangle triangle : m_triangles)
 		{
 			intersection.intersectPoint = null;
 			intersection.intersectNormal = null;
 			
-			triangle.isIntersect(ray, intersection);
+			triangle.isIntersect(localRay, intersection);
 			
 			if(intersection.intersectPoint != null)
 			{
-				float squareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
+				float squareDist = intersection.intersectPoint.sub(localRay.getOrigin()).squareLength();
 				
 				if(squareDist < closestSquareDist)
 				{
 					closestSquareDist = squareDist;
-					closestHitPoint = intersection.intersectPoint;
-					closestHitNormal = intersection.intersectNormal;
+					localClosestHitPoint = intersection.intersectPoint;
+					localClosestHitNormal = intersection.intersectNormal;
 				}
 			}
 		}
 		
-		if(closestHitPoint != null)
+		if(localClosestHitPoint != null)
 		{
-			intersection.intersectPoint = closestHitPoint;
-			intersection.intersectNormal = closestHitNormal;
+			intersection.intersectPoint = m_transform.getModelMatrix().mul(localClosestHitPoint, 1.0f);
+			intersection.intersectNormal = m_transform.getModelMatrix().mul(localClosestHitNormal, 0.0f);
 			
 			return true;
 		}
@@ -93,8 +101,6 @@ public class TriangleMesh implements Primitive
 	@Override
 	public Transform getTransform()
 	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return null;
+		return m_transform;
 	}
 }

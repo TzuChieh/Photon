@@ -22,6 +22,8 @@
 
 package math;
 
+import util.Debug;
+
 public class Transform
 {
 	private Matrix4f m_modelMatrix;
@@ -45,21 +47,26 @@ public class Transform
 	{
 		m_translationMatrix.mul(m_rotationMatrix.mul(m_scaleMatrix), m_modelMatrix);
 		m_modelMatrix.inverse(m_inverseModelMatrix);
+		
+//		Debug.print(m_inverseModelMatrix);
 	}
 	
 	public void setPos(float x, float y, float z)
 	{
 		m_translationMatrix.initTranslation(x, y, z);
+		update();
 	}
 	
 	public void setRot(Quaternion rot)
 	{
 		m_rotationMatrix.initRotation(rot);
+		update();
 	}
 	
 	public void setScale(float x, float y, float z)
 	{
 		m_scaleMatrix.initScale(x, y, z);
+		update();
 	}
 	
 	public Matrix4f getModelMatrix()

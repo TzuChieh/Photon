@@ -39,10 +39,15 @@ public class Sphere implements Primitive
 	private Vector3f m_center;
 	private float    m_radius;
 	
+	private Transform m_transform;
+	
 	public Sphere(float x, float y, float z, float radius)
 	{
-		m_center = new Vector3f(x, y, z);
-		m_radius = radius;
+		m_center    = new Vector3f(x, y, z);
+		m_radius    = radius;
+		m_transform = new Transform();
+		
+		updateTransform();
 	}
 	
 	public void getCenter(Vector3f result)
@@ -50,9 +55,27 @@ public class Sphere implements Primitive
 		result.set(m_center);
 	}
 	
+	public void setCenter(Vector3f center)
+	{
+		m_center.set(center);
+		
+		updateTransform();
+	}
+	
+	private void updateTransform()
+	{
+		m_transform.setPos(m_center.x, m_center.y, m_center.z);
+		m_transform.update();
+	}
+	
 	public float getRadius()
 	{
 		return m_radius;
+	}
+	
+	public void setRadius(float radius)
+	{
+		m_radius = radius;
 	}
 
 	@Override
@@ -110,8 +133,6 @@ public class Sphere implements Primitive
 	@Override
 	public Transform getTransform()
 	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return null;
+		return m_transform;
 	}
 }

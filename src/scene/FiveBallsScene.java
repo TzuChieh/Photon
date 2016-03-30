@@ -47,9 +47,11 @@ public class FiveBallsScene extends Scene
 		
 //		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
 //		ObjModel bunnyModel = new ObjModel("./resource/model/venusm_low_poly.obj");
-		ObjModel bunnyModel = new ObjModel("./resource/model/icosphere.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/icosphere.obj");
+//		bunnyModel.getPrimitive().getTransform().setPos(-5.0f, 0.0f, -7.0f);
 //		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
-//		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
+		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
+		bunnyModel.getPrimitive().getTransform().setPos(-1.0f, 1.0f, 0.0f);
 		addModel(bunnyModel);
 		
 //		AbradedOpaque sphere1Matl = new AbradedOpaque();
