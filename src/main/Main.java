@@ -31,6 +31,7 @@ import model.primitive.AABB;
 import model.primitive.Sphere;
 import model.primitive.Triangle;
 import ui.Window;
+import util.Debug;
 import util.Time;
 
 public class Main
@@ -42,6 +43,11 @@ public class Main
 		
 		System.out.println(triangle.isIntersect(aabb));
 //		System.out.println(aabb.isIntersect(aabb));
+		
+//		int test = 1;
+//		
+//		if(test = 2)
+//			Debug.print("WTF");
 		
 		
 		Engine engine = new Engine();

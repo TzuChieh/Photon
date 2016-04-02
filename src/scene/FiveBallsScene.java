@@ -23,6 +23,7 @@
 package scene;
 
 import main.Camera;
+import math.Vector3f;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
 import model.RawModel;
@@ -51,7 +52,8 @@ public class FiveBallsScene extends Scene
 //		bunnyModel.getPrimitive().getTransform().setPos(-5.0f, 0.0f, -7.0f);
 //		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
 		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
-		bunnyModel.getPrimitive().getTransform().setPos(-1.0f, 1.0f, 0.0f);
+		bunnyModel.getTransform().setPos(-1.0f, 1.0f, 0.0f);
+		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 45);
 		addModel(bunnyModel);
 		
 //		AbradedOpaque sphere1Matl = new AbradedOpaque();

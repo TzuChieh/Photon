@@ -28,6 +28,7 @@ import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
 import math.material.Material;
 import model.Model;
+import model.primitive.AABB;
 import model.primitive.Primitive;
 import model.primitive.Triangle;
 import model.primitive.TriangleMesh;
@@ -36,10 +37,17 @@ public class ObjModel implements Model
 {
 	private TriangleMesh m_triangleMesh;
 	private Material     m_defaultMaterial;
+	private AABB         m_aabb;
+	private Transform    m_transform;
 	
 	public ObjModel(String fullFilename)
 	{
+		m_transform = new Transform();
+		
 		m_triangleMesh = new TriangleMesh();
+		m_triangleMesh.setModel(this);
+		
+		
 //		m_defaultMaterial = new AbradedOpaque();
 		AbradedTranslucent matl = new AbradedTranslucent();
 		m_defaultMaterial = matl;
@@ -68,5 +76,11 @@ public class ObjModel implements Model
 	public Material getMaterial()
 	{
 		return m_defaultMaterial;
+	}
+
+	@Override
+	public Transform getTransform()
+	{
+		return m_transform;
 	}
 }

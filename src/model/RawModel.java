@@ -30,10 +30,15 @@ public class RawModel implements Model
 {
 	private Primitive m_primitive;
 	private Material  m_material;
+	private Transform m_transform;
 	
 	public RawModel(Primitive primitive, Material material)
 	{
+		m_transform = new Transform();
+		
 		m_primitive = primitive;
+		primitive.setModel(this);
+		
 		m_material  = material;
 	}
 	
@@ -47,5 +52,11 @@ public class RawModel implements Model
 	public Material getMaterial()
 	{
 		return m_material;
+	}
+
+	@Override
+	public Transform getTransform()
+	{
+		return m_transform;
 	}
 }

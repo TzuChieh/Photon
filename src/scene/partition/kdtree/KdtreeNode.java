@@ -23,14 +23,15 @@
 package scene.partition.kdtree;
 
 import main.Ray;
+import model.primitive.AABB;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 
-public class KdTree implements PartitionStrategy
+public class KdtreeNode extends AABB implements PartitionStrategy
 {
-	public KdTree()
+	public KdtreeNode(AABB aabb)
 	{
-		
+		super(aabb);
 	}
 	
 	@Override

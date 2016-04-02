@@ -26,6 +26,7 @@ import main.Intersection;
 import main.Ray;
 import math.Transform;
 import math.Vector3f;
+import model.Model;
 import util.Debug;
 
 public class AABB implements Primitive
@@ -40,6 +41,11 @@ public class AABB implements Primitive
 		m_maxVertex = new Vector3f(maxVertex);
 		
 		m_center = minVertex.add(maxVertex).divLocal(2.0f);
+	}
+	
+	public AABB(AABB other)
+	{
+		this(other.m_minVertex, other.m_maxVertex);
 	}
 
 	@Override
@@ -74,10 +80,16 @@ public class AABB implements Primitive
 	}
 
 	@Override
-	public Transform getTransform()
+	public Model getModel()
 	{
 		// TODO Auto-generated method stub
-		Debug.printTodoErr();
 		return null;
+	}
+
+	@Override
+	public void setModel(Model model)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -63,7 +63,7 @@ public class Quaternion
 		this.w = cosHalfAngle;
 	}
 	
-	public void setRot(Vector3f axis, float angle)
+	public Quaternion setRotRad(Vector3f axis, float angle)
 	{
 		float sinHalfAngle = (float)Math.sin(angle / 2);
 		float cosHalfAngle = (float)Math.cos(angle / 2);
@@ -72,6 +72,13 @@ public class Quaternion
 		this.y = axis.getY() * sinHalfAngle;
 		this.z = axis.getZ() * sinHalfAngle;
 		this.w = cosHalfAngle;
+		
+		return this;
+	}
+	
+	public Quaternion setRotDeg(Vector3f axis, float angle)
+	{
+		return setRotRad(axis, angle / 180.0f * 3.14159265f);
 	}
 	
 	/****************************************************/

@@ -26,6 +26,7 @@ import main.Intersection;
 import main.Ray;
 import math.Transform;
 import math.Vector3f;
+import model.Model;
 import util.Debug;
 
 public class Triangle implements Primitive
@@ -278,12 +279,18 @@ public class Triangle implements Primitive
 	{
 		return m_normal;
 	}
-	
+
 	@Override
-	public Transform getTransform()
+	public Model getModel()
 	{
 		// TODO Auto-generated method stub
-		Debug.printTodoErr();
 		return null;
+	}
+
+	@Override
+	public void setModel(Model model)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

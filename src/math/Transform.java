@@ -63,6 +63,18 @@ public class Transform
 		update();
 	}
 	
+	public void setRotRad(Vector3f axis, float angle)
+	{
+		m_rotationMatrix.initRotation(new Quaternion().setRotRad(axis, angle));
+		update();
+	}
+	
+	public void setRotDeg(Vector3f axis, float angle)
+	{
+		m_rotationMatrix.initRotation(new Quaternion().setRotDeg(axis, angle));
+		update();
+	}
+	
 	public void setScale(float x, float y, float z)
 	{
 		m_scaleMatrix.initScale(x, y, z);

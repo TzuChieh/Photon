@@ -26,6 +26,7 @@ import main.Intersection;
 import main.Ray;
 import math.Transform;
 import math.Vector3f;
+import model.Model;
 import util.Debug;
 
 public class Sphere implements Primitive
@@ -129,10 +130,18 @@ public class Sphere implements Primitive
 		Debug.printTodoErr();
 		return false;
 	}
-	
+
 	@Override
-	public Transform getTransform()
+	public Model getModel()
 	{
-		return m_transform;
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setModel(Model model)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

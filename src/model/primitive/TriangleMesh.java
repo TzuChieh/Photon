@@ -28,25 +28,27 @@ import main.Intersection;
 import main.Ray;
 import math.Transform;
 import math.Vector3f;
+import model.Model;
 import util.Debug;
 
 public class TriangleMesh implements Primitive
 {
 	private ArrayList<Triangle> m_triangles;
 	
-	private Transform m_transform;
+	private Model m_model;
 	
 	public TriangleMesh()
 	{
 		m_triangles = new ArrayList<>();
-		m_transform = new Transform();
+		
+		m_model = null;
 	}
 	
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		Vector3f localRayOrigin = m_transform.getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
-		Vector3f localRayDir    = m_transform.getInverseModelMatrix().mul(ray.getDir(), 0.0f);
+		Vector3f localRayOrigin = m_model.getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
+		Vector3f localRayDir    = m_model.getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
 		
 		Ray localRay = new Ray(localRayOrigin, localRayDir);
 		
@@ -76,8 +78,8 @@ public class TriangleMesh implements Primitive
 		
 		if(localClosestHitPoint != null)
 		{
-			intersection.intersectPoint = m_transform.getModelMatrix().mul(localClosestHitPoint, 1.0f);
-			intersection.intersectNormal = m_transform.getModelMatrix().mul(localClosestHitNormal, 0.0f);
+			intersection.intersectPoint = m_model.getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
+			intersection.intersectNormal = m_model.getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
 			
 			return true;
 		}
@@ -99,8 +101,14 @@ public class TriangleMesh implements Primitive
 	}
 	
 	@Override
-	public Transform getTransform()
+	public Model getModel()
 	{
-		return m_transform;
+		return m_model;
+	}
+
+	@Override
+	public void setModel(Model model)
+	{
+		m_model = model;
 	}
 }

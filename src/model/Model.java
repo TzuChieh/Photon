@@ -30,4 +30,5 @@ public interface Model
 {
 	public abstract Primitive getPrimitive();
 	public abstract Material  getMaterial();
+	public abstract Transform getTransform();
 }
