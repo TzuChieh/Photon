@@ -27,6 +27,7 @@ import main.Ray;
 import math.Transform;
 import math.Vector3f;
 import model.Model;
+import model.boundingVolume.AABB;
 import util.Debug;
 
 public class Sphere implements Primitive
@@ -143,5 +144,12 @@ public class Sphere implements Primitive
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public AABB calcTransformedAABB()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

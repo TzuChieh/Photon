@@ -27,7 +27,7 @@ import math.Rand;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import model.RawModel;
-import model.primitive.AABB;
+import model.boundingVolume.AABB;
 import model.primitive.Sphere;
 import model.primitive.Triangle;
 import ui.Window;

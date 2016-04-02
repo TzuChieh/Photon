@@ -20,16 +20,17 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package model.primitive;
+package model.boundingVolume;
 
 import main.Intersection;
 import main.Ray;
 import math.Transform;
 import math.Vector3f;
 import model.Model;
+import model.primitive.Primitive;
 import util.Debug;
 
-public class AABB implements Primitive
+public class AABB implements BoundingVolume
 {
 	private Vector3f m_minVertex;
 	private Vector3f m_maxVertex;
@@ -46,22 +47,6 @@ public class AABB implements Primitive
 	public AABB(AABB other)
 	{
 		this(other.m_minVertex, other.m_maxVertex);
-	}
-
-	@Override
-	public boolean isIntersect(Ray ray, Intersection intersection)
-	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return false;
-	}
-
-	@Override
-	public boolean isIntersect(AABB aabb)
-	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return false;
 	}
 	
 	public Vector3f getCenter()
@@ -80,16 +65,10 @@ public class AABB implements Primitive
 	}
 
 	@Override
-	public Model getModel()
+	public boolean isIntersect(Ray ray)
 	{
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setModel(Model model)
-	{
-		// TODO Auto-generated method stub
-		
+		Debug.printTodoErr();
+		return false;
 	}
 }

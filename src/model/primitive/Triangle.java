@@ -27,6 +27,7 @@ import main.Ray;
 import math.Transform;
 import math.Vector3f;
 import model.Model;
+import model.boundingVolume.AABB;
 import util.Debug;
 
 public class Triangle implements Primitive
@@ -284,6 +285,7 @@ public class Triangle implements Primitive
 	public Model getModel()
 	{
 		// TODO Auto-generated method stub
+		Debug.printTodoErr();
 		return null;
 	}
 
@@ -291,6 +293,15 @@ public class Triangle implements Primitive
 	public void setModel(Model model)
 	{
 		// TODO Auto-generated method stub
+		Debug.printTodoErr();
 		
+	}
+	
+	@Override
+	public AABB calcTransformedAABB()
+	{
+		// TODO Auto-generated method stub
+		Debug.printTodoErr();
+		return null;
 	}
 }

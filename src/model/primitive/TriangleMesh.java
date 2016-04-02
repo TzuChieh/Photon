@@ -29,6 +29,7 @@ import main.Ray;
 import math.Transform;
 import math.Vector3f;
 import model.Model;
+import model.boundingVolume.AABB;
 import util.Debug;
 
 public class TriangleMesh implements Primitive
@@ -110,5 +111,47 @@ public class TriangleMesh implements Primitive
 	public void setModel(Model model)
 	{
 		m_model = model;
+	}
+	
+	@Override
+	public AABB calcTransformedAABB()
+	{
+		// min, max value of the mesh's position components
+		float minX = 0, maxX = 0,
+			  minY = 0, maxY = 0,
+			  minZ = 0, maxZ = 0;
+		
+		Vector3f vA = new Vector3f();
+		Vector3f vB = new Vector3f();
+		Vector3f vC = new Vector3f();
+		
+		for(Triangle triangle : m_triangles)
+		{
+			triangle.getVerticesABC(vA, vB, vC);
+			
+			     if(vA.x > maxX) maxX = vA.x;
+			else if(vA.x < minX) minX = vA.x;
+			     if(vA.y > maxY) maxY = vA.y;
+			else if(vA.y < minY) minY = vA.y;
+			     if(vA.z > maxZ) maxZ = vA.z;
+			else if(vA.z < minZ) minZ = vA.z;
+			     
+			     if(vB.x > maxX) maxX = vB.x;
+			else if(vB.x < minX) minX = vB.x;
+			     if(vB.y > maxY) maxY = vB.y;
+			else if(vB.y < minY) minY = vB.y;
+			     if(vB.z > maxZ) maxZ = vB.z;
+			else if(vB.z < minZ) minZ = vB.z;
+					     
+			     if(vC.x > maxX) maxX = vC.x;
+			else if(vC.x < minX) minX = vC.x;
+			     if(vC.y > maxY) maxY = vC.y;
+			else if(vC.y < minY) minY = vC.y;
+			     if(vC.z > maxZ) maxZ = vC.z;
+			else if(vC.z < minZ) minZ = vC.z;
+		}
+		
+		return new AABB(new Vector3f(minX, minY, minZ),
+				        new Vector3f(maxX, maxY, maxZ));
 	}
 }

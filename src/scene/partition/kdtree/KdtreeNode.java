@@ -23,7 +23,7 @@
 package scene.partition.kdtree;
 
 import main.Ray;
-import model.primitive.AABB;
+import model.boundingVolume.AABB;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 

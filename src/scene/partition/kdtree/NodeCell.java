@@ -23,7 +23,7 @@
 package scene.partition.kdtree;
 
 import math.Vector3f;
-import model.primitive.AABB;
+import model.boundingVolume.AABB;
 
 public class NodeCell extends AABB
 {

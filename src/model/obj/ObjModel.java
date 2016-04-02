@@ -28,7 +28,7 @@ import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
 import math.material.Material;
 import model.Model;
-import model.primitive.AABB;
+import model.boundingVolume.AABB;
 import model.primitive.Primitive;
 import model.primitive.Triangle;
 import model.primitive.TriangleMesh;
