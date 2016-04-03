@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import main.Intersection;
 import main.Ray;
+import math.Matrix4f;
 import math.Transform;
 import math.Vector3f;
 import model.Model;
@@ -116,7 +117,6 @@ public class TriangleMesh implements Primitive
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		// min, max value of the mesh's position components
 		float minX = 0, maxX = 0,
 			  minY = 0, maxY = 0,
 			  minZ = 0, maxZ = 0;
@@ -125,30 +125,40 @@ public class TriangleMesh implements Primitive
 		Vector3f vB = new Vector3f();
 		Vector3f vC = new Vector3f();
 		
+		Vector3f tvA = new Vector3f();
+		Vector3f tvB = new Vector3f();
+		Vector3f tvC = new Vector3f();
+		
+		Matrix4f modelMatrix = m_model.getTransform().getModelMatrix();
+		
 		for(Triangle triangle : m_triangles)
 		{
 			triangle.getVerticesABC(vA, vB, vC);
 			
-			     if(vA.x > maxX) maxX = vA.x;
-			else if(vA.x < minX) minX = vA.x;
-			     if(vA.y > maxY) maxY = vA.y;
-			else if(vA.y < minY) minY = vA.y;
-			     if(vA.z > maxZ) maxZ = vA.z;
-			else if(vA.z < minZ) minZ = vA.z;
+			modelMatrix.mul(vA, 1.0f, tvA);
+			modelMatrix.mul(vB, 1.0f, tvB);
+			modelMatrix.mul(vC, 1.0f, tvC);
+			
+			     if(tvA.x > maxX) maxX = tvA.x;
+			else if(tvA.x < minX) minX = tvA.x;
+			     if(tvA.y > maxY) maxY = tvA.y;
+			else if(tvA.y < minY) minY = tvA.y;
+			     if(tvA.z > maxZ) maxZ = tvA.z;
+			else if(tvA.z < minZ) minZ = tvA.z;
 			     
-			     if(vB.x > maxX) maxX = vB.x;
-			else if(vB.x < minX) minX = vB.x;
-			     if(vB.y > maxY) maxY = vB.y;
-			else if(vB.y < minY) minY = vB.y;
-			     if(vB.z > maxZ) maxZ = vB.z;
-			else if(vB.z < minZ) minZ = vB.z;
+			     if(tvB.x > maxX) maxX = tvB.x;
+			else if(tvB.x < minX) minX = tvB.x;
+			     if(tvB.y > maxY) maxY = tvB.y;
+			else if(tvB.y < minY) minY = tvB.y;
+			     if(tvB.z > maxZ) maxZ = tvB.z;
+			else if(tvB.z < minZ) minZ = tvB.z;
 					     
-			     if(vC.x > maxX) maxX = vC.x;
-			else if(vC.x < minX) minX = vC.x;
-			     if(vC.y > maxY) maxY = vC.y;
-			else if(vC.y < minY) minY = vC.y;
-			     if(vC.z > maxZ) maxZ = vC.z;
-			else if(vC.z < minZ) minZ = vC.z;
+			     if(tvC.x > maxX) maxX = tvC.x;
+			else if(tvC.x < minX) minX = tvC.x;
+			     if(tvC.y > maxY) maxY = tvC.y;
+			else if(tvC.y < minY) minY = tvC.y;
+			     if(tvC.z > maxZ) maxZ = tvC.z;
+			else if(tvC.z < minZ) minZ = tvC.z;
 		}
 		
 		return new AABB(new Vector3f(minX, minY, minZ),

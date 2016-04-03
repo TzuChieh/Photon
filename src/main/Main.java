@@ -38,16 +38,16 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		Triangle triangle = new Triangle(new Vector3f(12, 9, 9), new Vector3f(9, 12, 9), new Vector3f(19, 19, 20));
-		AABB aabb = new AABB(new Vector3f(-10, -10, -10), new Vector3f(10, 10, 10));
-		
-		System.out.println(triangle.isIntersect(aabb));
+//		Triangle triangle = new Triangle(new Vector3f(12, 9, 9), new Vector3f(9, 12, 9), new Vector3f(19, 19, 20));
+//		AABB aabb = new AABB(new Vector3f(-10, -10, -10), new Vector3f(10, 10, 10));
+//		
+//		System.out.println(triangle.isIntersect(aabb));
 //		System.out.println(aabb.isIntersect(aabb));
 		
-//		int test = 1;
-//		
-//		if(test = 2)
-//			Debug.print("WTF");
+		AABB aabb = new AABB(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1));
+		Ray ray = new Ray(new Vector3f(1, 0.999f, 0.999f), new Vector3f(-1, 0, 0).normalizeLocal());
+		
+		System.out.println(aabb.isIntersect(ray));
 		
 		
 		Engine engine = new Engine();

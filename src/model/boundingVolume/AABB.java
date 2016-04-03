@@ -64,11 +64,55 @@ public class AABB implements BoundingVolume
 		return m_maxVertex;
 	}
 
+	// Reference: Kay and Kayjia's "slab method" from a project of the ACM SIGGRAPH Education Committee
+	// named HyperGraph.
 	@Override
 	public boolean isIntersect(Ray ray)
 	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return false;
+		float tMin, tMax;
+		
+		float txMin = (m_minVertex.x - ray.getOrigin().x) / ray.getDir().x;
+		float txMax = (m_maxVertex.x - ray.getOrigin().x) / ray.getDir().x;
+		
+		if(txMin < txMax)
+		{
+			tMin = txMin;
+			tMax = txMax;
+		}
+		else
+		{
+			tMin = txMax;
+			tMax = txMin;
+		}
+	 
+		float tyMin = (m_minVertex.y - ray.getOrigin().y) / ray.getDir().y;
+		float tyMax = (m_maxVertex.y - ray.getOrigin().y) / ray.getDir().y;
+		
+		if(tyMin < tyMax)
+		{
+			tMin = tMin > tyMin ? tMin : tyMin;
+			tMax = tMax > tyMax ? tyMax : tMax;
+		}
+		else
+		{
+			tMin = tMin > tyMax ? tMin : tyMax;
+			tMax = tMax > tyMin ? tyMin : tMax;
+		}
+	 
+		float tzMin = (m_minVertex.z - ray.getOrigin().z) / ray.getDir().z;
+		float tzMax = (m_maxVertex.z - ray.getOrigin().z) / ray.getDir().z;
+		
+		if(tzMin < tzMax)
+		{
+			tMin = tMin > tzMin ? tMin : tzMin;
+			tMax = tMax > tzMax ? tzMax : tMax;
+		}
+		else
+		{
+			tMin = tMin > tzMax ? tMin : tzMax;
+			tMax = tMax > tzMin ? tzMin : tMax;
+		}
+	 
+	    return tMax > 0.0f && tMax > tMin;
 	}
 }

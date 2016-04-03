@@ -274,10 +274,18 @@ public class Matrix4f
 	
 	public Vector3f mul(Vector3f r, float w)
 	{
-		
 		return new Vector3f(m[0][0] * r.getX() + m[0][1] * r.getY() + m[0][2] * r.getZ() + m[0][3] * w,
 		                    m[1][0] * r.getX() + m[1][1] * r.getY() + m[1][2] * r.getZ() + m[1][3] * w,
 		                    m[2][0] * r.getX() + m[2][1] * r.getY() + m[2][2] * r.getZ() + m[2][3] * w);
+	}
+	
+	public Vector3f mul(Vector3f r, float w, Vector3f result)
+	{
+		result.x = m[0][0] * r.getX() + m[0][1] * r.getY() + m[0][2] * r.getZ() + m[0][3] * w;
+		result.y = m[1][0] * r.getX() + m[1][1] * r.getY() + m[1][2] * r.getZ() + m[1][3] * w;
+		result.z = m[2][0] * r.getX() + m[2][1] * r.getY() + m[2][2] * r.getZ() + m[2][3] * w;
+		
+		return result;
 	}
 	
 	public Quaternion mul(Quaternion r)
