@@ -20,14 +20,32 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package scene.partition;
+package scene.partition.kdtree;
 
 import main.Intersection;
 import main.Ray;
+import model.boundingVolume.AABB;
 import model.primitive.Primitive;
+import scene.partition.PartitionStrategy;
 
-public interface PartitionStrategy
-{
-	public abstract void addPrimitive(Primitive primitive);
-	public abstract boolean findClosestIntersection(Ray ray, Intersection intersection);
+public class Kdtree implements PartitionStrategy
+{ 
+	public Kdtree()
+	{
+		
+	}
+	
+	@Override
+	public boolean findClosestIntersection(Ray ray, Intersection intersection)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void addPrimitive(Primitive primitive)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

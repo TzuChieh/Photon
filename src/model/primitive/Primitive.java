@@ -29,13 +29,26 @@ import math.Vector3f;
 import model.Model;
 import model.boundingVolume.AABB;
 
-public interface Primitive
+public abstract class Primitive
 {
+	private Model m_model;
+	
+	protected Primitive()
+	{
+		m_model = null;
+	}
+	
 	public abstract boolean isIntersect(Ray ray, Intersection intersection);
 	public abstract boolean isIntersect(AABB aabb);
-	
-	public abstract Model getModel();
-	public abstract void setModel(Model model);
-	
 	public abstract AABB calcTransformedAABB();
+	
+	public Model getModel()
+	{
+		return m_model;
+	}
+	
+	public void setModel(Model model)
+	{
+		m_model = model;
+	}
 }

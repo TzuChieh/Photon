@@ -30,7 +30,7 @@ import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
-public class Triangle implements Primitive
+public class Triangle extends Primitive
 {
 	private static final float EPSILON = 0.0001f;
 	
@@ -46,6 +46,8 @@ public class Triangle implements Primitive
 	// front facing: CCW vertex order
 	public Triangle(Vector3f vA, Vector3f vB, Vector3f vC)
 	{
+		super();
+		
 		m_vA = new Vector3f(vA);
 		m_vB = new Vector3f(vB);
 		m_vC = new Vector3f(vC);
@@ -279,22 +281,6 @@ public class Triangle implements Primitive
 	public Vector3f getNormal()
 	{
 		return m_normal;
-	}
-
-	@Override
-	public Model getModel()
-	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return null;
-	}
-
-	@Override
-	public void setModel(Model model)
-	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		
 	}
 	
 	@Override

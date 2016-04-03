@@ -66,6 +66,7 @@ public class AABB implements BoundingVolume
 
 	// Reference: Kay and Kayjia's "slab method" from a project of the ACM SIGGRAPH Education Committee
 	// named HyperGraph.
+	// TODO: The inverse of ray direction can be precalculated if a single ray is tested against several AABBs.
 	@Override
 	public boolean isIntersect(Ray ray)
 	{

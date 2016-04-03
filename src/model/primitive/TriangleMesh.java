@@ -33,24 +33,22 @@ import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
-public class TriangleMesh implements Primitive
+public class TriangleMesh extends Primitive
 {
 	private ArrayList<Triangle> m_triangles;
 	
-	private Model m_model;
-	
 	public TriangleMesh()
 	{
-		m_triangles = new ArrayList<>();
+		super();
 		
-		m_model = null;
+		m_triangles = new ArrayList<>();
 	}
 	
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		Vector3f localRayOrigin = m_model.getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
-		Vector3f localRayDir    = m_model.getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
+		Vector3f localRayOrigin = getModel().getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
+		Vector3f localRayDir    = getModel().getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
 		
 		Ray localRay = new Ray(localRayOrigin, localRayDir);
 		
@@ -80,8 +78,8 @@ public class TriangleMesh implements Primitive
 		
 		if(localClosestHitPoint != null)
 		{
-			intersection.intersectPoint = m_model.getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
-			intersection.intersectNormal = m_model.getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
+			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
+			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
 			
 			return true;
 		}
@@ -103,18 +101,6 @@ public class TriangleMesh implements Primitive
 	}
 	
 	@Override
-	public Model getModel()
-	{
-		return m_model;
-	}
-
-	@Override
-	public void setModel(Model model)
-	{
-		m_model = model;
-	}
-	
-	@Override
 	public AABB calcTransformedAABB()
 	{
 		float minX = 0, maxX = 0,
@@ -129,7 +115,7 @@ public class TriangleMesh implements Primitive
 		Vector3f tvB = new Vector3f();
 		Vector3f tvC = new Vector3f();
 		
-		Matrix4f modelMatrix = m_model.getTransform().getModelMatrix();
+		Matrix4f modelMatrix = getModel().getTransform().getModelMatrix();
 		
 		for(Triangle triangle : m_triangles)
 		{

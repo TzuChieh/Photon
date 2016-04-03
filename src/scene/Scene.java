@@ -30,55 +30,31 @@ import main.Intersection;
 import main.Ray;
 import math.Vector3f;
 import model.Model;
+import scene.partition.BruteForce;
+import scene.partition.PartitionStrategy;
 
 public class Scene
 {
 	private List<Model> m_models;
 	private Camera      m_camera;
+	private PartitionStrategy m_partitioinStrategy;
 	
 	public Scene()
 	{
 		m_models = new ArrayList<>();
 		m_camera = new Camera();
+		m_partitioinStrategy = new BruteForce();
 	}
 	
 	public void addModel(Model model)
 	{
 		m_models.add(model);
+		m_partitioinStrategy.addPrimitive(model.getPrimitive());
 	}
 	
 	public boolean findClosestIntersection(Ray ray, Intersection intersection)
 	{
-		float squareDist = Float.MAX_VALUE;
-		Vector3f intersectPoint = null;
-		Vector3f intersectNormal = null;
-		Model model = null;
-		
-		for(Model currentModel : m_models)
-		{
-			if(currentModel.getPrimitive().isIntersect(ray, intersection))
-			{
-				float currentSquareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
-				
-				if(currentSquareDist < squareDist)
-				{
-					squareDist = currentSquareDist;
-					model = currentModel;
-					intersectPoint  = intersection.intersectPoint;
-					intersectNormal = intersection.intersectNormal;
-				}
-			}
-		}
-		
-		if(squareDist != Float.MAX_VALUE)
-		{
-			intersection.model = model;
-			intersection.intersectPoint  = intersectPoint;
-			intersection.intersectNormal = intersectNormal;
-			return true;
-		}
-		
-		return false;
+		return m_partitioinStrategy.findClosestIntersection(ray, intersection);
 	}
 	
 	public Camera getCamera()

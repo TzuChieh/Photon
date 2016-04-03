@@ -27,17 +27,10 @@ import model.boundingVolume.AABB;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 
-public class KdtreeNode extends AABB implements PartitionStrategy
-{
+public class KdtreeNode extends AABB
+{ 
 	public KdtreeNode(AABB aabb)
 	{
 		super(aabb);
-	}
-	
-	@Override
-	public Primitive findClosestPrimitive(Ray ray)
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

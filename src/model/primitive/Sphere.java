@@ -30,7 +30,7 @@ import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
-public class Sphere implements Primitive
+public class Sphere extends Primitive
 {
 	// Notice that we've confirmed that radii larger than 10000 will
 	// produce floating point precision artefact on rendered surface.
@@ -41,15 +41,12 @@ public class Sphere implements Primitive
 	private Vector3f m_center;
 	private float    m_radius;
 	
-	private Transform m_transform;
-	
 	public Sphere(float x, float y, float z, float radius)
 	{
+		super();
+		
 		m_center    = new Vector3f(x, y, z);
 		m_radius    = radius;
-		m_transform = new Transform();
-		
-		updateTransform();
 	}
 	
 	public void getCenter(Vector3f result)
@@ -60,14 +57,6 @@ public class Sphere implements Primitive
 	public void setCenter(Vector3f center)
 	{
 		m_center.set(center);
-		
-		updateTransform();
-	}
-	
-	private void updateTransform()
-	{
-		m_transform.setPos(m_center.x, m_center.y, m_center.z);
-		m_transform.update();
 	}
 	
 	public float getRadius()
@@ -130,20 +119,6 @@ public class Sphere implements Primitive
 		// TODO Auto-generated method stub
 		Debug.printTodoErr();
 		return false;
-	}
-
-	@Override
-	public Model getModel()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setModel(Model model)
-	{
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
