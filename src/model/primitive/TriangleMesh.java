@@ -23,13 +23,12 @@
 package model.primitive;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.Intersection;
 import main.Ray;
 import math.Matrix4f;
-import math.Transform;
 import math.Vector3f;
-import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
@@ -149,5 +148,14 @@ public class TriangleMesh extends Primitive
 		
 		return new AABB(new Vector3f(minX, minY, minZ),
 				        new Vector3f(maxX, maxY, maxZ));
+	}
+	
+	@Override
+	public void getAtomicPrimitives(List<Primitive> results)
+	{
+		for(Triangle triangle : m_triangles)
+		{
+			results.add(triangle);
+		}
 	}
 }

@@ -22,11 +22,11 @@
 
 package model.primitive;
 
+import java.util.List;
+
 import main.Intersection;
 import main.Ray;
-import math.Transform;
 import math.Vector3f;
-import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
@@ -126,5 +126,11 @@ public class Sphere extends Primitive
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void getAtomicPrimitives(List<Primitive> results)
+	{
+		results.add(this);
 	}
 }
