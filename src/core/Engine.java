@@ -69,6 +69,7 @@ public class Engine
 		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 		
+		scene.cookScene();
 		
 		Runnable tracer1 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		Thread tread1 = new Thread(tracer1);

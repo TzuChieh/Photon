@@ -22,15 +22,34 @@
 
 package scene.partition.kdtree;
 
+import java.util.List;
+
 import main.Ray;
+import math.Vector3f;
 import model.boundingVolume.AABB;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 
 public class KdtreeNode extends AABB
 { 
-	public KdtreeNode(AABB aabb)
+	private KdtreeNode m_leftNode;
+	private KdtreeNode m_rightNode;
+	
+	public KdtreeNode()
 	{
-		super(aabb);
+		super();
+		
+		m_leftNode  = null;
+		m_rightNode = null;
+	}
+	
+	public void build(List<Primitive> primitives)
+	{
+		if(primitives.size() == 0)
+			return;
+		
+		calcAABB(primitives);
+		
+		Vector3f geometricAveragePos = new Vector3f(0, 0, 0);
 	}
 }

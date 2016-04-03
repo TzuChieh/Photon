@@ -22,6 +22,8 @@
 
 package model.boundingVolume;
 
+import java.util.List;
+
 import main.Intersection;
 import main.Ray;
 import math.Transform;
@@ -42,6 +44,11 @@ public class AABB implements BoundingVolume
 		m_maxVertex = new Vector3f(maxVertex);
 		
 		m_center = minVertex.add(maxVertex).divLocal(2.0f);
+	}
+	
+	public AABB()
+	{
+		this(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0));
 	}
 	
 	public AABB(AABB other)
@@ -115,5 +122,24 @@ public class AABB implements BoundingVolume
 		}
 	 
 	    return tMax > 0.0f && tMax > tMin;
+	}
+	
+	public void calcAABB(List<Primitive> primitives)
+	{
+		if(primitives.size() == 0)
+			return;
+		
+		AABB initialAABB = primitives.get(0).calcTransformedAABB();
+		m_minVertex.set(initialAABB.getMinVertex());
+		m_maxVertex.set(initialAABB.getMaxVertex());
+		
+		for(int i = 1; i < primitives.size(); i++)
+		{
+			AABB primitiveAABB = primitives.get(i).calcTransformedAABB();
+			m_minVertex.minLocal(primitiveAABB.getMinVertex());
+			m_maxVertex.maxLocal(primitiveAABB.getMaxVertex());
+		}
+		
+		m_center = m_minVertex.add(m_maxVertex).divLocal(2.0f);
 	}
 }

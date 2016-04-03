@@ -29,6 +29,7 @@ import main.Ray;
 import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
+import util.Func;
 
 public class Sphere extends Primitive
 {
@@ -40,6 +41,11 @@ public class Sphere extends Primitive
 	
 	private Vector3f m_center;
 	private float    m_radius;
+	
+	public Sphere(Vector3f center, float radius)
+	{
+		this(center.x, center.y, center.z, radius);
+	}
 	
 	public Sphere(float x, float y, float z, float radius)
 	{
@@ -113,24 +119,52 @@ public class Sphere extends Primitive
 		}
 	}
 
+	// Reference: Jim Arvo's algorithm in Graphics Gems 2
 	@Override
 	public boolean isIntersect(AABB aabb)
 	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return false;
+		float rSquared = m_radius * m_radius;
+		
+	    if(m_center.x < aabb.getMinVertex().x) 
+	    	rSquared -= Func.squared(m_center.x - aabb.getMinVertex().x);
+	    else if(m_center.x > aabb.getMaxVertex().x) 
+	    	rSquared -= Func.squared(m_center.x - aabb.getMaxVertex().x);
+	    
+	    if(m_center.y < aabb.getMinVertex().y) 
+	    	rSquared -= Func.squared(m_center.y - aabb.getMinVertex().y);
+	    else if(m_center.y > aabb.getMaxVertex().y) 
+	    	rSquared -= Func.squared(m_center.y - aabb.getMaxVertex().y);
+	    
+	    if(m_center.z < aabb.getMinVertex().z) 
+	    	rSquared -= Func.squared(m_center.z - aabb.getMinVertex().z);
+	    else if(m_center.z > aabb.getMaxVertex().z) 
+	    	rSquared -= Func.squared(m_center.z - aabb.getMaxVertex().z);
+	    
+	    return rSquared > 0;
 	}
 	
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new AABB(m_center.sub(m_radius),
+				        m_center.add(m_radius));
 	}
 
 	@Override
 	public void getAtomicPrimitives(List<Primitive> results)
 	{
 		results.add(this);
+	}
+
+	@Override
+	public Vector3f calcGeometricAveragePos()
+	{
+		return new Vector3f(m_center);
+	}
+
+	@Override
+	public long calcGeometricWeight()
+	{
+		return 1L;
 	}
 }

@@ -296,4 +296,23 @@ public class Triangle extends Primitive
 	{
 		results.add(this);
 	}
+
+	@Override
+	public Vector3f calcGeometricAveragePos()
+	{
+		Vector3f result = new Vector3f(0, 0, 0);
+		
+		result.addLocal(m_vA);
+		result.addLocal(m_vB);
+		result.addLocal(m_vC);
+		result.divLocal(3.0f);
+		
+		return result;
+	}
+
+	@Override
+	public long calcGeometricWeight()
+	{
+		return 3L;
+	}
 }

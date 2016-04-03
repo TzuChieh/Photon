@@ -158,4 +158,23 @@ public class TriangleMesh extends Primitive
 			results.add(triangle);
 		}
 	}
+
+	@Override
+	public Vector3f calcGeometricAveragePos()
+	{
+		Vector3f result = new Vector3f(0, 0, 0);
+		
+		for(Triangle triangle : m_triangles)
+		{
+			result.addLocal(triangle.calcGeometricAveragePos().divLocal(m_triangles.size()));
+		}
+		
+		return result;
+	}
+
+	@Override
+	public long calcGeometricWeight()
+	{
+		return m_triangles.size() * 3L;
+	}
 }

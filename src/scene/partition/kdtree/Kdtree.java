@@ -22,6 +22,9 @@
 
 package scene.partition.kdtree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.Intersection;
 import main.Ray;
 import model.boundingVolume.AABB;
@@ -29,10 +32,14 @@ import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 
 public class Kdtree implements PartitionStrategy
-{ 
+{
+	private List<Primitive> m_atomicPrimitives;
+	
+	private KdtreeNode      m_rootKdtreeNode;
+	
 	public Kdtree()
 	{
-		
+		m_atomicPrimitives = new ArrayList<>();
 	}
 	
 	@Override
@@ -45,7 +52,13 @@ public class Kdtree implements PartitionStrategy
 	@Override
 	public void addPrimitive(Primitive primitive)
 	{
-		// TODO Auto-generated method stub
-		
+		primitive.getAtomicPrimitives(m_atomicPrimitives);
+	}
+
+	@Override
+	public void processData()
+	{
+		m_rootKdtreeNode = new KdtreeNode();
+		m_rootKdtreeNode.build(m_atomicPrimitives);
 	}
 }

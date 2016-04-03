@@ -35,4 +35,9 @@ public class Func
 	{
 		return new Vector3f(Math.min(value1.x, value2.x), Math.min(value1.y, value2.y), Math.min(value1.z, value2.z));
 	}
+	
+	public static float squared(float var)
+	{
+		return var * var;
+	}
 }

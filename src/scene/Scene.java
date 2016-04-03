@@ -61,4 +61,9 @@ public class Scene
 	{
 		return m_camera;
 	}
+	
+	public void cookScene()
+	{
+		m_partitioinStrategy.processData();
+	}
 }

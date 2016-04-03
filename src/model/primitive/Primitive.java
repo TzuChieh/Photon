@@ -26,6 +26,7 @@ import java.util.List;
 
 import main.Intersection;
 import main.Ray;
+import math.Vector3f;
 import model.Model;
 import model.boundingVolume.AABB;
 
@@ -40,8 +41,12 @@ public abstract class Primitive
 	
 	public abstract boolean isIntersect(Ray ray, Intersection intersection);
 	public abstract boolean isIntersect(AABB aabb);
-	public abstract AABB calcTransformedAABB();
+	
 	public abstract void getAtomicPrimitives(List<Primitive> results);
+	
+	public abstract AABB     calcTransformedAABB();
+	public abstract Vector3f calcGeometricAveragePos();
+	public abstract long     calcGeometricWeight();
 	
 	public Model getModel()
 	{

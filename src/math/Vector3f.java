@@ -87,7 +87,30 @@ public class Vector3f
 	
 	public Vector3f max(Vector3f r)
 	{
-		return new Vector3f(Math.max(x, r.getX()), Math.max(y, r.getY()), Math.max(z, r.getZ()));
+		return new Vector3f(Math.max(x, r.x), Math.max(y, r.y), Math.max(z, r.z));
+	}
+	
+	public Vector3f maxLocal(Vector3f r)
+	{
+		x = Math.max(x, r.x);
+		y = Math.max(y, r.y);
+		z = Math.max(z, r.z);
+		
+		return this;
+	}
+	
+	public Vector3f min(Vector3f r)
+	{
+		return new Vector3f(Math.min(x, r.x), Math.min(y, r.y), Math.min(z, r.z));
+	}
+	
+	public Vector3f minLocal(Vector3f r)
+	{
+		x = Math.min(x, r.x);
+		y = Math.min(y, r.y);
+		z = Math.min(z, r.z);
+		
+		return this;
 	}
 
 	public float dot(Vector3f r)
@@ -210,6 +233,15 @@ public class Vector3f
 		return this;
 	}
 	
+	public Vector3f addLocal(float var)
+	{
+		x += var;
+		y += var;
+		z += var;
+		
+		return this;
+	}
+	
 	public Vector3f addLocal(float varX, float varY, float varZ)
 	{
 		x += varX;
@@ -245,6 +277,15 @@ public class Vector3f
 		this.x -= var.x;
 		this.y -= var.y;
 		this.z -= var.z;
+		
+		return this;
+	}
+	
+	public Vector3f subLocal(float var)
+	{
+		this.x -= var;
+		this.y -= var;
+		this.z -= var;
 		
 		return this;
 	}
@@ -293,6 +334,15 @@ public class Vector3f
 		x *= var.x;
 		y *= var.y;
 		z *= var.z;
+		
+		return this;
+	}
+	
+	public Vector3f maddLocal(float multiplier, Vector3f adder)
+	{
+		x = x * multiplier + adder.x;
+		y = y * multiplier + adder.y;
+		z = x * multiplier + adder.z;
 		
 		return this;
 	}

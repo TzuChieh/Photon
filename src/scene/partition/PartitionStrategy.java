@@ -30,4 +30,5 @@ public interface PartitionStrategy
 {
 	public abstract void addPrimitive(Primitive primitive);
 	public abstract boolean findClosestIntersection(Ray ray, Intersection intersection);
+	public abstract void processData();
 }

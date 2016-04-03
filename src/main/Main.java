@@ -44,11 +44,15 @@ public class Main
 //		System.out.println(triangle.isIntersect(aabb));
 //		System.out.println(aabb.isIntersect(aabb));
 		
+//		AABB aabb = new AABB(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1));
+//		Ray ray = new Ray(new Vector3f(1, 0.999f, 0.999f), new Vector3f(-1, 0, 0).normalizeLocal());
+//		
+//		System.out.println(aabb.isIntersect(ray));
+		
 		AABB aabb = new AABB(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1));
-		Ray ray = new Ray(new Vector3f(1, 0.999f, 0.999f), new Vector3f(-1, 0, 0).normalizeLocal());
+		Sphere sphere = new Sphere(new Vector3f(1.999f, 0, 0), 1);
 		
-		System.out.println(aabb.isIntersect(ray));
-		
+		System.out.println(sphere.isIntersect(aabb));
 		
 		Engine engine = new Engine();
 		
