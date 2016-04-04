@@ -26,6 +26,7 @@ import java.util.List;
 
 import main.Intersection;
 import main.Ray;
+import math.Matrix4f;
 import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
@@ -286,9 +287,43 @@ public class Triangle extends Primitive
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		// TODO Auto-generated method stub
-		Debug.printTodoErr();
-		return null;
+		float minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE,
+			  minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE,
+			  minZ = Float.MAX_VALUE, maxZ = Float.MIN_VALUE;
+		
+		Vector3f tvA = new Vector3f();
+		Vector3f tvB = new Vector3f();
+		Vector3f tvC = new Vector3f();
+		
+		Matrix4f modelMatrix = getModel().getTransform().getModelMatrix();
+		
+		modelMatrix.mul(m_vA, 1.0f, tvA);
+		modelMatrix.mul(m_vB, 1.0f, tvB);
+		modelMatrix.mul(m_vC, 1.0f, tvC);
+		
+		     if(tvA.x > maxX) maxX = tvA.x;
+		else if(tvA.x < minX) minX = tvA.x;
+		     if(tvA.y > maxY) maxY = tvA.y;
+		else if(tvA.y < minY) minY = tvA.y;
+		     if(tvA.z > maxZ) maxZ = tvA.z;
+		else if(tvA.z < minZ) minZ = tvA.z;
+		     
+		     if(tvB.x > maxX) maxX = tvB.x;
+		else if(tvB.x < minX) minX = tvB.x;
+		     if(tvB.y > maxY) maxY = tvB.y;
+		else if(tvB.y < minY) minY = tvB.y;
+		     if(tvB.z > maxZ) maxZ = tvB.z;
+		else if(tvB.z < minZ) minZ = tvB.z;
+				     
+		     if(tvC.x > maxX) maxX = tvC.x;
+		else if(tvC.x < minX) minX = tvC.x;
+		     if(tvC.y > maxY) maxY = tvC.y;
+		else if(tvC.y < minY) minY = tvC.y;
+		     if(tvC.z > maxZ) maxZ = tvC.z;
+		else if(tvC.z < minZ) minZ = tvC.z;
+		
+		return new AABB(new Vector3f(minX, minY, minZ),
+				        new Vector3f(maxX, maxY, maxZ));
 	}
 	
 	@Override
@@ -314,5 +349,12 @@ public class Triangle extends Primitive
 	public long calcGeometricWeight()
 	{
 		return 3L;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return super.toString() + "\n"
+	         + "A" + m_vA + ", B" + m_vB + ", C" + m_vC + ", N" + m_normal;
 	}
 }

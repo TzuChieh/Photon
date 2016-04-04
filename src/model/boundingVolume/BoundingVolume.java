@@ -23,8 +23,10 @@
 package model.boundingVolume;
 
 import main.Ray;
+import math.Vector3f;
 
 public interface BoundingVolume
 {
 	public abstract boolean isIntersect(Ray ray);
+	public abstract boolean isIntersect(Vector3f point);
 }

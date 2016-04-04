@@ -20,52 +20,70 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package scene;
+package scene.partition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Camera;
 import main.Intersection;
 import main.Ray;
 import math.Vector3f;
 import model.Model;
-import scene.partition.BruteForce;
-import scene.partition.PartitionStrategy;
-import scene.partition.kdtree.Kdtree;
+import model.primitive.Primitive;
 
-public class Scene
+public class BruteForce implements PartitionStrategy
 {
-	private List<Model> m_models;
-	private Camera      m_camera;
-	private PartitionStrategy m_partitioinStrategy;
+	private List<Primitive> m_primitives;
 	
-	public Scene()
+	public BruteForce()
 	{
-		m_models = new ArrayList<>();
-		m_camera = new Camera();
-//		m_partitioinStrategy = new BruteForce();
-		m_partitioinStrategy = new Kdtree();
+		m_primitives = new ArrayList<>();
 	}
 	
-	public void addModel(Model model)
+	@Override
+	public void addPrimitive(Primitive primitive)
 	{
-		m_models.add(model);
-		m_partitioinStrategy.addPrimitive(model.getPrimitive());
+		m_primitives.add(primitive);
 	}
-	
+
+	@Override
 	public boolean findClosestIntersection(Ray ray, Intersection intersection)
 	{
-		return m_partitioinStrategy.findClosestIntersection(ray, intersection);
+		float    squareDist      = Float.MAX_VALUE;
+		Vector3f intersectPoint  = null;
+		Vector3f intersectNormal = null;
+		Model    model           = null;
+		
+		for(Primitive currentPrimitive : m_primitives)
+		{
+			if(currentPrimitive.isIntersect(ray, intersection))
+			{
+				float currentSquareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
+				
+				if(currentSquareDist < squareDist)
+				{
+					squareDist      = currentSquareDist;
+					model           = currentPrimitive.getModel();
+					intersectPoint  = intersection.intersectPoint;
+					intersectNormal = intersection.intersectNormal;
+				}
+			}
+		}
+		
+		if(squareDist != Float.MAX_VALUE)
+		{
+			intersection.model           = model;
+			intersection.intersectPoint  = intersectPoint;
+			intersection.intersectNormal = intersectNormal;
+			return true;
+		}
+		
+		return false;
 	}
-	
-	public Camera getCamera()
+
+	@Override
+	public void processData()
 	{
-		return m_camera;
-	}
-	
-	public void cookScene()
-	{
-		m_partitioinStrategy.processData();
+		// do nothing
 	}
 }

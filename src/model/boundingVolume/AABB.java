@@ -43,7 +43,8 @@ public class AABB implements BoundingVolume
 		m_minVertex = new Vector3f(minVertex);
 		m_maxVertex = new Vector3f(maxVertex);
 		
-		m_center = minVertex.add(maxVertex).divLocal(2.0f);
+		m_center = new Vector3f();
+		updateCenter();
 	}
 	
 	public AABB()
@@ -70,9 +71,17 @@ public class AABB implements BoundingVolume
 	{
 		return m_maxVertex;
 	}
+	
+	public void updateCenter()
+	{
+		m_center.set(m_minVertex).addLocal(m_maxVertex).divLocal(2.0f);
+	}
 
 	// Reference: Kay and Kayjia's "slab method" from a project of the ACM SIGGRAPH Education Committee
 	// named HyperGraph.
+	// Note: This algorithm can produce NaNs which will generate false positives in rare cases. Although 
+	// it can be handled, we ignore it since the performance will degrade and bounding volumes can produce
+	// false positives already (but for k-d tree, this may produce visual artifact... not sure).
 	// TODO: The inverse of ray direction can be precalculated if a single ray is tested against several AABBs.
 	@Override
 	public boolean isIntersect(Ray ray)
@@ -121,13 +130,26 @@ public class AABB implements BoundingVolume
 			tMax = tMax > tzMin ? tzMin : tMax;
 		}
 	 
-	    return tMax > 0.0f && tMax > tMin;
+	    return tMax >= 0.0f && tMax >= tMin;
+	}
+	
+	@Override
+	public boolean isIntersect(Vector3f point)
+	{
+		return point.x < m_maxVertex.x && point.x > m_minVertex.x
+			&& point.y < m_maxVertex.y && point.y > m_minVertex.y
+			&& point.z < m_maxVertex.z && point.z > m_minVertex.z;
 	}
 	
 	public void calcAABB(List<Primitive> primitives)
 	{
 		if(primitives.size() == 0)
+		{
+			m_minVertex.set(0, 0, 0);
+			m_maxVertex.set(0, 0, 0);
+			updateCenter();
 			return;
+		}
 		
 		AABB initialAABB = primitives.get(0).calcTransformedAABB();
 		m_minVertex.set(initialAABB.getMinVertex());
@@ -140,6 +162,6 @@ public class AABB implements BoundingVolume
 			m_maxVertex.maxLocal(primitiveAABB.getMaxVertex());
 		}
 		
-		m_center = m_minVertex.add(m_maxVertex).divLocal(2.0f);
+		updateCenter();
 	}
 }

@@ -29,6 +29,7 @@ import main.Intersection;
 import main.Ray;
 import math.Matrix4f;
 import math.Vector3f;
+import model.Model;
 import model.boundingVolume.AABB;
 import util.Debug;
 
@@ -89,6 +90,7 @@ public class TriangleMesh extends Primitive
 	public void addTriangle(Triangle triangle)
 	{
 		m_triangles.add(triangle);
+		triangle.setModel(getModel());
 	}
 
 	@Override
@@ -102,9 +104,9 @@ public class TriangleMesh extends Primitive
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		float minX = 0, maxX = 0,
-			  minY = 0, maxY = 0,
-			  minZ = 0, maxZ = 0;
+		float minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE,
+			  minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE,
+			  minZ = Float.MAX_VALUE, maxZ = Float.MIN_VALUE;
 		
 		Vector3f vA = new Vector3f();
 		Vector3f vB = new Vector3f();
@@ -176,5 +178,16 @@ public class TriangleMesh extends Primitive
 	public long calcGeometricWeight()
 	{
 		return m_triangles.size() * 3L;
+	}
+	
+	@Override
+	public void setModel(Model model)
+	{
+		super.setModel(model);
+		
+		for(Triangle triangle : m_triangles)
+		{
+			triangle.setModel(model);
+		}
 	}
 }
