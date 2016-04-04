@@ -23,6 +23,7 @@
 package scene.partition.kdtree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import main.Ray;
@@ -34,9 +35,13 @@ import util.Debug;
 
 public class KdtreeNode extends AABB
 { 
-	private static final int X = 0;
-	private static final int Y = 1;
-	private static final int Z = 2;
+	private static final int UNKNOWN_AXIS = 0;
+	private static final int X_AXIS = 1;
+	private static final int Y_AXIS = 2;
+	private static final int Z_AXIS = 3;
+	
+	private static final double COST_TRAVERSAL    = 1.0;
+	private static final double COST_INTERSECTION = 1.0;
 	
 	private KdtreeNode m_positiveNode;
 	private KdtreeNode m_negativeNode;
@@ -65,155 +70,280 @@ public class KdtreeNode extends AABB
 	
 	public void build(List<Primitive> primitives)
 	{
-		if(primitives.size() == 0)
-			return;
-		
 		calcAABB(primitives);
-		
 		buildChildren(primitives);
 	}
 	
 	private void buildChildren(List<Primitive> primitives)
 	{
-		// calculate total geometric average position
-		Vector3f totalAveragePos      = new Vector3f(0, 0, 0);
-		long     totalGeometricWeight = 0L;
+		if(primitives.size() == 0)
+			return;
 		
-		for(Primitive primitive : primitives)
-			totalGeometricWeight += primitive.calcGeometricWeight();
+		// be aware of array sizes that are around Integer.MAX_VALUE
+		TestPoint[] xPoints = new TestPoint[primitives.size() * 2];
+		TestPoint[] yPoints = new TestPoint[primitives.size() * 2];
+		TestPoint[] zPoints = new TestPoint[primitives.size() * 2];
 		
-		for(Primitive primitive : primitives)
+		for(int i = 0; i < primitives.size(); i++)
 		{
-			Vector3f geometricAveragePos = primitive.calcGeometricAveragePos();
-			float    geometricFactor     = (float)primitive.calcGeometricWeight() / (float)totalGeometricWeight;
+			AABB primAABB = primitives.get(i).calcTransformedAABB();
 			
-			totalAveragePos.addLocal(geometricAveragePos.mulLocal(geometricFactor));
+			xPoints[2 * i]     = new TestPoint(primAABB.getMinVertex().x, TestPoint.PRIMITIVE_MIN);
+			xPoints[2 * i + 1] = new TestPoint(primAABB.getMaxVertex().x, TestPoint.PRIMITIVE_MAX);
+			yPoints[2 * i]     = new TestPoint(primAABB.getMinVertex().y, TestPoint.PRIMITIVE_MIN);
+			yPoints[2 * i + 1] = new TestPoint(primAABB.getMaxVertex().y, TestPoint.PRIMITIVE_MAX);
+			zPoints[2 * i]     = new TestPoint(primAABB.getMinVertex().z, TestPoint.PRIMITIVE_MIN);
+			zPoints[2 * i + 1] = new TestPoint(primAABB.getMaxVertex().z, TestPoint.PRIMITIVE_MAX);
 		}
 		
-		// split primitives based on their average vertex position's sidedness against 
-		// the total average vertex position, the cutting plane cuts the longest extent 
-		// of the AABB
-		List<Primitive> positivePrimitives = new ArrayList<>();
-		List<Primitive> negativePrimitives = new ArrayList<>();
+		Arrays.sort(xPoints);
+		Arrays.sort(yPoints);
+		Arrays.sort(zPoints);
 		
-		float extentX = getMaxVertex().x - getMinVertex().x;
-		float extentY = getMaxVertex().y - getMinVertex().y;
-		float extentZ = getMaxVertex().z - getMinVertex().z;
+		double xExtent = getMaxVertex().x - getMinVertex().x;
+		double yExtent = getMaxVertex().y - getMinVertex().y;
+		double zExtent = getMaxVertex().z - getMinVertex().z;
+		double noSplitSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * zExtent + zExtent * xExtent);
+		double noSplitCost  = COST_INTERSECTION * (double)primitives.size();
+		double minSplitCost = Double.MAX_VALUE;
 		
-		int maxExtent;
+		float splitPos  = 0.0f;
+		int   splitAxis = UNKNOWN_AXIS;
 		
-		if(extentX > extentY)
+		int numNnodePrims, numPnodePrims;
+		boolean boundaryPrimPassed;
+		
+		// analyze x-axis
+		numNnodePrims = 0;
+		numPnodePrims = primitives.size();
+		boundaryPrimPassed = false;
+		
+		for(int i = 0; i < xPoints.length; i++)
 		{
-			if(extentX > extentZ)
-				maxExtent = X;
-			else
-				maxExtent = Z;
-		}
-		else
-		{
-			if(extentY > extentZ)
-				maxExtent = Y;
-			else
-				maxExtent = Z;
-		}
-		
-		m_positiveNode = new KdtreeNode(genChildAABB(maxExtent, totalAveragePos,  1));
-		m_negativeNode = new KdtreeNode(genChildAABB(maxExtent, totalAveragePos, -1));
-		
-		for(Primitive primitive : primitives)
-		{
-			if(primitive.isIntersect(m_positiveNode))
-				positivePrimitives.add(primitive);
-			
-			if(primitive.isIntersect(m_negativeNode))
-				negativePrimitives.add(primitive);
-		}
-		
-		int numDuplicates = numDuplicates(positivePrimitives, negativePrimitives);
-		
-		if(positivePrimitives.size() != 0)
-		{
-			float duplicateFraction = (float)numDuplicates / (float)positivePrimitives.size();
-			
-//			Debug.print("" + m_positiveNode.getMinVertex() + m_positiveNode.getMaxVertex());
-//			Debug.print(positivePrimitives.get(0));
-//			Debug.print(positivePrimitives.size());
-			Debug.print(numDuplicates);
-			
-			if(duplicateFraction < 0.5f && m_positiveNode.isIntersect(totalAveragePos))
-				m_positiveNode.buildChildren(positivePrimitives);
-			else
-				m_positiveNode.m_primitives = positivePrimitives;
-		}
-		else
-		{
-			m_positiveNode = null;
-		}
-		
-		if(negativePrimitives.size() != 0)
-		{
-			float duplicateFraction = (float)numDuplicates / (float)negativePrimitives.size();
-			
-			if(duplicateFraction < 0.5f && m_positiveNode.isIntersect(totalAveragePos))
-				m_negativeNode.buildChildren(negativePrimitives);
-			else
-				m_negativeNode.m_primitives = negativePrimitives;
-		}
-		else
-		{
-			m_negativeNode = null;
-		}
-	}
-	
-	private int numDuplicates(List<Primitive> positivePrims, List<Primitive> negativePrims)
-	{
-		int duplicatedNum = 0;
-		
-		for(int i = 0; i < positivePrims.size(); i++)
-		{
-			for(int j = 0; j < negativePrims.size(); j++)
+			if(xPoints[i].pointType == TestPoint.PRIMITIVE_MIN)
 			{
-				if(positivePrims.get(i) == negativePrims.get(j))
+				if(boundaryPrimPassed)
 				{
-					duplicatedNum++;
-					break;
+					boundaryPrimPassed = false;
+					numPnodePrims--;
 				}
+				
+				numNnodePrims++;
+			}
+			
+			if(xPoints[i].pointType == TestPoint.PRIMITIVE_MAX)
+			{
+				if(boundaryPrimPassed)
+				{
+					numPnodePrims--;
+				}
+				
+				boundaryPrimPassed = true;
+			}
+			
+			// check if the test point is a reasonable one
+			if(xPoints[i].testPoint <= getMinVertex().x || xPoints[i].testPoint >= getMaxVertex().x)
+				continue;
+			
+			double pNodeXextent = getMaxVertex().x - xPoints[i].testPoint;
+			double nNodeXextent = xPoints[i].testPoint - getMinVertex().x;
+			double pNodeSurfaceArea = 2.0 * (pNodeXextent * yExtent + yExtent * zExtent + zExtent * pNodeXextent);
+			double nNodeSurfaceArea = 2.0 * (nNodeXextent * yExtent + yExtent * zExtent + zExtent * nNodeXextent);
+			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			
+			if(splitCost < minSplitCost)
+			{
+				minSplitCost = splitCost;
+				splitPos     = xPoints[i].testPoint;
+				splitAxis    = X_AXIS;
 			}
 		}
 		
-		return duplicatedNum;
-	}
-	
-	private AABB genChildAABB(int maxExtent, Vector3f totalAveragePos, int sidedness)
-	{
-		AABB result = new AABB(this);
+		// analyze y-axis
+		numNnodePrims = 0;
+		numPnodePrims = primitives.size();
+		boundaryPrimPassed = false;
 		
-		switch(maxExtent)
+		for(int i = 0; i < yPoints.length; i++)
 		{
-		case X:
-			if(sidedness == 1)
-				result.getMinVertex().x = totalAveragePos.x;
-			else
-				result.getMaxVertex().x = totalAveragePos.x;
-			break;
+			if(yPoints[i].pointType == TestPoint.PRIMITIVE_MIN)
+			{
+				if(boundaryPrimPassed)
+				{
+					boundaryPrimPassed = false;
+					numPnodePrims--;
+				}
+				
+				numNnodePrims++;
+			}
 			
-		case Y:
-			if(sidedness == 1)
-				result.getMinVertex().y = totalAveragePos.y;
-			else
-				result.getMaxVertex().y = totalAveragePos.y;
-			break;
+			if(yPoints[i].pointType == TestPoint.PRIMITIVE_MAX)
+			{
+				if(boundaryPrimPassed)
+				{
+					numPnodePrims--;
+				}
+				
+				boundaryPrimPassed = true;
+			}
 			
-		case Z:
-			if(sidedness == 1)
-				result.getMinVertex().z = totalAveragePos.z;
-			else
-				result.getMaxVertex().z = totalAveragePos.z;
-			break;
+			// check if the test point is a reasonable one
+			if(yPoints[i].testPoint <= getMinVertex().y || yPoints[i].testPoint >= getMaxVertex().y)
+				continue;
+			
+			double pNodeYextent = getMaxVertex().y - yPoints[i].testPoint;
+			double nNodeYextent = yPoints[i].testPoint - getMinVertex().y;
+			double pNodeSurfaceArea = 2.0 * (xExtent * pNodeYextent + pNodeYextent * zExtent + zExtent * xExtent);
+			double nNodeSurfaceArea = 2.0 * (xExtent * nNodeYextent + nNodeYextent * zExtent + zExtent * xExtent);
+			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			
+			if(splitCost < minSplitCost)
+			{
+				minSplitCost = splitCost;
+				splitPos     = yPoints[i].testPoint;
+				splitAxis    = Y_AXIS;
+			}
 		}
 		
-		result.updateCenter();
+		// analyze z-axis
+		numNnodePrims = 0;
+		numPnodePrims = primitives.size();
+		boundaryPrimPassed = false;
 		
-		return result;
+		for(int i = 0; i < zPoints.length; i++)
+		{
+			if(zPoints[i].pointType == TestPoint.PRIMITIVE_MIN)
+			{
+				if(boundaryPrimPassed)
+				{
+					boundaryPrimPassed = false;
+					numPnodePrims--;
+				}
+				
+				numNnodePrims++;
+			}
+			
+			if(zPoints[i].pointType == TestPoint.PRIMITIVE_MAX)
+			{
+				if(boundaryPrimPassed)
+				{
+					numPnodePrims--;
+				}
+				
+				boundaryPrimPassed = true;
+			}
+			
+			// check if the test point is a reasonable one
+			if(zPoints[i].testPoint <= getMinVertex().z || zPoints[i].testPoint >= getMaxVertex().z)
+				continue;
+			
+			double pNodeZextent = getMaxVertex().z - zPoints[i].testPoint;
+			double nNodeZextent = zPoints[i].testPoint - getMinVertex().z;
+			double pNodeSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * pNodeZextent + pNodeZextent * xExtent);
+			double nNodeSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * nNodeZextent + nNodeZextent * xExtent);
+			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			
+			if(splitCost < minSplitCost)
+			{
+				minSplitCost = splitCost;
+				splitPos     = zPoints[i].testPoint;
+				splitAxis    = Z_AXIS;
+			}
+		}
+		
+		if(minSplitCost < noSplitCost)
+		{
+			AABB pChildAABB = new AABB(this);
+			AABB nChildAABB = new AABB(this);
+			
+			switch(splitAxis)
+			{
+			case X_AXIS:
+				pChildAABB.getMinVertex().x = splitPos;
+				nChildAABB.getMaxVertex().x = splitPos;
+				break;
+				
+			case Y_AXIS:
+				pChildAABB.getMinVertex().y = splitPos;
+				nChildAABB.getMaxVertex().y = splitPos;
+				break;
+				
+			case Z_AXIS:
+				pChildAABB.getMinVertex().z = splitPos;
+				nChildAABB.getMaxVertex().z = splitPos;
+				break;
+				
+			default:
+				Debug.printErr("KdtreeNode: unidentified split axis detected");
+				break;
+			}
+			
+			m_positiveNode = buildChild(pChildAABB, primitives);
+			m_negativeNode = buildChild(nChildAABB, primitives);
+		}
+		else
+		{
+			m_primitives = primitives;
+		}
+	}
+	
+	private KdtreeNode buildChild(AABB childAABB, List<Primitive> parentPrimitives)
+	{
+		List<Primitive> primitives = new ArrayList<>();
+		
+		for(int i = 0; i < parentPrimitives.size(); i++)
+		{
+			if(parentPrimitives.get(i).isIntersect(childAABB))
+				primitives.add(parentPrimitives.get(i));
+		}
+		
+		if(primitives.size() == 0)
+			return null;
+		
+		KdtreeNode childNode = new KdtreeNode(childAABB);
+		childNode.buildChildren(primitives);
+		
+		if(childNode.isLeaf())
+		{
+			childNode.m_primitives = primitives;
+			Debug.print(primitives.size());
+		}
+		
+		return childNode;
+	}
+	
+	private boolean isLeaf()
+	{
+		return m_positiveNode == null && m_negativeNode == null;
+	}
+	
+	private static class TestPoint implements Comparable<TestPoint>
+	{
+		public static final int PRIMITIVE_MIN = 1;
+		public static final int PRIMITIVE_MAX = 2;
+		
+		public float testPoint;
+		public int   pointType;
+		
+		public TestPoint(float testPoint, int pointType)
+		{
+			this.testPoint = testPoint;
+			this.pointType = pointType;
+		}
+
+		@Override
+		public int compareTo(TestPoint other)
+		{
+			return Float.compare(testPoint, other.testPoint);
+		}
 	}
 }
