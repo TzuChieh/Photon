@@ -105,6 +105,7 @@ public class FiveBallsScene extends Scene
 //		scene.addModel(whiteSphereLight);
 		
 		
+		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
 		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
