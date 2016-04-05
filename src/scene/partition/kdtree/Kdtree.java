@@ -45,8 +45,7 @@ public class Kdtree implements PartitionStrategy
 	@Override
 	public boolean findClosestIntersection(Ray ray, Intersection intersection)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return m_rootKdtreeNode.findClosestIntersection(ray, intersection);
 	}
 
 	@Override

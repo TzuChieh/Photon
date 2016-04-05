@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import main.Intersection;
 import main.Ray;
+import math.Vector2f;
 import math.Vector3f;
+import model.Model;
 import model.boundingVolume.AABB;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
@@ -35,10 +38,10 @@ import util.Debug;
 
 public class KdtreeNode extends AABB
 { 
-	private static final int UNKNOWN_AXIS = 0;
-	private static final int X_AXIS = 1;
-	private static final int Y_AXIS = 2;
-	private static final int Z_AXIS = 3;
+	private static final int UNKNOWN_AXIS = -1;
+	private static final int X_AXIS = 0;
+	private static final int Y_AXIS = 1;
+	private static final int Z_AXIS = 2;
 	
 	private static final double COST_TRAVERSAL    = 1.0;
 	private static final double COST_INTERSECTION = 1.0;
@@ -48,14 +51,12 @@ public class KdtreeNode extends AABB
 	
 	private List<Primitive> m_primitives;
 	
+	private int   m_splitAxis;
+	private float m_splitPos;
+	
 	public KdtreeNode()
 	{
-		super();
-		
-		m_positiveNode = null;
-		m_negativeNode = null;
-		
-		m_primitives = null;
+		this(new AABB());
 	}
 	
 	private KdtreeNode(AABB aabb)
@@ -66,6 +67,222 @@ public class KdtreeNode extends AABB
 		m_negativeNode = null;
 		
 		m_primitives = null;
+		
+		m_splitPos  = 0.0f;
+		m_splitAxis = UNKNOWN_AXIS;
+	}
+	
+	public boolean findClosestIntersection(Ray ray, Intersection intersection)
+	{
+//		Vector2f nearFarDist = new Vector2f();
+//		
+//		if(!isIntersect(ray, nearFarDist))
+//		{
+//			// ray missed root node's aabb
+//			return false;
+//		}
+//		
+//		float nearHitDist = nearFarDist.x < 0.0f ? 0.0f : nearFarDist.x;
+//		float farHitDist  = nearFarDist.y;
+//		
+//		return traverseAndFindClosestIntersection(ray, intersection, nearHitDist, farHitDist);
+		
+		if(isIntersect(ray))
+		{
+			if(!isLeaf())
+			{
+				boolean hit = false;
+				
+				if(m_positiveNode != null)
+				{
+					hit |= m_positiveNode.findClosestIntersection(ray, intersection);
+				}
+				
+				if(m_negativeNode != null)
+				{
+					hit |= m_negativeNode.findClosestIntersection(ray, intersection);
+				}
+				
+				return hit;
+			}
+			else
+			{
+				Model     closestModel     = intersection.model;
+				Vector3f  closestHitPos    = intersection.intersectPoint;
+				Vector3f  closestHitNormal = intersection.intersectNormal;
+				
+				Vector3f temp = new Vector3f();
+				
+				float closestHitSquaredDist = Float.MAX_VALUE;
+				
+				if(closestModel != null)
+					closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
+				
+				boolean closerHitFound = false;
+				
+				for(Primitive primitive : m_primitives)
+				{
+					if(primitive.isIntersect(ray, intersection))
+					{
+						intersection.intersectPoint.sub(ray.getOrigin(), temp);
+						float squaredHitDist = temp.squareLength();
+						
+						if(squaredHitDist < closestHitSquaredDist)
+						{
+							closestHitSquaredDist = squaredHitDist;
+							
+							closestModel     = primitive.getModel();
+							closestHitPos    = intersection.intersectPoint;
+							closestHitNormal = intersection.intersectNormal;
+							
+							closerHitFound = true;
+						}
+					}
+				}
+				
+				if(closerHitFound || closestModel != null)
+				{
+					intersection.model           = closestModel;
+					intersection.intersectPoint  = closestHitPos;
+					intersection.intersectNormal = closestHitNormal;
+					
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	private boolean traverseAndFindClosestIntersection(Ray ray, Intersection intersection, float rayDistMin, float rayDistMax)
+	{
+		if(!isLeaf())
+		{
+			float splitAxisRayOrigin = 0.0f;
+			float splitAxisRayDir    = 0.0f;
+			
+			switch(m_splitAxis)
+			{
+			case X_AXIS:
+				splitAxisRayOrigin = ray.getOrigin().x;
+				splitAxisRayDir    = ray.getDir().x;
+				break;
+				
+			case Y_AXIS:
+				splitAxisRayOrigin = ray.getOrigin().y;
+				splitAxisRayDir    = ray.getDir().y;
+				break;
+				
+			case Z_AXIS:
+				splitAxisRayOrigin = ray.getOrigin().z;
+				splitAxisRayDir    = ray.getDir().z;
+				break;
+				
+			default:
+				Debug.printErr("KdtreeNode: unidentified split axis detected");
+				break;
+			}
+			
+			KdtreeNode nearHitNode;
+			KdtreeNode farHitNode;
+			
+			if(m_splitPos - splitAxisRayOrigin >= 0.0f)
+			{
+				nearHitNode = m_negativeNode;
+				farHitNode  = m_positiveNode;
+			}
+			else
+			{
+				nearHitNode = m_positiveNode;
+				farHitNode  = m_negativeNode;
+			}
+			
+			float raySplitPlaneDist = (m_splitPos - splitAxisRayOrigin) / splitAxisRayDir;
+			
+			// case I: split plane is behind ray, only near node is hit
+			if(raySplitPlaneDist <= rayDistMin)
+			{
+				if(nearHitNode != null)
+					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
+				else
+					return false;
+			}
+			// case II: split plane is beyond ray's range, only near node is hit
+			else if(raySplitPlaneDist >= rayDistMax)
+			{
+				if(nearHitNode != null)
+					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
+				else
+					return false;
+			}
+			// case III: split plane is within ray's range, both near and far node are hit
+			else
+			{
+				if(nearHitNode != null)
+				{
+					if(nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax))
+					{
+						return true;
+					}
+				}
+				
+				if(farHitNode != null)
+				{
+					if(farHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax))
+					{
+						return true;
+					}
+				}
+				
+				return false;
+			}
+		}
+		else
+		{
+			Primitive closestPrimitive = null;
+			Vector3f  closestHitPos    = intersection.intersectPoint;
+			Vector3f  closestHitNormal = intersection.intersectNormal;
+			
+			Vector3f temp = new Vector3f();
+			float closestHitSquaredDist = Float.MAX_VALUE;
+			
+			for(Primitive primitive : m_primitives)
+			{
+				if(primitive.isIntersect(ray, intersection))
+				{
+					intersection.intersectPoint.sub(ray.getOrigin(), temp);
+					float squaredHitDist = temp.squareLength();
+					
+					if(squaredHitDist < closestHitSquaredDist)
+					{
+						closestHitSquaredDist = squaredHitDist;
+						
+						closestPrimitive = primitive;
+						closestHitPos    = intersection.intersectPoint;
+						closestHitNormal = intersection.intersectNormal;
+					}
+				}
+			}
+			
+			if(closestPrimitive != null)
+			{
+				intersection.model           = closestPrimitive.getModel();
+				intersection.intersectPoint  = closestHitPos;
+				intersection.intersectNormal = closestHitNormal;
+				
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 	
 	public void build(List<Primitive> primitives)
@@ -76,9 +293,6 @@ public class KdtreeNode extends AABB
 	
 	private void buildChildren(List<Primitive> primitives)
 	{
-		if(primitives.size() == 0)
-			return;
-		
 		// be aware of array sizes that are around Integer.MAX_VALUE
 		TestPoint[] xPoints = new TestPoint[primitives.size() * 2];
 		TestPoint[] yPoints = new TestPoint[primitives.size() * 2];
@@ -105,10 +319,10 @@ public class KdtreeNode extends AABB
 		double zExtent = getMaxVertex().z - getMinVertex().z;
 		double noSplitSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * zExtent + zExtent * xExtent);
 		double noSplitCost  = COST_INTERSECTION * (double)primitives.size();
-		double minSplitCost = Double.MAX_VALUE;
 		
-		float splitPos  = 0.0f;
-		int   splitAxis = UNKNOWN_AXIS;
+//		noSplitCost = 0.0;
+		
+		double minSplitCost = Double.MAX_VALUE;
 		
 		int numNnodePrims, numPnodePrims;
 		boolean boundaryPrimPassed;
@@ -157,8 +371,8 @@ public class KdtreeNode extends AABB
 			if(splitCost < minSplitCost)
 			{
 				minSplitCost = splitCost;
-				splitPos     = xPoints[i].testPoint;
-				splitAxis    = X_AXIS;
+				m_splitPos   = xPoints[i].testPoint;
+				m_splitAxis  = X_AXIS;
 			}
 		}
 		
@@ -206,8 +420,8 @@ public class KdtreeNode extends AABB
 			if(splitCost < minSplitCost)
 			{
 				minSplitCost = splitCost;
-				splitPos     = yPoints[i].testPoint;
-				splitAxis    = Y_AXIS;
+				m_splitPos   = yPoints[i].testPoint;
+				m_splitAxis  = Y_AXIS;
 			}
 		}
 		
@@ -255,8 +469,8 @@ public class KdtreeNode extends AABB
 			if(splitCost < minSplitCost)
 			{
 				minSplitCost = splitCost;
-				splitPos     = zPoints[i].testPoint;
-				splitAxis    = Z_AXIS;
+				m_splitPos   = zPoints[i].testPoint;
+				m_splitAxis  = Z_AXIS;
 			}
 		}
 		
@@ -265,21 +479,21 @@ public class KdtreeNode extends AABB
 			AABB pChildAABB = new AABB(this);
 			AABB nChildAABB = new AABB(this);
 			
-			switch(splitAxis)
+			switch(m_splitAxis)
 			{
 			case X_AXIS:
-				pChildAABB.getMinVertex().x = splitPos;
-				nChildAABB.getMaxVertex().x = splitPos;
+				pChildAABB.getMinVertex().x = m_splitPos;
+				nChildAABB.getMaxVertex().x = m_splitPos;
 				break;
 				
 			case Y_AXIS:
-				pChildAABB.getMinVertex().y = splitPos;
-				nChildAABB.getMaxVertex().y = splitPos;
+				pChildAABB.getMinVertex().y = m_splitPos;
+				nChildAABB.getMaxVertex().y = m_splitPos;
 				break;
 				
 			case Z_AXIS:
-				pChildAABB.getMinVertex().z = splitPos;
-				nChildAABB.getMaxVertex().z = splitPos;
+				pChildAABB.getMinVertex().z = m_splitPos;
+				nChildAABB.getMaxVertex().z = m_splitPos;
 				break;
 				
 			default:
@@ -293,6 +507,8 @@ public class KdtreeNode extends AABB
 		else
 		{
 			m_primitives = primitives;
+			Debug.print(primitives.size());
+			Debug.print("????????");
 		}
 	}
 	
@@ -312,18 +528,12 @@ public class KdtreeNode extends AABB
 		KdtreeNode childNode = new KdtreeNode(childAABB);
 		childNode.buildChildren(primitives);
 		
-		if(childNode.isLeaf())
-		{
-			childNode.m_primitives = primitives;
-			Debug.print(primitives.size());
-		}
-		
 		return childNode;
 	}
 	
 	private boolean isLeaf()
 	{
-		return m_positiveNode == null && m_negativeNode == null;
+		return m_primitives != null;
 	}
 	
 	private static class TestPoint implements Comparable<TestPoint>

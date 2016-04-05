@@ -27,6 +27,7 @@ import java.util.List;
 import main.Intersection;
 import main.Ray;
 import math.Transform;
+import math.Vector2f;
 import math.Vector3f;
 import model.Model;
 import model.primitive.Primitive;
@@ -131,6 +132,76 @@ public class AABB implements BoundingVolume
 		}
 	 
 	    return tMax >= 0.0f && tMax >= tMin;
+	}
+	
+	/**
+	 * @return Returned boolean value indicates whether the ray is intersecting the AABB
+	 *         or not. If there's an intersection, the near and far hit distance will be
+	 *         stored in inOutDist like (near hit distance, far hit distance); if the ray
+	 *         origin is inside the AABB, near hit distance will be negative.
+	 */
+	public boolean isIntersect(Ray ray, Vector2f inOutDist)
+	{
+		float tMin, tMax;
+		
+		float txMin = (m_minVertex.x - ray.getOrigin().x) / ray.getDir().x;
+		float txMax = (m_maxVertex.x - ray.getOrigin().x) / ray.getDir().x;
+		
+		if(txMin < txMax)
+		{
+			tMin = txMin;
+			tMax = txMax;
+		}
+		else
+		{
+			tMin = txMax;
+			tMax = txMin;
+		}
+	 
+		float tyMin = (m_minVertex.y - ray.getOrigin().y) / ray.getDir().y;
+		float tyMax = (m_maxVertex.y - ray.getOrigin().y) / ray.getDir().y;
+		
+		if(tyMin < tyMax)
+		{
+			tMin = tMin > tyMin ? tMin : tyMin;
+			tMax = tMax > tyMax ? tyMax : tMax;
+		}
+		else
+		{
+			tMin = tMin > tyMax ? tMin : tyMax;
+			tMax = tMax > tyMin ? tyMin : tMax;
+		}
+	 
+		float tzMin = (m_minVertex.z - ray.getOrigin().z) / ray.getDir().z;
+		float tzMax = (m_maxVertex.z - ray.getOrigin().z) / ray.getDir().z;
+		
+		if(tzMin < tzMax)
+		{
+			tMin = tMin > tzMin ? tMin : tzMin;
+			tMax = tMax > tzMax ? tzMax : tMax;
+		}
+		else
+		{
+			tMin = tMin > tzMax ? tMin : tzMax;
+			tMax = tMax > tzMin ? tzMin : tMax;
+		}
+		
+		if(tMax < 0.0f || tMax < tMin)
+			return false;
+		
+		// ray is intersecting AABB, but whole AABB is behind the ray origin
+//		if(tMax < 0)
+//		{
+//			inOutDist.x = tMax;
+//			inOutDist.y = tMin;
+//		    return false;
+//		}
+		
+		// ray is intersecting AABB, and whole AABB is in front of the ray origin
+		inOutDist.x = tMin;
+		inOutDist.y = tMax;
+	 
+	    return true;
 	}
 	
 	@Override

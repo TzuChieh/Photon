@@ -58,6 +58,8 @@ public class Triangle extends Primitive
 		m_normal = m_eAB.cross(m_eAC).normalizeLocal();
 	}
 	
+	// TODO: make local & global intersect method
+	
 	// Reference: Ingo Wald's PhD paper "Real Time Ray Tracing and Interactive Global Illumination".
 	// This implementation is twice as fast as Moeller-Trumbore's method (stated by others, haven't profiled
 	// that myself).
@@ -65,7 +67,12 @@ public class Triangle extends Primitive
 	@Override
 	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		float dist = ray.getOrigin().sub(m_vA).dot(m_normal) / (-ray.getDir().dot(m_normal));
+		Vector3f localRayOrigin = getModel().getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
+		Vector3f localRayDir    = getModel().getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
+		
+		Ray localRay = new Ray(localRayOrigin, localRayDir);
+		
+		float dist = localRay.getOrigin().sub(m_vA).dot(m_normal) / (-localRay.getDir().dot(m_normal));
 		
 		// reject by distance
 		if(dist < EPSILON || dist > Float.MAX_VALUE || dist != dist) 
@@ -83,8 +90,8 @@ public class Triangle extends Primitive
 			// X dominant, projection plane is YZ
 			if(Math.abs(m_normal.x) > Math.abs(m_normal.z))
 			{
-				hitPu = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
-				hitPv = dist * ray.getDir().z + ray.getOrigin().z - m_vA.z;
+				hitPu = dist * localRay.getDir().y + localRay.getOrigin().y - m_vA.y;
+				hitPv = dist * localRay.getDir().z + localRay.getOrigin().z - m_vA.z;
 				abPu  = m_eAB.y;
 				abPv  = m_eAB.z;
 				acPu  = m_eAC.y;
@@ -93,8 +100,8 @@ public class Triangle extends Primitive
 			// Z dominant, projection plane is XY
 			else
 			{
-				hitPu = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
-				hitPv = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
+				hitPu = dist * localRay.getDir().x + localRay.getOrigin().x - m_vA.x;
+				hitPv = dist * localRay.getDir().y + localRay.getOrigin().y - m_vA.y;
 				abPu  = m_eAB.x;
 				abPv  = m_eAB.y;
 				acPu  = m_eAC.x;
@@ -104,8 +111,8 @@ public class Triangle extends Primitive
 		// Y dominant, projection plane is ZX
 		else if(Math.abs(m_normal.y) > Math.abs(m_normal.z))
 		{
-			hitPu = dist * ray.getDir().z + ray.getOrigin().z - m_vA.z;
-			hitPv = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
+			hitPu = dist * localRay.getDir().z + localRay.getOrigin().z - m_vA.z;
+			hitPv = dist * localRay.getDir().x + localRay.getOrigin().x - m_vA.x;
 			abPu  = m_eAB.z;
 			abPv  = m_eAB.x;
 			acPu  = m_eAC.z;
@@ -114,8 +121,8 @@ public class Triangle extends Primitive
 		// Z dominant, projection plane is XY
 		else
 		{
-			hitPu = dist * ray.getDir().x + ray.getOrigin().x - m_vA.x;
-			hitPv = dist * ray.getDir().y + ray.getOrigin().y - m_vA.y;
+			hitPu = dist * localRay.getDir().x + localRay.getOrigin().x - m_vA.x;
+			hitPv = dist * localRay.getDir().y + localRay.getOrigin().y - m_vA.y;
 			abPu  = m_eAB.x;
 			abPv  = m_eAB.y;
 			acPu  = m_eAC.x;
@@ -135,8 +142,10 @@ public class Triangle extends Primitive
 		if(baryB + baryC > 1.0f) return false;
 		
 		// so the ray intersects the triangle (TODO: reuse calculated results!)
-		intersection.intersectPoint  = ray.getDir().mul(dist).addLocal(ray.getOrigin());
-		intersection.intersectNormal = new Vector3f(m_normal);
+		Vector3f localIntersectPoint  = localRay.getDir().mul(dist).addLocal(localRay.getOrigin());
+		Vector3f localIntersectNormal = new Vector3f(m_normal);
+		intersection.intersectPoint  = getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f);
+		intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal();
 		
 		return true;
 	}
@@ -146,37 +155,43 @@ public class Triangle extends Primitive
 	@Override
 	public boolean isIntersect(AABB aabb)
 	{
-		Vector3f vA = new Vector3f(m_vA);
-		Vector3f vB = new Vector3f(m_vB);
-		Vector3f vC = new Vector3f(m_vC);
+		// TODO: transform aabb to local space may be faster
+		
+		Vector3f tvA = new Vector3f();
+		Vector3f tvB = new Vector3f();
+		Vector3f tvC = new Vector3f();
+		
+		getModel().getTransform().getModelMatrix().mul(m_vA, 1.0f, tvA);
+		getModel().getTransform().getModelMatrix().mul(m_vB, 1.0f, tvB);
+		getModel().getTransform().getModelMatrix().mul(m_vC, 1.0f, tvC);
 		
 		// move the origin to the AABB's center
-		vA.subLocal(aabb.getCenter());
-		vB.subLocal(aabb.getCenter());
-		vC.subLocal(aabb.getCenter());
+		tvA.subLocal(aabb.getCenter());
+		tvB.subLocal(aabb.getCenter());
+		tvC.subLocal(aabb.getCenter());
 		
 		Vector3f aabbHalfExtents  = aabb.getMaxVertex().sub(aabb.getCenter());
 		Vector3f projection       = new Vector3f();
 		Vector3f sortedProjection = new Vector3f();// (min, mid, max)
 		
 		// test AABB face normals (x-, y- and z-axes)
-		projection.set(vA.x, vB.x, vC.x);
+		projection.set(tvA.x, tvB.x, tvC.x);
 		projection.sort(sortedProjection);
 		if(sortedProjection.z < -aabbHalfExtents.x || sortedProjection.x > aabbHalfExtents.x)
 			return false;
 		
-		projection.set(vA.y, vB.y, vC.y);
+		projection.set(tvA.y, tvB.y, tvC.y);
 		projection.sort(sortedProjection);
 		if(sortedProjection.z < -aabbHalfExtents.y || sortedProjection.x > aabbHalfExtents.y)
 			return false;
 		
-		projection.set(vA.z, vB.z, vC.z);
+		projection.set(tvA.z, tvB.z, tvC.z);
 		projection.sort(sortedProjection);
 		if(sortedProjection.z < -aabbHalfExtents.z || sortedProjection.x > aabbHalfExtents.z)
 			return false;
 		
 		// test triangle's face normal
-		float trigOffset = vA.dot(m_normal);
+		float trigOffset = tvA.dot(m_normal);
 		sortedProjection.z = Math.abs(aabbHalfExtents.x * m_normal.x)
 				           + Math.abs(aabbHalfExtents.y * m_normal.y)
 				           + Math.abs(aabbHalfExtents.z * m_normal.z);
@@ -192,74 +207,74 @@ public class Triangle extends Primitive
 		// TODO: precompute triangle edges
 		
 		// (1, 0, 0) cross (edge AB)
-		projection.set(0.0f, vA.z - vB.z, vB.y - vA.y);
+		projection.set(0.0f, tvA.z - tvB.z, tvB.y - tvA.y);
 		aabbR = aabbHalfExtents.y * Math.abs(projection.y) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.y*vA.y + projection.z*vA.z;
-		trigV = projection.y*vC.y + projection.z*vC.z;
+		trigE = projection.y*tvA.y + projection.z*tvA.z;
+		trigV = projection.y*tvC.y + projection.z*tvC.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 1, 0) cross (edge AB)
-		projection.set(vB.z - vA.z, 0.0f, vA.x - vB.x);
+		projection.set(tvB.z - tvA.z, 0.0f, tvA.x - tvB.x);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.x*vA.x + projection.z*vA.z;
-		trigV = projection.x*vC.x + projection.z*vC.z;
+		trigE = projection.x*tvA.x + projection.z*tvA.z;
+		trigV = projection.x*tvC.x + projection.z*tvC.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 0, 1) cross (edge AB)
-		projection.set(vA.y - vB.y, vB.x - vA.x, 0.0f);
+		projection.set(tvA.y - tvB.y, tvB.x - tvA.x, 0.0f);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.y * Math.abs(projection.y);
-		trigE = projection.x*vA.x + projection.y*vA.y;
-		trigV = projection.x*vC.x + projection.y*vC.y;
+		trigE = projection.x*tvA.x + projection.y*tvA.y;
+		trigV = projection.x*tvC.x + projection.y*tvC.y;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (1, 0, 0) cross (edge BC)
-		projection.set(0.0f, vB.z - vC.z, vC.y - vB.y);
+		projection.set(0.0f, tvB.z - tvC.z, tvC.y - tvB.y);
 		aabbR = aabbHalfExtents.y * Math.abs(projection.y) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.y*vB.y + projection.z*vB.z;
-		trigV = projection.y*vA.y + projection.z*vA.z;
+		trigE = projection.y*tvB.y + projection.z*tvB.z;
+		trigV = projection.y*tvA.y + projection.z*tvA.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 1, 0) cross (edge BC)
-		projection.set(vC.z - vB.z, 0.0f, vB.x - vC.x);
+		projection.set(tvC.z - tvB.z, 0.0f, tvB.x - tvC.x);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.x*vB.x + projection.z*vB.z;
-		trigV = projection.x*vA.x + projection.z*vA.z;
+		trigE = projection.x*tvB.x + projection.z*tvB.z;
+		trigV = projection.x*tvA.x + projection.z*tvA.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 0, 1) cross (edge BC)
-		projection.set(vB.y - vC.y, vC.x - vB.x, 0.0f);
+		projection.set(tvB.y - tvC.y, tvC.x - tvB.x, 0.0f);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.y * Math.abs(projection.y);
-		trigE = projection.x*vB.x + projection.y*vB.y;
-		trigV = projection.x*vA.x + projection.y*vA.y;
+		trigE = projection.x*tvB.x + projection.y*tvB.y;
+		trigV = projection.x*tvA.x + projection.y*tvA.y;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (1, 0, 0) cross (edge CA)
-		projection.set(0.0f, vC.z - vA.z, vA.y - vC.y);
+		projection.set(0.0f, tvC.z - tvA.z, tvA.y - tvC.y);
 		aabbR = aabbHalfExtents.y * Math.abs(projection.y) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.y*vC.y + projection.z*vC.z;
-		trigV = projection.y*vB.y + projection.z*vB.z;
+		trigE = projection.y*tvC.y + projection.z*tvC.z;
+		trigV = projection.y*tvB.y + projection.z*tvB.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 1, 0) cross (edge CA)
-		projection.set(vA.z - vC.z, 0.0f, vC.x - vA.x);
+		projection.set(tvA.z - tvC.z, 0.0f, tvC.x - tvA.x);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.z * Math.abs(projection.z);
-		trigE = projection.x*vC.x + projection.z*vC.z;
-		trigV = projection.x*vB.x + projection.z*vB.z;
+		trigE = projection.x*tvC.x + projection.z*tvC.z;
+		trigV = projection.x*tvB.x + projection.z*tvB.z;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		
 		// (0, 0, 1) cross (edge CA)
-		projection.set(vC.y - vA.y, vA.x - vC.x, 0.0f);
+		projection.set(tvC.y - tvA.y, tvA.x - tvC.x, 0.0f);
 		aabbR = aabbHalfExtents.x * Math.abs(projection.x) + aabbHalfExtents.y * Math.abs(projection.y);
-		trigE = projection.x*vC.x + projection.y*vC.y;
-		trigV = projection.x*vB.x + projection.y*vB.y;
+		trigE = projection.x*tvC.x + projection.y*tvC.y;
+		trigV = projection.x*tvB.x + projection.y*tvB.y;
 		if(trigE < trigV) { if(trigE > aabbR || trigV < -aabbR) return false; }
 		else              { if(trigV > aabbR || trigE < -aabbR) return false; }
 		

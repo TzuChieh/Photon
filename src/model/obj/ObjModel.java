@@ -47,12 +47,13 @@ public class ObjModel implements Model
 		m_triangleMesh = new TriangleMesh();
 		m_triangleMesh.setModel(this);
 		
-		
-//		m_defaultMaterial = new AbradedOpaque();
-		AbradedTranslucent matl = new AbradedTranslucent();
+
+		AbradedOpaque matl = new AbradedOpaque();
+//		AbradedTranslucent matl = new AbradedTranslucent();
 		m_defaultMaterial = matl;
-		matl.setIor(1.5f);
+//		matl.setIor(1.5f);
 		matl.setRoughness(0.0f);
+		matl.setEmissivity(10, 10, 10);
 		
 		IndexedMesh indexedMesh = new ObjParser(fullFilename).toIndexedMesh();
 		

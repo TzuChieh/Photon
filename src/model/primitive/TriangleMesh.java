@@ -44,13 +44,16 @@ public class TriangleMesh extends Primitive
 		m_triangles = new ArrayList<>();
 	}
 	
+	// TODO: make local & global intersect method
 	@Override
-	public boolean isIntersect(Ray ray, Intersection intersection)
+	public boolean isIntersect(Ray localRay, Intersection intersection)
 	{
-		Vector3f localRayOrigin = getModel().getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
-		Vector3f localRayDir    = getModel().getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
+		Debug.printTodoErr();
 		
-		Ray localRay = new Ray(localRayOrigin, localRayDir);
+//		Vector3f localRayOrigin = getModel().getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
+//		Vector3f localRayDir    = getModel().getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
+//		
+//		Ray localRay = new Ray(localRayOrigin, localRayDir);
 		
 		float closestSquareDist = Float.MAX_VALUE;
 		Vector3f localClosestHitPoint = null;
@@ -78,8 +81,10 @@ public class TriangleMesh extends Primitive
 		
 		if(localClosestHitPoint != null)
 		{
-			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
-			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
+//			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
+//			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
+			intersection.intersectPoint = localClosestHitPoint;
+			intersection.intersectNormal = localClosestHitNormal;
 			
 			return true;
 		}
@@ -155,10 +160,7 @@ public class TriangleMesh extends Primitive
 	@Override
 	public void getAtomicPrimitives(List<Primitive> results)
 	{
-		for(Triangle triangle : m_triangles)
-		{
-			results.add(triangle);
-		}
+		results.addAll(m_triangles);
 	}
 
 	@Override

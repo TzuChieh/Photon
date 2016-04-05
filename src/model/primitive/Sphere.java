@@ -37,6 +37,8 @@ public class Sphere extends Primitive
 	// produce floating point precision artefact on rendered surface.
 	// Radii around 1000 are fine, but no guarantee on higher values.
 	
+	// Sphere stores global coordinates.
+	
 	private static final float EPSILON = 0.0001f;
 	
 	private Vector3f m_center;
