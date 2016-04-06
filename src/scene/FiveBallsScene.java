@@ -139,13 +139,13 @@ public class FiveBallsScene extends Scene
 ////		groundWallMatl.setRoughness(0.2f);
 //		addModel(groundWall);
 		
-//		AbradedOpaque topWallMatl = new AbradedOpaque();
-//		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
-//		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
-////		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
-//		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
-////		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
-//		addModel(topWall);
+		AbradedOpaque topWallMatl = new AbradedOpaque();
+		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
+		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+//		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
+		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
+//		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
+		addModel(topWall);
 		
 //		AbradedOpaque frontWallMatl = new AbradedOpaque();
 //		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + 5.5f, wallR), frontWallMatl);

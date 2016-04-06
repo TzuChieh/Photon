@@ -363,10 +363,10 @@ public class KdtreeNode extends AABB
 			double nNodeXextent = xPoints[i].testPoint - getMinVertex().x;
 			double pNodeSurfaceArea = 2.0 * (pNodeXextent * yExtent + yExtent * zExtent + zExtent * pNodeXextent);
 			double nNodeSurfaceArea = 2.0 * (nNodeXextent * yExtent + yExtent * zExtent + zExtent * nNodeXextent);
-			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
-			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			double pNodeFrac = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeFrac = nNodeSurfaceArea / noSplitSurfaceArea;
 			
-			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeFrac*numPnodePrims + nNodeFrac*numNnodePrims);
 			
 			if(splitCost < minSplitCost)
 			{
@@ -412,10 +412,10 @@ public class KdtreeNode extends AABB
 			double nNodeYextent = yPoints[i].testPoint - getMinVertex().y;
 			double pNodeSurfaceArea = 2.0 * (xExtent * pNodeYextent + pNodeYextent * zExtent + zExtent * xExtent);
 			double nNodeSurfaceArea = 2.0 * (xExtent * nNodeYextent + nNodeYextent * zExtent + zExtent * xExtent);
-			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
-			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			double pNodeFrac = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeFrac = nNodeSurfaceArea / noSplitSurfaceArea;
 			
-			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeFrac*numPnodePrims + nNodeFrac*numNnodePrims);
 			
 			if(splitCost < minSplitCost)
 			{
@@ -461,10 +461,10 @@ public class KdtreeNode extends AABB
 			double nNodeZextent = zPoints[i].testPoint - getMinVertex().z;
 			double pNodeSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * pNodeZextent + pNodeZextent * xExtent);
 			double nNodeSurfaceArea = 2.0 * (xExtent * yExtent + yExtent * nNodeZextent + nNodeZextent * xExtent);
-			double pNodeProb = pNodeSurfaceArea / noSplitSurfaceArea;
-			double nNodeProb = nNodeSurfaceArea / noSplitSurfaceArea;
+			double pNodeFrac = pNodeSurfaceArea / noSplitSurfaceArea;
+			double nNodeFrac = nNodeSurfaceArea / noSplitSurfaceArea;
 			
-			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeProb*numPnodePrims + nNodeProb*numNnodePrims);
+			double splitCost = COST_TRAVERSAL + COST_INTERSECTION * (pNodeFrac*numPnodePrims + nNodeFrac*numNnodePrims);
 			
 			if(splitCost < minSplitCost)
 			{
@@ -500,6 +500,9 @@ public class KdtreeNode extends AABB
 				Debug.printErr("KdtreeNode: unidentified split axis detected");
 				break;
 			}
+			
+			pChildAABB.updateCenter();
+			nChildAABB.updateCenter();
 			
 			m_positiveNode = buildChild(pChildAABB, primitives);
 			m_negativeNode = buildChild(nChildAABB, primitives);
