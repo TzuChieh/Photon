@@ -74,90 +74,90 @@ public class KdtreeNode extends AABB
 	
 	public boolean findClosestIntersection(Ray ray, Intersection intersection)
 	{
-//		Vector2f nearFarDist = new Vector2f();
-//		
-//		if(!isIntersect(ray, nearFarDist))
-//		{
-//			// ray missed root node's aabb
-//			return false;
-//		}
-//		
-//		float nearHitDist = nearFarDist.x < 0.0f ? 0.0f : nearFarDist.x;
-//		float farHitDist  = nearFarDist.y;
-//		
-//		return traverseAndFindClosestIntersection(ray, intersection, nearHitDist, farHitDist);
+		Vector2f nearFarDist = new Vector2f();
 		
-		if(isIntersect(ray))
+		if(!isIntersect(ray, nearFarDist))
 		{
-			if(!isLeaf())
-			{
-				boolean hit = false;
-				
-				if(m_positiveNode != null)
-				{
-					hit |= m_positiveNode.findClosestIntersection(ray, intersection);
-				}
-				
-				if(m_negativeNode != null)
-				{
-					hit |= m_negativeNode.findClosestIntersection(ray, intersection);
-				}
-				
-				return hit;
-			}
-			else
-			{
-				Model     closestModel     = intersection.model;
-				Vector3f  closestHitPos    = intersection.intersectPoint;
-				Vector3f  closestHitNormal = intersection.intersectNormal;
-				
-				Vector3f temp = new Vector3f();
-				
-				float closestHitSquaredDist = Float.MAX_VALUE;
-				
-				if(closestModel != null)
-					closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
-				
-				boolean closerHitFound = false;
-				
-				for(Primitive primitive : m_primitives)
-				{
-					if(primitive.isIntersect(ray, intersection))
-					{
-						intersection.intersectPoint.sub(ray.getOrigin(), temp);
-						float squaredHitDist = temp.squareLength();
-						
-						if(squaredHitDist < closestHitSquaredDist)
-						{
-							closestHitSquaredDist = squaredHitDist;
-							
-							closestModel     = primitive.getModel();
-							closestHitPos    = intersection.intersectPoint;
-							closestHitNormal = intersection.intersectNormal;
-							
-							closerHitFound = true;
-						}
-					}
-				}
-				
-				if(closerHitFound || closestModel != null)
-				{
-					intersection.model           = closestModel;
-					intersection.intersectPoint  = closestHitPos;
-					intersection.intersectNormal = closestHitNormal;
-					
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-		else
-		{
+			// ray missed root node's aabb
 			return false;
 		}
+		
+		float nearHitDist = nearFarDist.x < 0.0f ? 0.0f : nearFarDist.x;
+		float farHitDist  = nearFarDist.y;
+		
+		return traverseAndFindClosestIntersection(ray, intersection, 0.0f, Float.MAX_VALUE);
+		
+//		if(isIntersect(ray))
+//		{
+//			if(!isLeaf())
+//			{
+//				boolean hit = false;
+//				
+//				if(m_positiveNode != null)
+//				{
+//					hit |= m_positiveNode.findClosestIntersection(ray, intersection);
+//				}
+//				
+//				if(m_negativeNode != null)
+//				{
+//					hit |= m_negativeNode.findClosestIntersection(ray, intersection);
+//				}
+//				
+//				return hit;
+//			}
+//			else
+//			{
+//				Model     closestModel     = intersection.model;
+//				Vector3f  closestHitPos    = intersection.intersectPoint;
+//				Vector3f  closestHitNormal = intersection.intersectNormal;
+//				
+//				Vector3f temp = new Vector3f();
+//				
+//				float closestHitSquaredDist = Float.MAX_VALUE;
+//				
+//				if(closestModel != null)
+//					closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
+//				
+//				boolean closerHitFound = false;
+//				
+//				for(Primitive primitive : m_primitives)
+//				{
+//					if(primitive.isIntersect(ray, intersection))
+//					{
+//						intersection.intersectPoint.sub(ray.getOrigin(), temp);
+//						float squaredHitDist = temp.squareLength();
+//						
+//						if(squaredHitDist < closestHitSquaredDist)
+//						{
+//							closestHitSquaredDist = squaredHitDist;
+//							
+//							closestModel     = primitive.getModel();
+//							closestHitPos    = intersection.intersectPoint;
+//							closestHitNormal = intersection.intersectNormal;
+//							
+//							closerHitFound = true;
+//						}
+//					}
+//				}
+//				
+//				if(closerHitFound || closestModel != null)
+//				{
+//					intersection.model           = closestModel;
+//					intersection.intersectPoint  = closestHitPos;
+//					intersection.intersectNormal = closestHitNormal;
+//					
+//					return true;
+//				}
+//				else
+//				{
+//					return false;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			return false;
+//		}
 	}
 	
 	private boolean traverseAndFindClosestIntersection(Ray ray, Intersection intersection, float rayDistMin, float rayDistMax)
@@ -192,7 +192,7 @@ public class KdtreeNode extends AABB
 			KdtreeNode nearHitNode;
 			KdtreeNode farHitNode;
 			
-			if(m_splitPos - splitAxisRayOrigin >= 0.0f)
+			if(m_splitPos > splitAxisRayOrigin)
 			{
 				nearHitNode = m_negativeNode;
 				farHitNode  = m_positiveNode;
@@ -209,24 +209,24 @@ public class KdtreeNode extends AABB
 			if(raySplitPlaneDist <= rayDistMin)
 			{
 				if(nearHitNode != null)
+				{
 					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
-				else
-					return false;
+				}
 			}
 			// case II: split plane is beyond ray's range, only near node is hit
 			else if(raySplitPlaneDist >= rayDistMax)
 			{
 				if(nearHitNode != null)
+				{
 					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
-				else
-					return false;
+				}
 			}
 			// case III: split plane is within ray's range, both near and far node are hit
 			else
 			{
 				if(nearHitNode != null)
 				{
-					if(nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax))
+					if(nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, raySplitPlaneDist))
 					{
 						return true;
 					}
@@ -234,7 +234,7 @@ public class KdtreeNode extends AABB
 				
 				if(farHitNode != null)
 				{
-					if(farHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax))
+					if(farHitNode.traverseAndFindClosestIntersection(ray, intersection, raySplitPlaneDist, rayDistMax))
 					{
 						return true;
 					}
@@ -242,15 +242,23 @@ public class KdtreeNode extends AABB
 				
 				return false;
 			}
+			
+			return false;
 		}
 		else
 		{
-			Primitive closestPrimitive = null;
+			Model     closestModel     = intersection.model;
 			Vector3f  closestHitPos    = intersection.intersectPoint;
 			Vector3f  closestHitNormal = intersection.intersectNormal;
 			
 			Vector3f temp = new Vector3f();
+			
 			float closestHitSquaredDist = Float.MAX_VALUE;
+			
+			if(closestModel != null)
+				closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
+			
+			boolean continueTraversal = closestHitSquaredDist > rayDistMax * rayDistMax;
 			
 			for(Primitive primitive : m_primitives)
 			{
@@ -263,25 +271,20 @@ public class KdtreeNode extends AABB
 					{
 						closestHitSquaredDist = squaredHitDist;
 						
-						closestPrimitive = primitive;
+						closestModel     = primitive.getModel();
 						closestHitPos    = intersection.intersectPoint;
 						closestHitNormal = intersection.intersectNormal;
+						
+						continueTraversal = squaredHitDist > rayDistMax * rayDistMax;
 					}
 				}
 			}
 			
-			if(closestPrimitive != null)
-			{
-				intersection.model           = closestPrimitive.getModel();
-				intersection.intersectPoint  = closestHitPos;
-				intersection.intersectNormal = closestHitNormal;
-				
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			intersection.model           = closestModel;
+			intersection.intersectPoint  = closestHitPos;
+			intersection.intersectNormal = closestHitNormal;
+			
+			return !continueTraversal;
 		}
 	}
 	
