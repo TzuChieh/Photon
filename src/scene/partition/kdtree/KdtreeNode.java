@@ -85,7 +85,7 @@ public class KdtreeNode extends AABB
 		float nearHitDist = nearFarDist.x < 0.0f ? 0.0f : nearFarDist.x;
 		float farHitDist  = nearFarDist.y;
 		
-		return traverseAndFindClosestIntersection(ray, intersection, 0.0f, Float.MAX_VALUE);
+		return traverseAndFindClosestIntersection(ray, intersection, nearHitDist, farHitDist);
 		
 //		if(isIntersect(ray))
 //		{
@@ -205,23 +205,23 @@ public class KdtreeNode extends AABB
 			
 			float raySplitPlaneDist = (m_splitPos - splitAxisRayOrigin) / splitAxisRayDir;
 			
-			// case I: split plane is behind ray, only near node is hit
-			if(raySplitPlaneDist <= rayDistMin)
+			// case I: split plane is beyond ray's range or behind ray origin, only near node is hit
+			if(raySplitPlaneDist >= rayDistMax || raySplitPlaneDist < 0.0f)
 			{
 				if(nearHitNode != null)
 				{
 					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
 				}
 			}
-			// case II: split plane is beyond ray's range, only near node is hit
-			else if(raySplitPlaneDist >= rayDistMax)
+			// case II: split plane is between ray origin and near intersection point, only far node is hit
+			else if(raySplitPlaneDist <= rayDistMin)
 			{
-				if(nearHitNode != null)
+				if(farHitNode != null)
 				{
-					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
+					return farHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
 				}
 			}
-			// case III: split plane is within ray's range, both near and far node are hit
+			// case III: split plane is within ray's range, and both near and far node are hit
 			else
 			{
 				if(nearHitNode != null)
@@ -258,6 +258,7 @@ public class KdtreeNode extends AABB
 			if(closestModel != null)
 				closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
 			
+			// NOTE: this will fail if rayDistMax is Float.MAX_VALUE, NaN or anything large enough
 			boolean continueTraversal = closestHitSquaredDist > rayDistMax * rayDistMax;
 			
 			for(Primitive primitive : m_primitives)
