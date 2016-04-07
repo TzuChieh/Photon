@@ -49,11 +49,15 @@ public class ObjModel implements Model
 		
 
 //		AbradedOpaque matl = new AbradedOpaque();
-		AbradedTranslucent matl = new AbradedTranslucent();
-		m_defaultMaterial = matl;
-		matl.setIor(1.5f);
-		matl.setRoughness(0.0f);
+////		AbradedTranslucent matl = new AbradedTranslucent();
+//		m_defaultMaterial = matl;
+////		matl.setIor(1.5f);
+//		matl.setRoughness(0.0f);
 //		matl.setEmissivity(10, 10, 10);
+		
+		AbradedOpaque matl = new AbradedOpaque();
+		m_defaultMaterial = matl;
+		matl.setAlbedo(1.0f, 1.0f, 1.0f);
 		
 		IndexedMesh indexedMesh = new ObjParser(fullFilename).toIndexedMesh();
 		

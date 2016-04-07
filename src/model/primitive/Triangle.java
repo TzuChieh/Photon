@@ -157,9 +157,9 @@ public class Triangle extends Primitive
 	{
 		// TODO: transform aabb to local space may be faster
 		
-		Vector3f tvA = new Vector3f();
-		Vector3f tvB = new Vector3f();
-		Vector3f tvC = new Vector3f();
+		Vector3f tvA     = new Vector3f();
+		Vector3f tvB     = new Vector3f();
+		Vector3f tvC     = new Vector3f();
 		
 		getModel().getTransform().getModelMatrix().mul(m_vA, 1.0f, tvA);
 		getModel().getTransform().getModelMatrix().mul(m_vB, 1.0f, tvB);
@@ -190,11 +190,15 @@ public class Triangle extends Primitive
 		if(sortedProjection.z < -aabbHalfExtents.z || sortedProjection.x > aabbHalfExtents.z)
 			return false;
 		
+		Vector3f tNormal = new Vector3f();
+		getModel().getTransform().getModelMatrix().mul(m_normal, 0.0f, tNormal);
+		tNormal.normalizeLocal();
+		
 		// test triangle's face normal
-		float trigOffset = tvA.dot(m_normal);
-		sortedProjection.z = Math.abs(aabbHalfExtents.x * m_normal.x)
-				           + Math.abs(aabbHalfExtents.y * m_normal.y)
-				           + Math.abs(aabbHalfExtents.z * m_normal.z);
+		float trigOffset = tvA.dot(tNormal);
+		sortedProjection.z = Math.abs(aabbHalfExtents.x * tNormal.x)
+				           + Math.abs(aabbHalfExtents.y * tNormal.y)
+				           + Math.abs(aabbHalfExtents.z * tNormal.z);
 		sortedProjection.x = -sortedProjection.z;
 		if(sortedProjection.z < trigOffset || sortedProjection.x > trigOffset)
 			return false;

@@ -214,7 +214,7 @@ public class KdtreeNode extends AABB
 				}
 			}
 			// case II: split plane is between ray origin and near intersection point, only far node is hit
-			else if(raySplitPlaneDist <= rayDistMin)
+			else if(raySplitPlaneDist <= rayDistMin && raySplitPlaneDist > 0.0f)
 			{
 				if(farHitNode != null)
 				{
@@ -295,6 +295,7 @@ public class KdtreeNode extends AABB
 		buildChildren(primitives);
 	}
 	
+	// a SAH based spatial partitioning algorithm
 	private void buildChildren(List<Primitive> primitives)
 	{
 		// be aware of array sizes that are around Integer.MAX_VALUE
