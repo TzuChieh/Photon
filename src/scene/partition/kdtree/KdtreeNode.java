@@ -515,7 +515,7 @@ public class KdtreeNode extends AABB
 		else
 		{
 			m_primitives = primitives;
-			Debug.print(primitives.size());
+			Debug.print("size: " + primitives.size() + ", (" + minSplitCost + ", " + noSplitCost + ")");
 			Debug.print("????????");
 		}
 	}

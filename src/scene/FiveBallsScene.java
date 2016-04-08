@@ -36,26 +36,51 @@ public class FiveBallsScene extends Scene
 	{
 		super();
 		
+//		Camera camera = getCamera();
+////		camera.setPos(0.07f, 0.03f, 5.01f);
+////		camera.setDir(0.3f, -0.0f, -1.0f);
+//		camera.setPos(-1.5f, 2.43f, 4.01f);
+////		camera.setPos(0.07f, 0.03f, 4.95f);
+//		camera.setDir(0.2f, -0.25f, -1.0f);
+		
 		Camera camera = getCamera();
-//		camera.setPos(0.07f, 0.03f, 5.01f);
-//		camera.setDir(0.3f, -0.0f, -1.0f);
-		camera.setPos(-1.5f, 2.43f, 4.01f);
-//		camera.setPos(0.07f, 0.03f, 4.95f);
-		camera.setDir(0.2f, -0.25f, -1.0f);
+		camera.setPos(-4.4f, -3.0f, 2.01f);
+		camera.setDir(0.25f, -0.35f, -1.0f);
 		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
-		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
-//		bunnyModel.getTransform().setPos(-1.0f, 0.0f, -1.0f);
+//		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
+//		bunnyModel.getTransform().setPos(-1.0f, 0.5f, 0.0f);
+//		bunnyModel.getTransform().setScale(2.0f);
+//		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+		
+		// observe caustics
+		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
+		bunnyModel.getTransform().setPos(-3.8f, -4.98f, -1.5f);
+		bunnyModel.getTransform().setScale(2.0f);
+		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+		
+		AbradedOpaque sphereLightMatl = new AbradedOpaque();
+		RawModel sphereLight = new RawModel(new Sphere(-3.55f, -3.6f, -3.0f, 0.5f), sphereLightMatl);
+		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
+		sphereLightMatl.setEmissivity(5.0f, 20.0f, 5.0f);
+		addModel(sphereLight);
+		
+		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
+		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
+		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
+		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
+		addModel(sphereLight2);
+		
 		
 //		ObjModel bunnyModel = new ObjModel("./resource/model/venusm_low_poly.obj");
 //		ObjModel bunnyModel = new ObjModel("./resource/model/icosphere.obj");
 //		bunnyModel.getPrimitive().getTransform().setPos(-5.0f, 0.0f, -7.0f);
-//		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
+//		ObjModel bunnyModel = new ObjModel("./resource/model/bunny_low_poly.obj");
 //		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
-		bunnyModel.getTransform().setPos(-1.0f, 0.5f, 0.0f);
-		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 90);
+//		bunnyModel.getTransform().setPos(-1.0f, 0.5f, 0.0f);
+//		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 90);
 		addModel(bunnyModel);
 		
 //		AbradedOpaque sphere1Matl = new AbradedOpaque();
@@ -101,10 +126,11 @@ public class FiveBallsScene extends Scene
 //		sphere5Matl.setF0(1.0f, 1.0f, 1.0f);
 //		addModel(sphere5);
 		
-//		RawModel whiteSphereLight = new RawModel(new AnalyticalSphere(1.0f, 1.0f, -10.0f, 0.5f));
-//		whiteSphereLight.getMaterial().setBaseColor(1.0f, 1.0f, 1.0f);
-//		whiteSphereLight.getMaterial().setEmissivity(50.0f, 50.0f, 50.0f);
-//		scene.addModel(whiteSphereLight);
+//		AbradedOpaque whiteSphereLightMatl = new AbradedOpaque();
+//		RawModel whiteSphereLight = new RawModel(new Sphere(1.0f, 1.0f, -10.0f, 0.5f), whiteSphereLightMatl);
+//		whiteSphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
+//		whiteSphereLightMatl.setEmissivity(50.0f, 50.0f, 50.0f);
+//		addModel(whiteSphereLight);
 		
 		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();

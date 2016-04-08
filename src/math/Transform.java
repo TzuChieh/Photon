@@ -81,6 +81,12 @@ public class Transform
 		update();
 	}
 	
+	public void setScale(float uniformScale)
+	{
+		m_scaleMatrix.initScale(uniformScale, uniformScale, uniformScale);
+		update();
+	}
+	
 	public Matrix4f getModelMatrix()
 	{
 		return m_modelMatrix;

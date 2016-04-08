@@ -43,11 +43,14 @@ public class Engine
 //	private static final int FRAME_WIDTH_PX  = 1366;
 //	private static final int FRAME_HEIGHT_PX = 768;
 	
-	private static final int FRAME_WIDTH_PX  = 800;
-	private static final int FRAME_HEIGHT_PX = 500;
+//	private static final int FRAME_WIDTH_PX  = 800;
+//	private static final int FRAME_HEIGHT_PX = 500;
 	
-//	private static final int FRAME_WIDTH_PX  = 1280;
-//	private static final int FRAME_HEIGHT_PX = 800;
+//	private static final int FRAME_WIDTH_PX  = 400;
+//	private static final int FRAME_HEIGHT_PX = 250;
+	
+	private static final int FRAME_WIDTH_PX  = 1280;
+	private static final int FRAME_HEIGHT_PX = 800;
 	
 	private PathTracer tracer;
 	private Window window;
@@ -78,26 +81,26 @@ public class Engine
 		Util.threadSleep(100);
 		
 		Runnable tracer2 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread tread2 = new Thread(tracer2);
-		tread2.start();
+		Thread thread2 = new Thread(tracer2);
+		thread2.start();
 		
 		Util.threadSleep(100);
 		
 		Runnable tracer3 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread tread3 = new Thread(tracer3);
-		tread3.start();
+		Thread thread3 = new Thread(tracer3);
+		thread3.start();
 		
 		Util.threadSleep(100);
 		
 		Runnable tracer4 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread tread4 = new Thread(tracer4);
-		tread4.start();
+		Thread thread4 = new Thread(tracer4);
+		thread4.start();
 		
 		Util.threadSleep(100);
 		
 //		Runnable tracer5 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-//		Thread tread5 = new Thread(tracer5);
-//		tread5.start();
+//		Thread thread5 = new Thread(tracer5);
+//		thread5.start();
 //		
 //		Util.threadSleep(100);
 	}

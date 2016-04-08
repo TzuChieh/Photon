@@ -109,9 +109,9 @@ public class TriangleMesh extends Primitive
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		float minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE,
-			  minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE,
-			  minZ = Float.MAX_VALUE, maxZ = Float.MIN_VALUE;
+		float minX = Float.POSITIVE_INFINITY, maxX = Float.NEGATIVE_INFINITY,
+		      minY = Float.POSITIVE_INFINITY, maxY = Float.NEGATIVE_INFINITY,
+			  minZ = Float.POSITIVE_INFINITY, maxZ = Float.NEGATIVE_INFINITY;
 		
 		Vector3f vA = new Vector3f();
 		Vector3f vB = new Vector3f();
