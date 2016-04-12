@@ -198,6 +198,11 @@ public final class AbradedOpaque implements Material
 		return m_albedo;
 	}
 	
+	public void setAlbedo(float r, float g, float b)
+	{
+		m_albedo.set(r, g, b);
+	}
+	
 	public Vector3f getEmissivity()
 	{
 		return m_emissivity;
@@ -206,11 +211,6 @@ public final class AbradedOpaque implements Material
 	public void setEmissivity(float r, float g, float b)
 	{
 		m_emissivity.set(r, g, b);
-	}
-	
-	public void setAlbedo(float r, float g, float b)
-	{
-		m_albedo.set(r, g, b);
 	}
 	
 	public void setF0(float r, float g, float b)

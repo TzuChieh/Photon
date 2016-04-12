@@ -53,14 +53,14 @@ public class Display extends JPanel
 			{
 				int inversedY = frame.getHeightPx() - y - 1;
 				
-//				float r = Func.clamp(frame.getPixelR(x, y), 0.0f, 1.0f);
-//				float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
-//				float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
+				float r = Func.clamp(frame.getPixelR(x, y), 0.0f, 1.0f);
+				float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
+				float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
 				
 				// Reinhard tone mapping
-				float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
-				float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));
-				float b = frame.getPixelB(x, y) / (1.0f + frame.getPixelB(x, y));
+//				float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
+//				float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));
+//				float b = frame.getPixelB(x, y) / (1.0f + frame.getPixelB(x, y));
 				
 				if(r != r || g != g || b != b)
 				{

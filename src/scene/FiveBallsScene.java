@@ -26,6 +26,7 @@ import main.Camera;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
+import math.material.PureDiffusion;
 import model.RawModel;
 import model.obj.ObjModel;
 import model.primitive.Sphere;
@@ -36,17 +37,17 @@ public class FiveBallsScene extends Scene
 	{
 		super();
 		
-//		Camera camera = getCamera();
-////		camera.setPos(0.07f, 0.03f, 5.01f);
-////		camera.setDir(0.3f, -0.0f, -1.0f);
+		Camera camera = getCamera();
+//		camera.setPos(0.07f, 0.03f, 5.01f);
+//		camera.setDir(0.3f, -0.0f, -1.0f);
 //		camera.setPos(-1.5f, 2.43f, 4.01f);
-////		camera.setPos(0.07f, 0.03f, 4.95f);
+		camera.setPos(0.07f, 0.03f, 4.95f);
 //		camera.setDir(0.2f, -0.25f, -1.0f);
 		
-		Camera camera = getCamera();
-		camera.setPos(-4.4f, -3.0f, 2.01f);
-		camera.setDir(0.25f, -0.35f, -1.0f);
-		
+//		Camera camera = getCamera();
+//		camera.setPos(-4.4f, -3.0f, 2.01f);
+//		camera.setDir(0.25f, -0.35f, -1.0f);
+//		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
@@ -62,10 +63,11 @@ public class FiveBallsScene extends Scene
 //		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
 		
 		// observe caustics
-		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
-		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
-		dragonModel.getTransform().setScale(1.8f);
-		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+//		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
+//		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
+//		dragonModel.getTransform().setScale(1.8f);
+//		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+//		addModel(dragonModel);
 		
 //		AbradedOpaque sphereLightMatl = new AbradedOpaque();
 //		RawModel sphereLight = new RawModel(new Sphere(-3.55f, -3.6f, -3.0f, 0.5f), sphereLightMatl);
@@ -73,17 +75,17 @@ public class FiveBallsScene extends Scene
 //		sphereLightMatl.setEmissivity(5.0f, 20.0f, 5.0f);
 //		addModel(sphereLight);
 		
-		AbradedOpaque sphereLightMatl = new AbradedOpaque();
-		RawModel sphereLight = new RawModel(new Sphere(-3.0f, -3.3f, -3.0f, 0.5f), sphereLightMatl);
-		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
-		sphereLightMatl.setEmissivity(10.0f, 20.0f, 10.0f);
-		addModel(sphereLight);
-		
-		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
-		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
-		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
-		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
-		addModel(sphereLight2);
+//		AbradedOpaque sphereLightMatl = new AbradedOpaque();
+//		RawModel sphereLight = new RawModel(new Sphere(-3.0f, -3.3f, -3.0f, 0.5f), sphereLightMatl);
+//		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
+//		sphereLightMatl.setEmissivity(10.0f, 20.0f, 10.0f);
+//		addModel(sphereLight);
+//		
+//		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
+//		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
+//		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
+//		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
+//		addModel(sphereLight2);
 		
 		
 //		ObjModel bunnyModel = new ObjModel("./resource/model/venusm_low_poly.obj");
@@ -93,50 +95,56 @@ public class FiveBallsScene extends Scene
 //		ObjModel bunnyModel = new ObjModel("./resource/model/teapot.obj");
 //		bunnyModel.getTransform().setPos(-1.0f, 0.5f, 0.0f);
 //		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 90);
-		addModel(dragonModel);
 		
+		PureDiffusion sphere1Matl = new PureDiffusion(0.3f, 0.3f, 1.0f);
 //		AbradedOpaque sphere1Matl = new AbradedOpaque();
-//		RawModel sphere1 = new RawModel(new Sphere(-halfSize + 0.25f, -halfSize + 0.25f, -10.0f, 0.25f), sphere1Matl);
+		RawModel sphere1 = new RawModel(new Sphere(-halfSize + 0.25f, -halfSize + 0.25f, -10.0f, 0.25f), sphere1Matl);
 //		sphere1Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 //		sphere1Matl.setRoughness(0.0f);
 //		sphere1Matl.setF0(1.0f, 1.0f, 1.0f);
-//		addModel(sphere1);
-//		
+		addModel(sphere1);
+		
+		PureDiffusion sphere2Matl = new PureDiffusion(0.3f, 1.0f, 0.3f);
 //		AbradedOpaque sphere2Matl = new AbradedOpaque();
-//		RawModel sphere2 = new RawModel(new Sphere(-halfSize + 1.5f, -halfSize + 0.5f, -10.0f, 0.5f), sphere2Matl);
+		RawModel sphere2 = new RawModel(new Sphere(-halfSize + 1.5f, -halfSize + 0.5f, -10.0f, 0.5f), sphere2Matl);
 //		sphere2Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 //		sphere2Matl.setRoughness(0.0f);
 //		sphere2Matl.setF0(1.0f, 1.0f, 1.0f);
-//		addModel(sphere2);
-//		
+		addModel(sphere2);
+		
+		PureDiffusion sphere3Matl = new PureDiffusion(1.0f, 0.3f, 0.3f);
 //		AbradedOpaque sphere3Matl = new AbradedOpaque();
-//		RawModel sphere3 = new RawModel(new Sphere(-halfSize + 4.0f, -halfSize + 1.0f, -10.0f, 1.0f), sphere3Matl);
+		RawModel sphere3 = new RawModel(new Sphere(-halfSize + 4.0f, -halfSize + 1.0f, -10.0f, 1.0f), sphere3Matl);
 //		sphere3Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 //		sphere3Matl.setRoughness(0.0f);
 //		sphere3Matl.setF0(1.0f, 1.0f, 1.0f);
-//		addModel(sphere3);
-//		
+		addModel(sphere3);
+		
+		PureDiffusion sphere4Matl = new PureDiffusion(1.0f, 1.0f, 1.0f);
+//		AbradedOpaque sphere4Matl = new AbradedOpaque();
 //		AbradedTranslucent sphere4Matl = new AbradedTranslucent();
+		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 10.0f + 3.0f, 3.0f), sphere4Matl);
 //		RawModel sphere4 = new RawModel(new Sphere(halfSize - 3.0f, -halfSize + 3.0f, -halfSize - 7.0f + 5.0f, 3.0f), sphere4Matl);
-////		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
-////		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
-////		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
-////		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
+//		RawModel sphere4 = new RawModel(new AnalyticalSphere(0.0f, 0.0f, -halfSize - 7.0f, 3.0f));
+//		sphere4Matl.setAlbedo(0.1f, 0.1f, 0.1f);
+//		sphere4Matl.setAlbedo(0.5f, 0.5f, 0.5f);
+//		sphere4Matl.setAlbedo(1.0f, 1.0f, 1.0f);
 //		sphere4Matl.setRoughness(0.0f);
 //		sphere4Matl.setIor(1.55f);
 //		sphere4Matl.setF0(0.0f, 0.0f, 0.0f);
-////		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
-////		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
-////		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
-////		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
-//		addModel(sphere4);
+//		sphere4Matl.setF0(1.0f, 1.0f, 1.0f);
+//		sphere4Matl.setF0(0.9f, 0.9f, 0.9f);
+//		sphere4Matl.setF0(0.5f, 0.5f, 0.5f);
+//		sphere4Matl.setF0(0.1f, 0.1f, 0.1f);
+		addModel(sphere4);
 		
+		PureDiffusion sphere5Matl = new PureDiffusion(1.0f, 1.0f, 1.0f);
 //		AbradedOpaque sphere5Matl = new AbradedOpaque();
-//		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
+		RawModel sphere5 = new RawModel(new Sphere(halfSize - 2.0f, -halfSize + 0.8f, -8.5f, 0.8f), sphere5Matl);
 //		sphere5Matl.setAlbedo(0.0f, 1.0f, 0.0f);
 //		sphere5Matl.setRoughness(0.0f);
 //		sphere5Matl.setF0(1.0f, 1.0f, 1.0f);
-//		addModel(sphere5);
+		addModel(sphere5);
 		
 //		AbradedOpaque whiteSphereLightMatl = new AbradedOpaque();
 //		RawModel whiteSphereLight = new RawModel(new Sphere(1.0f, 1.0f, -10.0f, 0.5f), whiteSphereLightMatl);
@@ -182,8 +190,8 @@ public class FiveBallsScene extends Scene
 		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
 		topWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
-		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
-//		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
+//		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
+		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 		addModel(topWall);
 		
