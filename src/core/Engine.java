@@ -33,6 +33,7 @@ import model.RawModel;
 import model.primitive.Sphere;
 import scene.ClassicMaterialScene;
 import scene.FiveBallsScene;
+import scene.LamborghiniScene;
 import scene.Scene;
 import ui.Window;
 import util.Time;
@@ -69,8 +70,9 @@ public class Engine
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		
-		scene = new FiveBallsScene();
+//		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
+		scene = new LamborghiniScene();
 		
 		scene.cookScene();
 		

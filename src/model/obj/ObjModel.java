@@ -48,14 +48,19 @@ public class ObjModel implements Model
 		m_triangleMesh.setModel(this);
 		
 
-		AbradedTranslucent matl = new AbradedTranslucent();
-		m_defaultMaterial = matl;
-		matl.setIor(1.5f);
-		matl.setRoughness(0.0f);
-		
-//		AbradedOpaque matl = new AbradedOpaque();
+//		AbradedTranslucent matl = new AbradedTranslucent();
 //		m_defaultMaterial = matl;
-//		matl.setAlbedo(1.0f, 1.0f, 1.0f);
+//		matl.setIor(1.5f);
+//		matl.setRoughness(0.02f);
+		
+		AbradedOpaque matl = new AbradedOpaque();
+		m_defaultMaterial = matl;
+		matl.setAlbedo(0.1f, 0.1f, 0.1f);
+//		matl.setF0(0.9f, 0.9f, 0.9f);
+//		matl.setF0(1.0f, 0.765557f, 0.336057f);// gold
+		matl.setF0(0.11f, 0.1f, 0.12f);
+		matl.setRoughness(0.03f);
+		matl.setMetalness(1.0f);
 		
 		IndexedMesh indexedMesh = new ObjParser(fullFilename).toIndexedMesh();
 		

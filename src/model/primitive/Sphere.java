@@ -92,7 +92,6 @@ public class Sphere extends Primitive
 		// (d*d is in fact 1)
 		
 		Vector3f oc = m_center.sub(ray.getOrigin());// vector from ray origin to sphere center
-		float t;
 		float b = ray.getDir().dot(oc);// b in the quadratic equation above (-2 can be cancelled out while solving t)
 		float D = b*b - oc.dot(oc) + m_radius*m_radius;
 		
@@ -102,6 +101,8 @@ public class Sphere extends Primitive
 		}
 		else
 		{
+			float t;
+			
 			D = (float)Math.sqrt(D);
 			
 			// pick closest point in front of ray origin

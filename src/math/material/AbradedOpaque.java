@@ -40,7 +40,8 @@ public final class AbradedOpaque implements Material
 	// F0: reflectivity at normal incidence
 	// o:  vector dot
 	
-	private float m_roughness;
+	private float    m_roughness;
+	private float    m_metalness;
 	private Vector3f m_f0;
 	private Vector3f m_albedo;
 	private Vector3f m_emissivity;
@@ -48,6 +49,7 @@ public final class AbradedOpaque implements Material
 	public AbradedOpaque()
 	{
 		m_roughness = 0.5f;
+		m_metalness = 0.0f;
 		
 		// around plastic
 		m_f0 = new Vector3f(0.04f, 0.04f, 0.04f);
@@ -157,12 +159,13 @@ public final class AbradedOpaque implements Material
 				reflectance.set(F.mul(constTerm));
 			}
 		}
-		// if the object is opaque, assume the resting energy is diffused (Kd)
+		// since the object is opaque, assume the resting energy is diffused (Kd)
 		else
 		{
 			L = genDiffuseSampleDirIS(N, V);
 			
 			Vector3f diffuseReflectivity = F.complement();
+			diffuseReflectivity.mulLocal(1.0f - m_metalness);
 			
 			// account for probability
 			diffuseReflectivity.divLocal(1.0f - reflectionProb);
@@ -228,5 +231,15 @@ public final class AbradedOpaque implements Material
 	public float getRoughness()
 	{
 		return m_roughness;
+	}
+	
+	public void setMetalness(float metalness)
+	{
+		m_metalness = metalness;
+	}
+	
+	public float getMetalness()
+	{
+		return m_metalness;
 	}
 }

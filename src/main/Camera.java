@@ -94,8 +94,8 @@ public class Camera
 		float halfHeight = halfWidth * (float)yRes / (float)xRes;
 		
 		// Pixel coordinates on screen specify the lower-left corner of each pixel. To obtain
-		// anti-aliasing effect, one must distribute ray directions randomly and uniformly across
-		// each pixel's area.
+		// anti-aliasing effect, one must distribute ray directions randomly and uniformly on
+		// each pixel's rectangular area.
 		float pixelPosX = ((xPx + Rand.getFloat0_1()) / (xRes / 2.0f) - 1.0f) * halfWidth;
 		float pixelPosY = ((yPx + Rand.getFloat0_1()) / (yRes / 2.0f) - 1.0f) * halfHeight;
 		
