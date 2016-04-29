@@ -24,14 +24,14 @@ package model.primitive;
 
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
 import util.Func;
 
-public class Sphere extends Primitive
+public class Sphere extends AtomicPrimitive 
 {
 	// Notice that we've confirmed that radii larger than 10000 will
 	// produce floating point precision artefact on rendered surface.
@@ -154,7 +154,7 @@ public class Sphere extends Primitive
 	}
 
 	@Override
-	public void getAtomicPrimitives(List<Primitive> results)
+	public void getAtomicPrimitives(List<AtomicPrimitive> results)
 	{
 		results.add(this);
 	}
@@ -169,5 +169,12 @@ public class Sphere extends Primitive
 	public long calcGeometricWeight()
 	{
 		return 1L;
+	}
+
+	@Override
+	public void getNormalInterpolated(Vector3f point)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

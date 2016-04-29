@@ -25,9 +25,9 @@ package scene;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Camera;
-import main.Intersection;
-import main.Ray;
+import core.Camera;
+import core.Intersection;
+import core.Ray;
 import math.Vector3f;
 import model.Model;
 import scene.partition.BruteForce;

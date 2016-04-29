@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import main.Frame;
+import core.Frame;
 import math.Vector3f;
 import util.Color;
 import util.Func;

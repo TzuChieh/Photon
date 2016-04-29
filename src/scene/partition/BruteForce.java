@@ -25,8 +25,8 @@ package scene.partition;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Vector3f;
 import model.Model;
 import model.primitive.Primitive;

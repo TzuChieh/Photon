@@ -22,12 +22,6 @@
 
 package core;
 
-import main.Camera;
-import main.Frame;
-import main.PathTracer;
-import main.Ray;
-import main.SampleManager;
-import main.TraceWorker;
 import math.material.AbradedOpaque;
 import model.RawModel;
 import model.primitive.Sphere;

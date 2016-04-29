@@ -22,7 +22,7 @@
 
 package math.material;
 
-import main.Ray;
+import core.Ray;
 import math.Rand;
 import math.Vector3f;
 

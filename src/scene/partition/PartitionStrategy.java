@@ -22,8 +22,8 @@
 
 package scene.partition;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import model.primitive.Primitive;
 
 public interface PartitionStrategy

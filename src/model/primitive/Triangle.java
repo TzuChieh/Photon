@@ -24,14 +24,14 @@ package model.primitive;
 
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Matrix4f;
 import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
 
-public class Triangle extends Primitive
+public class Triangle extends AtomicPrimitive
 {
 	private static final float EPSILON = 0.0001f;
 	
@@ -346,7 +346,7 @@ public class Triangle extends Primitive
 	}
 	
 	@Override
-	public void getAtomicPrimitives(List<Primitive> results)
+	public void getAtomicPrimitives(List<AtomicPrimitive> results)
 	{
 		results.add(this);
 	}
@@ -375,5 +375,12 @@ public class Triangle extends Primitive
 	{
 		return super.toString() + "\n"
 	         + "A" + m_vA + ", B" + m_vB + ", C" + m_vC + ", N" + m_normal;
+	}
+
+	@Override
+	public void getNormalInterpolated(Vector3f point)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

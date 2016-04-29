@@ -24,8 +24,8 @@ package model.boundingVolume;
 
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Transform;
 import math.Vector2f;
 import math.Vector3f;
@@ -212,7 +212,7 @@ public class AABB implements BoundingVolume
 			&& point.z < m_maxVertex.z && point.z > m_minVertex.z;
 	}
 	
-	public void calcAABB(List<Primitive> primitives)
+	public void calcAABB(List<? extends Primitive> primitives)
 	{
 		if(primitives.size() == 0)
 		{

@@ -28,7 +28,7 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import main.Frame;
+import core.Frame;
 
 public class Window
 {

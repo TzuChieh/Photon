@@ -25,8 +25,8 @@ package model.primitive;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Matrix4f;
 import math.Vector3f;
 import model.Model;
@@ -158,7 +158,7 @@ public class TriangleMesh extends Primitive
 	}
 	
 	@Override
-	public void getAtomicPrimitives(List<Primitive> results)
+	public void getAtomicPrimitives(List<AtomicPrimitive> results)
 	{
 		results.addAll(m_triangles);
 	}

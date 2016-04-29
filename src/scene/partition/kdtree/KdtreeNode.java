@@ -26,12 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import main.Intersection;
-import main.Ray;
+import core.Intersection;
+import core.Ray;
 import math.Vector2f;
 import math.Vector3f;
 import model.Model;
 import model.boundingVolume.AABB;
+import model.primitive.AtomicPrimitive;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 import util.Debug;
@@ -49,7 +50,7 @@ public class KdtreeNode extends AABB
 	private KdtreeNode m_positiveNode;
 	private KdtreeNode m_negativeNode;
 	
-	private List<Primitive> m_primitives;
+	private List<? extends Primitive> m_primitives;
 	
 	private int   m_splitAxis;
 	private float m_splitPos;
@@ -289,14 +290,14 @@ public class KdtreeNode extends AABB
 		}
 	}
 	
-	public void build(List<Primitive> primitives)
+	public void build(List<? extends Primitive> primitives)
 	{
 		calcAABB(primitives);
 		buildChildren(primitives);
 	}
 	
 	// a SAH based spatial partitioning algorithm
-	private void buildChildren(List<Primitive> primitives)
+	private void buildChildren(List<? extends Primitive> primitives)
 	{
 		// be aware of array sizes that are around Integer.MAX_VALUE
 		TestPoint[] xPoints = new TestPoint[primitives.size() * 2];
@@ -520,7 +521,7 @@ public class KdtreeNode extends AABB
 		}
 	}
 	
-	private KdtreeNode buildChild(AABB childAABB, List<Primitive> parentPrimitives)
+	private KdtreeNode buildChild(AABB childAABB, List<? extends Primitive> parentPrimitives)
 	{
 		List<Primitive> primitives = new ArrayList<>();
 		

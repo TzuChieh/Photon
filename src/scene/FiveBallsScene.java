@@ -22,7 +22,7 @@
 
 package scene;
 
-import main.Camera;
+import core.Camera;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
