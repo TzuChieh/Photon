@@ -30,6 +30,7 @@ import scene.FiveBallsScene;
 import scene.LamborghiniScene;
 import scene.Scene;
 import ui.Window;
+import util.Debug;
 import util.Time;
 import util.Util;
 
@@ -70,35 +71,14 @@ public class Engine
 		
 		scene.cookScene();
 		
-		Runnable tracer1 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread tread1 = new Thread(tracer1);
-		tread1.start();
-		
-		Util.threadSleep(100);
-		
-		Runnable tracer2 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread thread2 = new Thread(tracer2);
-		thread2.start();
-		
-		Util.threadSleep(100);
-		
-		Runnable tracer3 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread thread3 = new Thread(tracer3);
-		thread3.start();
-		
-		Util.threadSleep(100);
-		
-		Runnable tracer4 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		Thread thread4 = new Thread(tracer4);
-		thread4.start();
-		
-		Util.threadSleep(100);
-		
-//		Runnable tracer5 = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-//		Thread thread5 = new Thread(tracer5);
-//		thread5.start();
-//		
-//		Util.threadSleep(100);
+		for(int i = 0; i < 6; i++)
+		{
+			Runnable tracer = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+			Thread thread = new Thread(tracer);
+			thread.start();
+			
+			Util.threadSleep(100);
+		}
 	}
 	
 	public void run()
@@ -110,18 +90,15 @@ public class Engine
 		
 		int numSamples = 0;
 		
-//		while(numSamples < 20)
 		while(numSamples < Integer.MAX_VALUE)
 		{
-//			tracer.trace(scene, camera, frame);
-//			sampleManager.addSample(frame);
-			
 			numSamples = sampleManager.getCombinedSample(frame);
 			
 			window.render(frame);
 			
-			
-			System.out.println("number of samples: " + numSamples);
+			Debug.print("=============================================");
+			Debug.print("number of samples: " + numSamples);
+			Debug.print(Statistics.getCurrentKrps());
 			
 			Util.threadSleep(500);
 		}

@@ -24,23 +24,23 @@ package util;
 
 public class Time 
 {
-	public static double getTime()
-	{
-		return (double)System.nanoTime()/1000000000.0;
-	}
+//	public static double getTime()
+//	{
+//		return (double)System.nanoTime()/1000000000.0;
+//	}
+//	
+//	public static double getNanoTime()
+//	{
+//		return (double)System.nanoTime();
+//	}
+//	
+//	public static double getMicroTime()
+//	{
+//		return (double)System.nanoTime()/1000.0;
+//	}
 	
-	public static double getNanoTime()
+	public static long getMilliTime()
 	{
-		return (double)System.nanoTime();
-	}
-	
-	public static double getMicroTime()
-	{
-		return (double)System.nanoTime()/1000.0;
-	}
-	
-	public static double getMilliTime()
-	{
-		return (double)System.currentTimeMillis();
+		return System.currentTimeMillis();
 	}
 }

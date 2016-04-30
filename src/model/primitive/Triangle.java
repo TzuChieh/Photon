@@ -35,13 +35,21 @@ public class Triangle extends AtomicPrimitive
 {
 	private static final float EPSILON = 0.0001f;
 	
+	// vertex position
 	private Vector3f m_vA;
 	private Vector3f m_vB;
 	private Vector3f m_vC;
 	
+	// vertex normal
+	private Vector3f m_nA;
+	private Vector3f m_nB;
+	private Vector3f m_nC;
+	
+	// edge vector
 	private Vector3f m_eAB;
 	private Vector3f m_eAC;
 	
+	// surface normal
 	private Vector3f m_normal;
 	
 	// front facing: CCW vertex order
@@ -49,13 +57,18 @@ public class Triangle extends AtomicPrimitive
 	{
 		super();
 		
+		m_eAB = vB.sub(vA);
+		m_eAC = vC.sub(vA);
+		
+		m_normal = m_eAB.cross(m_eAC).normalizeLocal();
+		
 		m_vA = new Vector3f(vA);
 		m_vB = new Vector3f(vB);
 		m_vC = new Vector3f(vC);
 		
-		m_eAB = vB.sub(vA);
-		m_eAC = vC.sub(vA);
-		m_normal = m_eAB.cross(m_eAC).normalizeLocal();
+		m_nA = new Vector3f(m_normal);
+		m_nB = new Vector3f(m_normal);
+		m_nC = new Vector3f(m_normal);
 	}
 	
 	// TODO: make local & global intersect method
@@ -143,7 +156,8 @@ public class Triangle extends AtomicPrimitive
 		
 		// so the ray intersects the triangle (TODO: reuse calculated results!)
 		Vector3f localIntersectPoint  = localRay.getDir().mul(dist).addLocal(localRay.getOrigin());
-		Vector3f localIntersectNormal = new Vector3f(m_normal);
+//		Vector3f localIntersectNormal = new Vector3f(m_normal);
+		Vector3f localIntersectNormal = m_nB.mul(baryB).addLocal(m_nC.mul(baryC)).addLocal(m_nA.mul(1.0f - baryB - baryC)).normalizeLocal();
 		intersection.intersectPoint  = getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f);
 		intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal();
 		
@@ -382,5 +396,19 @@ public class Triangle extends AtomicPrimitive
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setVertices(Vector3f vA, Vector3f vB, Vector3f vC)
+	{
+		m_vA.set(vA);
+		m_vB.set(vB);
+		m_vC.set(vC);
+	}
+	
+	public void setNormals(Vector3f nA, Vector3f nB, Vector3f nC)
+	{
+		m_nA.set(nA);
+		m_nB.set(nB);
+		m_nC.set(nC);
 	}
 }

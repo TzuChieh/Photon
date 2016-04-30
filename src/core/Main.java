@@ -22,6 +22,9 @@
 
 package core;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import math.Rand;
 import math.Vector2f;
 import math.Vector3f;
@@ -55,6 +58,10 @@ public class Main
 //		Sphere sphere = new Sphere(new Vector3f(1.999f, 0, 0), 1);
 //		
 //		System.out.println(sphere.isIntersect(aabb));
+		
+		BigDecimal a = new BigDecimal(7777777);
+		BigDecimal b = new BigDecimal(1201);
+		Debug.print(a.divide(b, 3, RoundingMode.FLOOR));
 		
 		Engine engine = new Engine();
 		

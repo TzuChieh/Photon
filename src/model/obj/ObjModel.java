@@ -55,10 +55,11 @@ public class ObjModel implements Model
 		
 		AbradedOpaque matl = new AbradedOpaque();
 		m_defaultMaterial = matl;
-		matl.setAlbedo(0.1f, 0.1f, 0.1f);
+//		matl.setAlbedo(0.1f, 0.1f, 0.1f);
+		matl.setAlbedo(0.0f, 0.0f, 0.0f);
 //		matl.setF0(0.9f, 0.9f, 0.9f);
-//		matl.setF0(1.0f, 0.765557f, 0.336057f);// gold
-		matl.setF0(0.11f, 0.1f, 0.12f);
+		matl.setF0(1.0f, 0.765557f, 0.336057f);// gold
+//		matl.setF0(0.11f, 0.1f, 0.12f);
 		matl.setRoughness(0.03f);
 		matl.setMetalness(1.0f);
 		
@@ -66,11 +67,17 @@ public class ObjModel implements Model
 		
 		for(int i = 0; i < indexedMesh.getIndices().size(); i += 3)
 		{
-			Vector3f posA = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i));
-			Vector3f posB = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 1));
-			Vector3f posC = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 2));
+			Vector3f positionA = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i));
+			Vector3f positionB = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 1));
+			Vector3f positionC = indexedMesh.getPositions().get(indexedMesh.getIndices().get(i + 2));
 			
-			m_triangleMesh.addTriangle(new Triangle(posA, posB, posC));
+			Vector3f normalA = indexedMesh.getNormals().get(indexedMesh.getIndices().get(i));
+			Vector3f normalB = indexedMesh.getNormals().get(indexedMesh.getIndices().get(i + 1));
+			Vector3f normalC = indexedMesh.getNormals().get(indexedMesh.getIndices().get(i + 2));
+			
+			Triangle triangle = new Triangle(positionA, positionB, positionC);
+			triangle.setNormals(normalA, normalB, normalC);
+			m_triangleMesh.addTriangle(triangle);
 		}
 	}
 	

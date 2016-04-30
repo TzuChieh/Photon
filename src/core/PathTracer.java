@@ -54,6 +54,8 @@ public class PathTracer
 				sampleResult.setPixelRgb(x, y, ray.getRadiance().x, ray.getRadiance().y, ray.getRadiance().z);
 			}
 		}
+		
+		Statistics.addNumRays(widthPx * heightPx);
 	}
 	
 	private void pathTraceIterative(Scene scene, final Ray ray, int numBounces)

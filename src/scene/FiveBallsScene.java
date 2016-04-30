@@ -37,17 +37,17 @@ public class FiveBallsScene extends Scene
 	{
 		super();
 		
-		Camera camera = getCamera();
-//		camera.setPos(0.07f, 0.03f, 5.01f);
-//		camera.setDir(0.3f, -0.0f, -1.0f);
-//		camera.setPos(-1.5f, 2.43f, 4.01f);
-		camera.setPos(0.07f, 0.03f, 4.95f);
-//		camera.setDir(0.2f, -0.25f, -1.0f);
-		
 //		Camera camera = getCamera();
-//		camera.setPos(-4.4f, -3.0f, 2.01f);
-//		camera.setDir(0.25f, -0.35f, -1.0f);
-//		
+////		camera.setPos(0.07f, 0.03f, 5.01f);
+////		camera.setDir(0.3f, -0.0f, -1.0f);
+////		camera.setPos(-1.5f, 2.43f, 4.01f);
+//		camera.setPos(0.07f, 0.03f, 4.95f);
+////		camera.setDir(0.2f, -0.25f, -1.0f);
+		
+		Camera camera = getCamera();
+		camera.setPos(-4.4f, -3.0f, 2.01f);
+		camera.setDir(0.25f, -0.35f, -1.0f);
+		
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
@@ -63,11 +63,11 @@ public class FiveBallsScene extends Scene
 //		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
 		
 		// observe caustics
-//		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
-//		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
-//		dragonModel.getTransform().setScale(1.8f);
-//		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
-//		addModel(dragonModel);
+		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
+		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
+		dragonModel.getTransform().setScale(1.8f);
+		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+		addModel(dragonModel);
 		
 //		AbradedOpaque sphereLightMatl = new AbradedOpaque();
 //		RawModel sphereLight = new RawModel(new Sphere(-3.55f, -3.6f, -3.0f, 0.5f), sphereLightMatl);
