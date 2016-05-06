@@ -44,6 +44,7 @@ public class Scene
 	{
 		m_models = new ArrayList<>();
 		m_camera = new Camera();
+		
 //		m_partitioinStrategy = new BruteForce();
 		m_partitioinStrategy = new Kdtree();
 	}

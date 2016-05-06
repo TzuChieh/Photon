@@ -20,47 +20,47 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package core;
+package scene;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import math.Rand;
-import math.Vector2f;
+import core.Camera;
 import math.Vector3f;
 import math.material.AbradedOpaque;
+import math.material.AbradedTranslucent;
+import math.material.PureDiffusion;
 import model.RawModel;
-import model.boundingVolume.AABB;
+import model.obj.ObjModel;
 import model.primitive.Sphere;
-import model.primitive.Triangle;
-import ui.Window;
-import util.Debug;
-import util.Time;
 
-public class Main
+public class SponzaScene extends Scene
 {
-	public static void main(String[] args)
+	public SponzaScene()
 	{
-//		Triangle triangle = new Triangle(new Vector3f(12, 9, 9), new Vector3f(9, 12, 9), new Vector3f(19, 19, 20));
-//		AABB aabb = new AABB(new Vector3f(-10, -10, -10), new Vector3f(10, 10, 10));
-//		
-//		System.out.println(triangle.isIntersect(aabb));
-//		System.out.println(aabb.isIntersect(aabb));
+		super();
 		
-//		Vector2f hitDist = new Vector2f();
-//		AABB aabb = new AABB(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1));
-//		Ray ray = new Ray(new Vector3f(0, 0, 0), new Vector3f(-1, -1, -1).normalizeLocal());
-//		
-//		System.out.println(aabb.isIntersect(ray, hitDist));
-//		System.out.println(hitDist);
+//		Camera camera = getCamera();
+////		camera.setPos(0.07f, 0.03f, 5.01f);
+////		camera.setDir(0.3f, -0.0f, -1.0f);
+////		camera.setPos(-1.5f, 2.43f, 4.01f);
+//		camera.setPos(0.07f, 0.03f, 4.95f);
+////		camera.setDir(0.2f, -0.25f, -1.0f);
 		
-//		AABB aabb = new AABB(new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1));
-//		Sphere sphere = new Sphere(new Vector3f(1.999f, 0, 0), 1);
-//		
-//		System.out.println(sphere.isIntersect(aabb));
+		Camera camera = getCamera();
+		camera.setPos(0.0f, 2.0f, 10.0f);
+		camera.setDir(0.0f, 0.25f, -1.0f);
 		
-		Engine engine = new Engine();
+		float wallR = 1000.0f;
 		
-		engine.run();
+		ObjModel sponzaModel = new ObjModel("./resource/model/dabrovic_sponza.obj");
+//		ObjModel sponzaModel = new ObjModel("./resource/model/sponza_partial.obj");
+		sponzaModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 90);
+		addModel(sponzaModel);
+		
+		AbradedOpaque topWallMatl = new AbradedOpaque();
+		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + 50.0f, 0.0f, wallR), topWallMatl);
+		topWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+//		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
+		topWallMatl.setEmissivity(4.0f, 4.0f, 4.0f);
+//		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
+		addModel(topWall);
 	}
 }

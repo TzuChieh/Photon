@@ -27,6 +27,7 @@ import math.Vector3f;
 import math.material.BRDF;
 import math.material.Material;
 import scene.Scene;
+import util.Debug;
 import util.Func;
 
 public class PathTracer
@@ -69,6 +70,12 @@ public class PathTracer
 			
 			if(scene.findClosestIntersection(ray, intersection))
 			{
+				if(intersection.model == null)
+				{
+					Debug.printWrn("NO MODEL IN PATHTRACER!");
+					Debug.exit();
+				}
+				
 				Material material = intersection.model.getMaterial();
 				Vector3f N        = new Vector3f(intersection.intersectNormal);
 				

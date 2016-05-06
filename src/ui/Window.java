@@ -22,6 +22,7 @@
 
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -29,25 +30,33 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import core.Frame;
+import ui.panel.CorePanel;
+import ui.panel.Display;
 
 public class Window
 {
-	private JFrame m_frame;
+	public static final int COREPANEL_WIDTH  = 270;
+	public static final int COREPANEL_HEIGHT = 600;
+	
+	private JFrame m_jframe;
 	
 	private Display m_display;
 	
 	public Window(int widthPx, int heightPx)
 	{
-		m_frame = new JFrame("Photon ver. 0.1");
-		m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		m_frame.getContentPane().setPreferredSize(new Dimension(widthPx, heightPx));
-//		m_frame.setLocationRelativeTo(null);
-		m_frame.setResizable(false);
-		m_frame.setVisible(true);
+		m_jframe = new JFrame("Photon ver. 0.1");
+		m_jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		m_jframe.setBounds(0, 0, widthPx, heightPx);
+		m_jframe.setLocationRelativeTo(null);
+		m_jframe.setLayout(new BorderLayout());
+		m_jframe.setResizable(false);
+		m_jframe.setVisible(true);
 		
-		m_display = new Display(0, 0, widthPx, heightPx);
-		m_frame.add(m_display);
-		m_frame.pack();
+		m_display = new Display(widthPx, heightPx);
+		m_jframe.add(m_display, BorderLayout.CENTER);
+		
+//		CorePanel corePanel = new CorePanel();
+//		m_jframe.add(corePanel, BorderLayout.WEST);
 	}
 	
 	public void render(Frame frame)

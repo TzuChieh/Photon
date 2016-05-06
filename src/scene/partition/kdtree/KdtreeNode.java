@@ -108,9 +108,9 @@ public class KdtreeNode extends AABB
 //			}
 //			else
 //			{
-//				Model     closestModel     = intersection.model;
-//				Vector3f  closestHitPos    = intersection.intersectPoint;
-//				Vector3f  closestHitNormal = intersection.intersectNormal;
+//				Model    closestModel     = intersection.model;
+//				Vector3f closestHitPos    = intersection.intersectPoint;
+//				Vector3f closestHitNormal = intersection.intersectNormal;
 //				
 //				Vector3f temp = new Vector3f();
 //				
@@ -204,9 +204,11 @@ public class KdtreeNode extends AABB
 				farHitNode  = m_negativeNode;
 			}
 			
+			// The result can be NaN (the ray is lying on the splitting plane). In such case, traverse both
+			// positive and negative node (handled in Case III).
 			float raySplitPlaneDist = (m_splitPos - splitAxisRayOrigin) / splitAxisRayDir;
 			
-			// case I: split plane is beyond ray's range or behind ray origin, only near node is hit
+			// Case I: Split plane is beyond ray's range or behind ray origin, only near node is hit.
 			if(raySplitPlaneDist >= rayDistMax || raySplitPlaneDist < 0.0f)
 			{
 				if(nearHitNode != null)
@@ -214,7 +216,7 @@ public class KdtreeNode extends AABB
 					return nearHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
 				}
 			}
-			// case II: split plane is between ray origin and near intersection point, only far node is hit
+			// Case II: Split plane is between ray origin and near intersection point, only far node is hit.
 			else if(raySplitPlaneDist <= rayDistMin && raySplitPlaneDist > 0.0f)
 			{
 				if(farHitNode != null)
@@ -222,7 +224,7 @@ public class KdtreeNode extends AABB
 					return farHitNode.traverseAndFindClosestIntersection(ray, intersection, rayDistMin, rayDistMax);
 				}
 			}
-			// case III: split plane is within ray's range, and both near and far node are hit
+			// Case III: Split plane is within ray's range, and both near and far node are hit.
 			else
 			{
 				if(nearHitNode != null)
@@ -240,27 +242,22 @@ public class KdtreeNode extends AABB
 						return true;
 					}
 				}
-				
-				return false;
 			}
 			
 			return false;
 		}
 		else
 		{
-			Model     closestModel     = intersection.model;
-			Vector3f  closestHitPos    = intersection.intersectPoint;
-			Vector3f  closestHitNormal = intersection.intersectNormal;
+			Model    closestModel     = intersection.model;
+			Vector3f closestHitPos    = intersection.intersectPoint;
+			Vector3f closestHitNormal = intersection.intersectNormal;
 			
 			Vector3f temp = new Vector3f();
 			
-			float closestHitSquaredDist = Float.MAX_VALUE;
+			float closestHitSquaredDist = Float.POSITIVE_INFINITY;
 			
 			if(closestModel != null)
 				closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
-			
-			// NOTE: this will fail if rayDistMax is Float.MAX_VALUE, NaN or anything large enough
-			boolean continueTraversal = closestHitSquaredDist > rayDistMax * rayDistMax;
 			
 			for(Primitive primitive : m_primitives)
 			{
@@ -276,8 +273,6 @@ public class KdtreeNode extends AABB
 						closestModel     = primitive.getModel();
 						closestHitPos    = intersection.intersectPoint;
 						closestHitNormal = intersection.intersectNormal;
-						
-						continueTraversal = squaredHitDist > rayDistMax * rayDistMax;
 					}
 				}
 			}
@@ -286,7 +281,12 @@ public class KdtreeNode extends AABB
 			intersection.intersectPoint  = closestHitPos;
 			intersection.intersectNormal = closestHitNormal;
 			
-			return !continueTraversal;
+			// Notice that rayDistMax can be NaN, in such case the return value (does the intersection found)
+			// will always be false, even if we've actually found one and stored it in the intersection. Since
+			// this is a rare situation, and to properly handle it may slow down the algorithm quite a bit, so
+			// I assumed that ignoring these cases won't generate any visual artifacts.
+			
+			return (closestHitSquaredDist <= rayDistMax * rayDistMax) && (closestModel != null);
 		}
 	}
 	
@@ -316,6 +316,7 @@ public class KdtreeNode extends AABB
 			zPoints[2 * i + 1] = new TestPoint(primAABB.getMaxVertex().z, TestPoint.PRIMITIVE_MAX);
 		}
 		
+		// the sorting process has to be stable (equal elements shouldn't be reordered)
 		Arrays.sort(xPoints);
 		Arrays.sort(yPoints);
 		Arrays.sort(zPoints);

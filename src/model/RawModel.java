@@ -37,7 +37,7 @@ public class RawModel implements Model
 		m_transform = new Transform();
 		
 		m_primitive = primitive;
-		primitive.setModel(this);
+		m_primitive.setModel(this);
 		
 		m_material  = material;
 	}

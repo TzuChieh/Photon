@@ -20,32 +20,19 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package core;
+package ui.panel;
 
-import scene.Scene;
+import java.awt.Dimension;
 
-public class TraceWorker implements Runnable
+import javax.swing.JPanel;
+
+import ui.Window;
+
+@SuppressWarnings("serial")
+public class CorePanel extends JPanel
 {
-	private Scene         m_scene;
-	private SampleManager m_sampleManager;
-	private PathTracer    m_pathTracer;
-	private Frame         m_sampleResult;
-	
-	public TraceWorker(Scene scene, SampleManager sampleManager, int xRes, int yRes)
+	public CorePanel()
 	{
-		m_scene         = scene;
-		m_sampleManager = sampleManager;
-		m_pathTracer    = new PathTracer();
-		m_sampleResult  = new Frame(xRes, yRes);
-	}
-	
-	@Override
-	public void run()
-	{
-		while(true)
-		{
-			m_pathTracer.trace(m_scene, m_sampleResult);
-			m_sampleManager.addSample(m_sampleResult);
-		}
+		this.setPreferredSize(new Dimension(Window.COREPANEL_WIDTH, Window.COREPANEL_HEIGHT));
 	}
 }

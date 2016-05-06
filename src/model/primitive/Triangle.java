@@ -354,9 +354,13 @@ public class Triangle extends AtomicPrimitive
 		else if(tvC.y < minY) minY = tvC.y;
 		     if(tvC.z > maxZ) maxZ = tvC.z;
 		else if(tvC.z < minZ) minZ = tvC.z;
+		     
+		AABB aabb = new AABB(new Vector3f(minX, minY, minZ),
+				             new Vector3f(maxX, maxY, maxZ));
 		
-		return new AABB(new Vector3f(minX, minY, minZ),
-				        new Vector3f(maxX, maxY, maxZ));
+		aabb.relax();
+		
+		return aabb;
 	}
 	
 	@Override

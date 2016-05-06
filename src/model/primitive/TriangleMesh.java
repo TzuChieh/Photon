@@ -36,6 +36,7 @@ import util.Debug;
 public class TriangleMesh extends Primitive
 {
 	private ArrayList<Triangle> m_triangles;
+	private AABB                m_aabb;
 	
 	public TriangleMesh()
 	{
@@ -46,9 +47,9 @@ public class TriangleMesh extends Primitive
 	
 	// TODO: make local & global intersect method
 	@Override
-	public boolean isIntersect(Ray localRay, Intersection intersection)
+	public boolean isIntersect(Ray ray, Intersection intersection)
 	{
-		Debug.printTodoErr();
+//		Debug.printTodoErr();
 		
 //		Vector3f localRayOrigin = getModel().getTransform().getInverseModelMatrix().mul(ray.getOrigin(), 1.0f);
 //		Vector3f localRayDir    = getModel().getTransform().getInverseModelMatrix().mul(ray.getDir(), 0.0f).normalizeLocal();
@@ -56,35 +57,35 @@ public class TriangleMesh extends Primitive
 //		Ray localRay = new Ray(localRayOrigin, localRayDir);
 		
 		float closestSquareDist = Float.MAX_VALUE;
-		Vector3f localClosestHitPoint = null;
-		Vector3f localClosestHitNormal = null;
+		Vector3f closestHitPoint = null;
+		Vector3f closestHitNormal = null;
 		
 		for(Triangle triangle : m_triangles)
 		{
 			intersection.intersectPoint = null;
 			intersection.intersectNormal = null;
 			
-			triangle.isIntersect(localRay, intersection);
+			triangle.isIntersect(ray, intersection);
 			
 			if(intersection.intersectPoint != null)
 			{
-				float squareDist = intersection.intersectPoint.sub(localRay.getOrigin()).squareLength();
+				float squareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
 				
 				if(squareDist < closestSquareDist)
 				{
 					closestSquareDist = squareDist;
-					localClosestHitPoint = intersection.intersectPoint;
-					localClosestHitNormal = intersection.intersectNormal;
+					closestHitPoint = intersection.intersectPoint;
+					closestHitNormal = intersection.intersectNormal;
 				}
 			}
 		}
 		
-		if(localClosestHitPoint != null)
+		if(closestHitPoint != null)
 		{
 //			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
 //			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
-			intersection.intersectPoint = localClosestHitPoint;
-			intersection.intersectNormal = localClosestHitNormal;
+			intersection.intersectPoint = closestHitPoint;
+			intersection.intersectNormal = closestHitNormal;
 			
 			return true;
 		}
@@ -153,8 +154,12 @@ public class TriangleMesh extends Primitive
 			else if(tvC.z < minZ) minZ = tvC.z;
 		}
 		
-		return new AABB(new Vector3f(minX, minY, minZ),
-				        new Vector3f(maxX, maxY, maxZ));
+		AABB aabb = new AABB(new Vector3f(minX, minY, minZ),
+	                         new Vector3f(maxX, maxY, maxZ));
+
+		aabb.relax();
+		
+		return aabb;
 	}
 	
 	@Override
@@ -192,4 +197,9 @@ public class TriangleMesh extends Primitive
 			triangle.setModel(model);
 		}
 	}
+	
+//	public void cookData()
+//	{
+//		m_aabb = calcTransformedAABB();
+//	}
 }

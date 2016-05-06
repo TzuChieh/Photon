@@ -149,8 +149,12 @@ public class Sphere extends AtomicPrimitive
 	@Override
 	public AABB calcTransformedAABB()
 	{
-		return new AABB(m_center.sub(m_radius),
-				        m_center.add(m_radius));
+		AABB aabb = new AABB(m_center.sub(m_radius),
+		                     m_center.add(m_radius));
+
+		aabb.relax();
+		
+		return aabb;
 	}
 
 	@Override

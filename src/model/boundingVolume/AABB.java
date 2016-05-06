@@ -235,4 +235,13 @@ public class AABB implements BoundingVolume
 		
 		updateCenter();
 	}
+
+	@Override
+	public void relax()
+	{
+		m_minVertex.subLocal(BoundingVolume.RELAX_MARGIN);
+		m_maxVertex.addLocal(BoundingVolume.RELAX_MARGIN);
+		
+		updateCenter();
+	}
 }

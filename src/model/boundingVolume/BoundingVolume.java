@@ -27,7 +27,11 @@ import math.Vector3f;
 
 public interface BoundingVolume
 {
+	public static final float RELAX_MARGIN = 0.0001f;
+	
 	public abstract boolean isIntersect(Ray ray);
 //	public abstract float   calcIntersectDist(Ray ray);
 	public abstract boolean isIntersect(Vector3f point);
+	
+	public abstract void relax();
 }

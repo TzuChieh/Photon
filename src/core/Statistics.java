@@ -31,7 +31,7 @@ import util.Time;
 public final class Statistics
 {
 	private static final int numAvgedData = 100;
-	private static final String UNIT = "k rays/sec";
+	private static final String UNIT = "k samples/sec";
 	
 	private static Object            rpsLock       = new Object();
 	private static LimitedList<Long> numRaysRecord = new LimitedList<>(numAvgedData);

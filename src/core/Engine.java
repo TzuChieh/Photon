@@ -22,6 +22,10 @@
 
 package core;
 
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import math.material.AbradedOpaque;
 import model.RawModel;
 import model.primitive.Sphere;
@@ -29,6 +33,7 @@ import scene.ClassicMaterialScene;
 import scene.FiveBallsScene;
 import scene.LamborghiniScene;
 import scene.Scene;
+import scene.SponzaScene;
 import ui.Window;
 import util.Debug;
 import util.Time;
@@ -49,29 +54,28 @@ public class Engine
 	private static final int FRAME_HEIGHT_PX = 800;
 	
 	private PathTracer tracer;
-	private Window window;
-	private Frame frame;
+	private Window m_window;
 	private Scene scene;
 	
 	private SampleManager sampleManager;
 	
 	public Engine()
 	{
-		window = new Window(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
-		frame = new Frame(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		initGui();
 		
 		tracer = new PathTracer();
 		
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		
-		scene = new FiveBallsScene();
+//		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 //		scene = new LamborghiniScene();
+		scene = new SponzaScene();
 		
 		scene.cookScene();
 		
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < 4; i++)
 		{
 			Runnable tracer = new TraceWorker(scene, sampleManager, FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 			Thread thread = new Thread(tracer);
@@ -83,29 +87,40 @@ public class Engine
 	
 	public void run()
 	{
-		System.out.println("start tracing");
+		final Frame frameResult = new Frame(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
-		
-		double startTimeMs = Time.getMilliTime();
-		
-		int numSamples = 0;
-		
-		while(numSamples < Integer.MAX_VALUE)
+		while(true)
 		{
-			numSamples = sampleManager.getCombinedSample(frame);
+			int numSamples = sampleManager.getCombinedSample(frameResult);
 			
-			window.render(frame);
+			m_window.render(frameResult);
 			
 			Debug.print("=============================================");
 			Debug.print("number of samples: " + numSamples);
 			Debug.print(Statistics.getCurrentKrps());
 			
-			Util.threadSleep(500);
+			Util.threadSleep(1000);
 		}
-		
-		double endTimeMs = Time.getMilliTime();
-		
-		
-		System.out.println("time elapsed: " + (endTimeMs - startTimeMs) + " ms");
+	}
+	
+	private void initGui()
+	{
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					m_window = new Window(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			Debug.printErr("GUI initialization failed");
+			e.printStackTrace();
+			Debug.exit();
+		}
 	}
 }

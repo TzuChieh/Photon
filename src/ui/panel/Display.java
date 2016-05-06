@@ -20,8 +20,9 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package ui;
+package ui.panel;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -32,42 +33,47 @@ import math.Vector3f;
 import util.Color;
 import util.Func;
 
+@SuppressWarnings("serial")
 public class Display extends JPanel
 {
 	private BufferedImage m_bufferedImage;
 	
-	public Display(int xPx, int yPx, int widthPx, int heightPx)
+	public Display(int widthPx, int heightPx)
 	{
 		super();
 		
-		super.setBounds(xPx, yPx, widthPx, heightPx);
+		this.setPreferredSize(new Dimension(widthPx, heightPx));
 		
 		m_bufferedImage = new BufferedImage(widthPx, heightPx, BufferedImage.TYPE_INT_RGB);
 	}
 	
+	// safe to call from any thread since repaint() uses EDT internally
 	public void render(Frame frame)
 	{
-		for(int x = 0; x < frame.getWidthPx(); x++)
+		synchronized(m_bufferedImage)
 		{
-			for(int y = 0; y < frame.getHeightPx(); y++)
+			for(int x = 0; x < frame.getWidthPx(); x++)
 			{
-				int inversedY = frame.getHeightPx() - y - 1;
-				
-				float r = Func.clamp(frame.getPixelR(x, y), 0.0f, 1.0f);
-				float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
-				float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
-				
-				// Reinhard tone mapping
-//				float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
-//				float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));
-//				float b = frame.getPixelB(x, y) / (1.0f + frame.getPixelB(x, y));
-				
-				if(r != r || g != g || b != b)
+				for(int y = 0; y < frame.getHeightPx(); y++)
 				{
-					System.out.println("NaN!");
+					int inversedY = frame.getHeightPx() - y - 1;
+					
+//					float r = Func.clamp(frame.getPixelR(x, y), 0.0f, 1.0f);
+//					float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
+//					float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
+					
+					// Reinhard tone mapping
+					float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
+					float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));
+					float b = frame.getPixelB(x, y) / (1.0f + frame.getPixelB(x, y));
+					
+					if(r != r || g != g || b != b)
+					{
+						System.out.println("NaN!");
+					}
+					
+					m_bufferedImage.setRGB(x, inversedY, Color.toARGBInt(0.0f, r, g, b));
 				}
-				
-				m_bufferedImage.setRGB(x, inversedY, Color.toARGBInt(0.0f, r, g, b));
 			}
 		}
 		
@@ -79,6 +85,9 @@ public class Display extends JPanel
 	{
 		super.paintComponent(graphics);
 		
-		graphics.drawImage(m_bufferedImage, 0, 0, null);
+		synchronized(m_bufferedImage)
+		{
+			graphics.drawImage(m_bufferedImage, 0, 0, null);
+		}
 	}
 }

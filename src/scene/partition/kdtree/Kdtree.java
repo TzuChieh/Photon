@@ -31,6 +31,7 @@ import model.boundingVolume.AABB;
 import model.primitive.AtomicPrimitive;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
+import util.Debug;
 
 public class Kdtree implements PartitionStrategy
 {
@@ -58,6 +59,15 @@ public class Kdtree implements PartitionStrategy
 	@Override
 	public void processData()
 	{
+		for(AtomicPrimitive ap : m_atomicPrimitives)
+		{
+			if(ap.getModel() == null)
+			{
+				Debug.printWrn("NO MODEL IN KDTREE!");
+				Debug.exit();
+			}
+		}
+		
 		m_rootKdtreeNode = new KdtreeNode();
 		m_rootKdtreeNode.build(m_atomicPrimitives);
 	}
