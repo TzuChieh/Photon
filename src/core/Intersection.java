@@ -27,7 +27,56 @@ import model.Model;
 
 public class Intersection
 {
-	public Model    model;
-	public Vector3f intersectPoint;
-	public Vector3f intersectNormal;
+	private Model    m_model;
+	private Vector3f m_point;
+	private Vector3f m_normal;
+	
+	public Intersection()
+	{
+		
+	}
+	
+	public boolean interact(Ray ray)
+	{
+		boolean keepSampling = m_model.getMaterial().sample(m_normal, ray);
+		
+		return keepSampling;
+	}
+	
+	public void clear()
+	{
+		m_model  = null;
+		m_point  = null;
+		m_normal = null;
+	}
+	
+	public void setModel(Model model)
+	{
+		m_model = model;
+	}
+	
+	public void setPoint(Vector3f point)
+	{
+		m_point = point;
+	}
+	
+	public void setNormal(Vector3f normal)
+	{
+		m_normal = normal;
+	}
+	
+	public Model getModel()
+	{
+		return m_model;
+	}
+	
+	public Vector3f getPoint()
+	{
+		return m_point;
+	}
+	
+	public Vector3f getNormal()
+	{
+		return m_normal;
+	}
 }

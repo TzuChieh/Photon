@@ -41,7 +41,20 @@ public class Ray
 	
 	public Ray()
 	{
-		this(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f, 0.0f, -1.0f));
+		m_origin   = new Vector3f();
+		m_dir      = new Vector3f();
+		m_radiance = new Vector3f();
+		m_weight   = new Vector3f();
+		
+		reset();
+	}
+	
+	public void reset()
+	{
+		m_origin.  set( 0.0f,  0.0f,  0.0f);
+		m_dir.     set( 0.0f,  0.0f, -1.0f);
+		m_radiance.set( 0.0f,  0.0f,  0.0f);
+		m_weight.  set( 1.0f,  1.0f,  1.0f);
 	}
 	
 	public Vector3f getOrigin()

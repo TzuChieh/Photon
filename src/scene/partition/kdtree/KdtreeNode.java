@@ -248,9 +248,9 @@ public class KdtreeNode extends AABB
 		}
 		else
 		{
-			Model    closestModel     = intersection.model;
-			Vector3f closestHitPos    = intersection.intersectPoint;
-			Vector3f closestHitNormal = intersection.intersectNormal;
+			Model    closestModel     = intersection.getModel();
+			Vector3f closestHitPos    = intersection.getPoint();
+			Vector3f closestHitNormal = intersection.getNormal();
 			
 			Vector3f temp = new Vector3f();
 			
@@ -263,7 +263,7 @@ public class KdtreeNode extends AABB
 			{
 				if(primitive.isIntersect(ray, intersection))
 				{
-					intersection.intersectPoint.sub(ray.getOrigin(), temp);
+					intersection.getPoint().sub(ray.getOrigin(), temp);
 					float squaredHitDist = temp.squareLength();
 					
 					if(squaredHitDist < closestHitSquaredDist)
@@ -271,15 +271,15 @@ public class KdtreeNode extends AABB
 						closestHitSquaredDist = squaredHitDist;
 						
 						closestModel     = primitive.getModel();
-						closestHitPos    = intersection.intersectPoint;
-						closestHitNormal = intersection.intersectNormal;
+						closestHitPos    = intersection.getPoint();
+						closestHitNormal = intersection.getNormal();
 					}
 				}
 			}
 			
-			intersection.model           = closestModel;
-			intersection.intersectPoint  = closestHitPos;
-			intersection.intersectNormal = closestHitNormal;
+			intersection.setModel(closestModel);
+			intersection.setPoint(closestHitPos);
+			intersection.setNormal(closestHitNormal);
 			
 			// Notice that rayDistMax can be NaN, in such case the return value (does the intersection found)
 			// will always be false, even if we've actually found one and stored it in the intersection. Since

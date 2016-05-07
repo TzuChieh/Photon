@@ -42,16 +42,17 @@ public class PathTracer
 		int widthPx  = sampleResult.getWidthPx();
 		int heightPx = sampleResult.getHeightPx();
 		
+		Ray          ray          = new Ray();
+		Intersection intersection = new Intersection();
+		
 		for(int x = 0; x < widthPx; x++)
 		{
 			for(int y = 0; y < heightPx; y++)
 			{
-				Ray ray = new Ray();
-//				camera.calcRayFromPixel(ray, widthPx, heightPx, x, y);
+				ray.reset();
 				scene.getCamera().calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
-//				pathTraceIterative(scene, ray, 1000);
-				pathTraceIterative(scene, ray, Integer.MAX_VALUE);
+				pathTraceIterative(scene, ray, intersection, Integer.MAX_VALUE);
 				sampleResult.setPixelRgb(x, y, ray.getRadiance().x, ray.getRadiance().y, ray.getRadiance().z);
 			}
 		}
@@ -59,33 +60,21 @@ public class PathTracer
 		Statistics.addNumRays(widthPx * heightPx);
 	}
 	
-	private void pathTraceIterative(Scene scene, final Ray ray, int numBounces)
+	private void pathTraceIterative(Scene scene, Ray ray, Intersection intersection, int numBounces)
 	{
 		for(int nBounce = 0; nBounce <= numBounces; nBounce++)
 		{
-			Intersection intersection = new Intersection();
-			
-			// FIXME: front facing normal
-			// FIXME: PureEmissive
+			intersection.clear();
 			
 			if(scene.findClosestIntersection(ray, intersection))
 			{
-				if(intersection.model == null)
-				{
-					Debug.printWrn("NO MODEL IN PATHTRACER!");
-					Debug.exit();
-				}
-				
-				Material material = intersection.model.getMaterial();
-				Vector3f N        = new Vector3f(intersection.intersectNormal);
-				
-				if(!material.sample(N, ray))
+				if(!intersection.interact(ray))
 				{
 					return;
 				}
 				
 				// offset a little to prevent self intersection artefact
-				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.intersectPoint));
+				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.getPoint()));
 			}
 			else
 			{

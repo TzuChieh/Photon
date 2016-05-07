@@ -158,8 +158,8 @@ public class Triangle extends AtomicPrimitive
 		Vector3f localIntersectPoint  = localRay.getDir().mul(dist).addLocal(localRay.getOrigin());
 //		Vector3f localIntersectNormal = new Vector3f(m_normal);
 		Vector3f localIntersectNormal = m_nB.mul(baryB).addLocal(m_nC.mul(baryC)).addLocal(m_nA.mul(1.0f - baryB - baryC)).normalizeLocal();
-		intersection.intersectPoint  = getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f);
-		intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal();
+		intersection.setPoint(getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f));
+		intersection.setNormal(getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal());
 		
 		return true;
 	}

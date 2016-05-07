@@ -110,8 +110,8 @@ public class Sphere extends AtomicPrimitive
 			
 			if(t > 0.0f)
 			{
-				intersection.intersectPoint  = ray.getDir().mul(t).addLocal(ray.getOrigin());
-				intersection.intersectNormal = intersection.intersectPoint.sub(m_center).normalizeLocal();
+				intersection.setPoint(ray.getDir().mul(t).addLocal(ray.getOrigin()));
+				intersection.setNormal(intersection.getPoint().sub(m_center).normalizeLocal());
 				
 				return true;
 			}

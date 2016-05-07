@@ -62,20 +62,19 @@ public class TriangleMesh extends Primitive
 		
 		for(Triangle triangle : m_triangles)
 		{
-			intersection.intersectPoint = null;
-			intersection.intersectNormal = null;
+			intersection.clear();
 			
 			triangle.isIntersect(ray, intersection);
 			
-			if(intersection.intersectPoint != null)
+			if(intersection.getPoint() != null)
 			{
-				float squareDist = intersection.intersectPoint.sub(ray.getOrigin()).squareLength();
+				float squareDist = intersection.getPoint().sub(ray.getOrigin()).squareLength();
 				
 				if(squareDist < closestSquareDist)
 				{
 					closestSquareDist = squareDist;
-					closestHitPoint = intersection.intersectPoint;
-					closestHitNormal = intersection.intersectNormal;
+					closestHitPoint = intersection.getPoint();
+					closestHitNormal = intersection.getNormal();
 				}
 			}
 		}
@@ -84,8 +83,8 @@ public class TriangleMesh extends Primitive
 		{
 //			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
 //			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
-			intersection.intersectPoint = closestHitPoint;
-			intersection.intersectNormal = closestHitNormal;
+			intersection.setPoint(closestHitPoint);
+			intersection.setNormal(closestHitNormal);
 			
 			return true;
 		}
