@@ -56,35 +56,31 @@ public class TriangleMesh extends Primitive
 //		
 //		Ray localRay = new Ray(localRayOrigin, localRayDir);
 		
-		float closestSquareDist = Float.MAX_VALUE;
-		Vector3f closestHitPoint = null;
-		Vector3f closestHitNormal = null;
+		float closestSquareDist = Float.POSITIVE_INFINITY;
+		Intersection closestIntersection = new Intersection();
 		
 		for(Triangle triangle : m_triangles)
 		{
 			intersection.clear();
 			
-			triangle.isIntersect(ray, intersection);
-			
-			if(intersection.getPoint() != null)
+			if(triangle.isIntersect(ray, intersection))
 			{
-				float squareDist = intersection.getPoint().sub(ray.getOrigin()).squareLength();
+				float squareDist = intersection.getHitPoint().sub(ray.getOrigin()).squareLength();
 				
 				if(squareDist < closestSquareDist)
 				{
 					closestSquareDist = squareDist;
-					closestHitPoint = intersection.getPoint();
-					closestHitNormal = intersection.getNormal();
+					closestIntersection.set(intersection);
 				}
 			}
 		}
 		
-		if(closestHitPoint != null)
+		if(closestIntersection.getHitPoint() != null)
 		{
 //			intersection.intersectPoint = getModel().getTransform().getModelMatrix().mul(localClosestHitPoint, 1.0f);
 //			intersection.intersectNormal = getModel().getTransform().getModelMatrix().mul(localClosestHitNormal, 0.0f).normalizeLocal();
-			intersection.setPoint(closestHitPoint);
-			intersection.setNormal(closestHitNormal);
+			
+			intersection.set(closestIntersection);
 			
 			return true;
 		}
@@ -155,7 +151,6 @@ public class TriangleMesh extends Primitive
 		
 		AABB aabb = new AABB(new Vector3f(minX, minY, minZ),
 	                         new Vector3f(maxX, maxY, maxZ));
-
 		aabb.relax();
 		
 		return aabb;

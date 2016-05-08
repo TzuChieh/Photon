@@ -52,29 +52,26 @@ public class BruteForce implements PartitionStrategy
 		float    squareDist      = Float.MAX_VALUE;
 		Vector3f intersectPoint  = null;
 		Vector3f intersectNormal = null;
-		Model    model           = null;
 		
 		for(Primitive currentPrimitive : m_primitives)
 		{
 			if(currentPrimitive.isIntersect(ray, intersection))
 			{
-				float currentSquareDist = intersection.getPoint().sub(ray.getOrigin()).squareLength();
+				float currentSquareDist = intersection.getHitPoint().sub(ray.getOrigin()).squareLength();
 				
 				if(currentSquareDist < squareDist)
 				{
 					squareDist      = currentSquareDist;
-					model           = currentPrimitive.getModel();
-					intersectPoint  = intersection.getPoint();
-					intersectNormal = intersection.getNormal();
+					intersectPoint  = intersection.getHitPoint();
+					intersectNormal = intersection.getHitNormal();
 				}
 			}
 		}
 		
 		if(squareDist != Float.MAX_VALUE)
 		{
-			intersection.setModel(model);
-			intersection.setPoint(intersectPoint);
-			intersection.setNormal(intersectNormal);
+			intersection.setHitPoint(intersectPoint);
+			intersection.setHitNormal(intersectNormal);
 			
 			return true;
 		}

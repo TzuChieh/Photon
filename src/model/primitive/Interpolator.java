@@ -22,15 +22,10 @@
 
 package model.primitive;
 
-import core.Intersection;
 import math.Vector3f;
 
-public abstract class AtomicPrimitive extends Primitive
+public interface Interpolator
 {
-	protected AtomicPrimitive()
-	{
-		super();
-	}
-	
-	public abstract Interpolator getInterpolator(Intersection intersection);
+	public abstract Vector3f getFlatNormal();
+	public abstract Vector3f getSmoothNormal();
 }

@@ -248,45 +248,40 @@ public class KdtreeNode extends AABB
 		}
 		else
 		{
-			Model    closestModel     = intersection.getModel();
-			Vector3f closestHitPos    = intersection.getPoint();
-			Vector3f closestHitNormal = intersection.getNormal();
+			Intersection closestIntersection = new Intersection(intersection);
 			
 			Vector3f temp = new Vector3f();
 			
 			float closestHitSquaredDist = Float.POSITIVE_INFINITY;
 			
-			if(closestModel != null)
-				closestHitSquaredDist = closestHitPos.sub(ray.getOrigin()).squareLength();
+			if(closestIntersection.getHitPoint() != null)
+				closestHitSquaredDist = closestIntersection.getHitPoint().sub(ray.getOrigin()).squareLength();
 			
 			for(Primitive primitive : m_primitives)
 			{
+				intersection.clear();
+				
 				if(primitive.isIntersect(ray, intersection))
 				{
-					intersection.getPoint().sub(ray.getOrigin(), temp);
+					intersection.getHitPoint().sub(ray.getOrigin(), temp);
 					float squaredHitDist = temp.squareLength();
 					
 					if(squaredHitDist < closestHitSquaredDist)
 					{
 						closestHitSquaredDist = squaredHitDist;
-						
-						closestModel     = primitive.getModel();
-						closestHitPos    = intersection.getPoint();
-						closestHitNormal = intersection.getNormal();
+						closestIntersection.set(intersection);
 					}
 				}
 			}
 			
-			intersection.setModel(closestModel);
-			intersection.setPoint(closestHitPos);
-			intersection.setNormal(closestHitNormal);
+			intersection.set(closestIntersection);
 			
-			// Notice that rayDistMax can be NaN, in such case the return value (does the intersection found)
-			// will always be false, even if we've actually found one and stored it in the intersection. Since
-			// this is a rare situation, and to properly handle it may slow down the algorithm quite a bit, so
-			// I assumed that ignoring these cases won't generate any visual artifacts.
-			
-			return (closestHitSquaredDist <= rayDistMax * rayDistMax) && (closestModel != null);
+			// Notice that rayDistMax can be NaN or +infinity, in such cases the return value (does the 
+			// closest intersection in the entire tree found) can be false even if we've actually found 
+			// one and stored it in the intersection. Since these are rare situations, and to properly 
+			// handle them may slow down the algorithm quite a bit, so I assumed that simply ignoring 
+			// these cases won't generate any noticeable visual artifacts.
+			return (closestHitSquaredDist < rayDistMax * rayDistMax);
 		}
 	}
 	

@@ -22,6 +22,7 @@
 
 package math.material;
 
+import core.Intersection;
 import core.Ray;
 import math.Rand;
 import math.Vector3f;
@@ -91,8 +92,9 @@ public final class AbradedTranslucent implements Material
 	}
 	
 	@Override
-	public boolean sample(Vector3f N, Ray ray)
+	public boolean sample(Intersection intersection, Ray ray)
 	{
+		Vector3f N = intersection.getInterpolator().getSmoothNormal();
 		Vector3f V = ray.getDir().mul(-1.0f);
 		Vector3f H = genMicrofacetNormalIS(N, V);
 		Vector3f L = new Vector3f();

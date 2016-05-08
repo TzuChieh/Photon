@@ -110,8 +110,9 @@ public class Sphere extends AtomicPrimitive
 			
 			if(t > 0.0f)
 			{
-				intersection.setPoint(ray.getDir().mul(t).addLocal(ray.getOrigin()));
-				intersection.setNormal(intersection.getPoint().sub(m_center).normalizeLocal());
+				intersection.setHitAtomicPrimitive(this);
+				intersection.setHitPoint(ray.getDir().mul(t).addLocal(ray.getOrigin()));
+				intersection.setHitNormal(intersection.getHitPoint().sub(m_center).divLocal(m_radius));
 				
 				return true;
 			}
@@ -151,7 +152,6 @@ public class Sphere extends AtomicPrimitive
 	{
 		AABB aabb = new AABB(m_center.sub(m_radius),
 		                     m_center.add(m_radius));
-
 		aabb.relax();
 		
 		return aabb;
@@ -176,9 +176,8 @@ public class Sphere extends AtomicPrimitive
 	}
 
 	@Override
-	public void getNormalInterpolated(Vector3f point)
+	public Interpolator getInterpolator(Intersection intersection)
 	{
-		// TODO Auto-generated method stub
-		
+		return new SphereInterpolator(intersection.getHitPoint().sub(m_center).divLocal(m_radius));
 	}
 }

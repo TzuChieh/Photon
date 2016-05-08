@@ -22,10 +22,10 @@
 
 package math.material;
 
+import core.Intersection;
 import core.Ray;
-import math.Vector3f;
 
 public interface Material
 {
-	public abstract boolean sample(Vector3f N, Ray ray);
+	public abstract boolean sample(Intersection intersection, Ray ray);
 }

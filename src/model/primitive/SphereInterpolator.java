@@ -22,15 +22,26 @@
 
 package model.primitive;
 
-import core.Intersection;
 import math.Vector3f;
 
-public abstract class AtomicPrimitive extends Primitive
+public class SphereInterpolator implements Interpolator
 {
-	protected AtomicPrimitive()
+	private Vector3f m_hitNormal;
+	
+	public SphereInterpolator(Vector3f hitNormal)
 	{
-		super();
+		m_hitNormal = hitNormal;
 	}
 	
-	public abstract Interpolator getInterpolator(Intersection intersection);
+	@Override
+	public Vector3f getFlatNormal()
+	{
+		return m_hitNormal;
+	}
+
+	@Override
+	public Vector3f getSmoothNormal()
+	{
+		return m_hitNormal;
+	}
 }

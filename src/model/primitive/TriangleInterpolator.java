@@ -22,15 +22,47 @@
 
 package model.primitive;
 
-import core.Intersection;
+import math.Matrix4f;
 import math.Vector3f;
 
-public abstract class AtomicPrimitive extends Primitive
+public class TriangleInterpolator implements Interpolator
 {
-	protected AtomicPrimitive()
+	private Triangle m_triangle;
+	
+	private float m_baryA;
+	private float m_baryB;
+	private float m_baryC;
+	
+	public TriangleInterpolator(Triangle triangle, float baryA, float baryB, float baryC)
 	{
-		super();
+		m_triangle = triangle;
+		
+		m_baryA = baryA;
+		m_baryB = baryB;
+		m_baryC = baryC;
 	}
 	
-	public abstract Interpolator getInterpolator(Intersection intersection);
+	@Override
+	public Vector3f getFlatNormal()
+	{
+		Matrix4f modelMatrix = m_triangle.getModel().getTransform().getModelMatrix();
+		
+		return modelMatrix.mul(m_triangle.getNormal(), 0.0f).normalizeLocal();
+	}
+
+	@Override
+	public Vector3f getSmoothNormal()
+	{
+		Matrix4f modelMatrix = m_triangle.getModel().getTransform().getModelMatrix();
+		
+		Vector3f nA = m_triangle.getNa();
+		Vector3f nB = m_triangle.getNb();
+		Vector3f nC = m_triangle.getNc();
+		
+		Vector3f smoothN = new Vector3f(nA.x * m_baryA + nB.x * m_baryB + nC.x * m_baryC,
+				                        nA.y * m_baryA + nB.y * m_baryB + nC.y * m_baryC,
+				                        nA.z * m_baryA + nB.z * m_baryB + nC.z * m_baryC);
+		
+		return modelMatrix.mul(smoothN, 0.0f).normalizeLocal();
+	}
 }

@@ -74,7 +74,7 @@ public class PathTracer
 				}
 				
 				// offset a little to prevent self intersection artefact
-				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.getPoint()));
+				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.getHitPoint()));
 			}
 			else
 			{

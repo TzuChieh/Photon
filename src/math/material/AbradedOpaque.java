@@ -22,6 +22,7 @@
 
 package math.material;
 
+import core.Intersection;
 import core.Ray;
 import math.Rand;
 import math.Vector3f;
@@ -113,7 +114,7 @@ public final class AbradedOpaque implements Material
 	}
 	
 	@Override
-	public boolean sample(Vector3f N, Ray ray)
+	public boolean sample(Intersection intersection, Ray ray)
 	{
 		if(m_emissivity.squareLength() != 0.0f)
 		{
@@ -124,6 +125,7 @@ public final class AbradedOpaque implements Material
 		
 		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
 		
+		Vector3f N = intersection.getInterpolator().getSmoothNormal();
 		Vector3f V = ray.getDir().mul(-1.0f);
 		Vector3f H = genMicrofacetNormalIS(N, V);
 		Vector3f L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();

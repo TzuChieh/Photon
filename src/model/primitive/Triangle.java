@@ -73,7 +73,7 @@ public class Triangle extends AtomicPrimitive
 	
 	// TODO: make local & global intersect method
 	
-	// Reference: Ingo Wald's PhD paper "Real Time Ray Tracing and Interactive Global Illumination".
+	// Reference: Ingo Wald's PhD paper "Real Time Ray Tracing and Interactive Global Illumination", P.89.
 	// This implementation is twice as fast as Moeller-Trumbore's method (stated by others, haven't profiled
 	// that myself).
 	// FIXME: implement the 2x faster algorithm!
@@ -156,10 +156,12 @@ public class Triangle extends AtomicPrimitive
 		
 		// so the ray intersects the triangle (TODO: reuse calculated results!)
 		Vector3f localIntersectPoint  = localRay.getDir().mul(dist).addLocal(localRay.getOrigin());
-//		Vector3f localIntersectNormal = new Vector3f(m_normal);
-		Vector3f localIntersectNormal = m_nB.mul(baryB).addLocal(m_nC.mul(baryC)).addLocal(m_nA.mul(1.0f - baryB - baryC)).normalizeLocal();
-		intersection.setPoint(getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f));
-		intersection.setNormal(getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal());
+		Vector3f localIntersectNormal = new Vector3f(m_normal);
+//		Vector3f localIntersectNormal = m_nB.mul(baryB).addLocal(m_nC.mul(baryC)).addLocal(m_nA.mul(1.0f - baryB - baryC)).normalizeLocal();
+		
+		intersection.setHitAtomicPrimitive(this);
+		intersection.setHitPoint(getModel().getTransform().getModelMatrix().mul(localIntersectPoint, 1.0f));
+		intersection.setHitNormal(getModel().getTransform().getModelMatrix().mul(localIntersectNormal, 0.0f).normalizeLocal());
 		
 		return true;
 	}
@@ -357,7 +359,6 @@ public class Triangle extends AtomicPrimitive
 		     
 		AABB aabb = new AABB(new Vector3f(minX, minY, minZ),
 				             new Vector3f(maxX, maxY, maxZ));
-		
 		aabb.relax();
 		
 		return aabb;
@@ -394,13 +395,6 @@ public class Triangle extends AtomicPrimitive
 		return super.toString() + "\n"
 	         + "A" + m_vA + ", B" + m_vB + ", C" + m_vC + ", N" + m_normal;
 	}
-
-	@Override
-	public void getNormalInterpolated(Vector3f point)
-	{
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public void setVertices(Vector3f vA, Vector3f vB, Vector3f vC)
 	{
@@ -414,5 +408,86 @@ public class Triangle extends AtomicPrimitive
 		m_nA.set(nA);
 		m_nB.set(nB);
 		m_nC.set(nC);
+	}
+	
+	public Vector3f getNa()
+	{
+		return m_nA;
+	}
+	
+	public Vector3f getNb()
+	{
+		return m_nB;
+	}
+	
+	public Vector3f getNc()
+	{
+		return m_nC;
+	}
+
+	@Override
+	public Interpolator getInterpolator(Intersection intersection)
+	{
+		// projected hit point
+		float hitPu, hitPv;
+		
+		// projected side vector AB and AC
+		float abPu, abPv, acPu, acPv;
+					
+		// find dominant axis
+		if(Math.abs(m_normal.x) > Math.abs(m_normal.y))
+		{
+			// X dominant, projection plane is YZ
+			if(Math.abs(m_normal.x) > Math.abs(m_normal.z))
+			{
+				hitPu = intersection.getHitPoint().y - m_vA.y;
+				hitPv = intersection.getHitPoint().z - m_vA.z;
+				abPu  = m_eAB.y;
+				abPv  = m_eAB.z;
+				acPu  = m_eAC.y;
+				acPv  = m_eAC.z;
+			}
+			// Z dominant, projection plane is XY
+			else
+			{
+				hitPu = intersection.getHitPoint().x - m_vA.x;
+				hitPv = intersection.getHitPoint().y - m_vA.y;
+				abPu  = m_eAB.x;
+				abPv  = m_eAB.y;
+				acPu  = m_eAC.x;
+				acPv  = m_eAC.y;
+			}
+		}
+		// Y dominant, projection plane is ZX
+		else if(Math.abs(m_normal.y) > Math.abs(m_normal.z))
+		{
+			hitPu = intersection.getHitPoint().z - m_vA.z;
+			hitPv = intersection.getHitPoint().x - m_vA.x;
+			abPu  = m_eAB.z;
+			abPv  = m_eAB.x;
+			acPu  = m_eAC.z;
+			acPv  = m_eAC.x;
+		}
+		// Z dominant, projection plane is XY
+		else
+		{
+			hitPu = intersection.getHitPoint().x - m_vA.x;
+			hitPv = intersection.getHitPoint().y - m_vA.y;
+			abPu  = m_eAB.x;
+			abPv  = m_eAB.y;
+			acPu  = m_eAC.x;
+			acPv  = m_eAC.y;
+		}
+		
+		// TODO: check if this operation is possible of producing a NaN
+		float multiplier = 1.0f / (abPu*acPv - abPv*acPu);
+		
+		// barycentric coordinate of vertex B in the projected plane
+		float baryB = (hitPu*acPv - hitPv*acPu) * multiplier;
+		
+		// barycentric coordinate of vertex C in the projected plane
+		float baryC = (hitPv*abPu - hitPu*abPv) * multiplier;
+		
+		return new TriangleInterpolator(this, 1.0f - baryB - baryC, baryB, baryC);
 	}
 }

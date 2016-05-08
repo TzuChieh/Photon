@@ -24,59 +24,65 @@ package core;
 
 import math.Vector3f;
 import model.Model;
+import model.primitive.AtomicPrimitive;
+import model.primitive.Interpolator;
 
 public class Intersection
 {
-	private Model    m_model;
-	private Vector3f m_point;
-	private Vector3f m_normal;
+	private AtomicPrimitive m_hitAtomicPrimitive;
+	private Vector3f        m_hitPoint;
+	private Vector3f        m_hitNormal;
 	
 	public Intersection()
 	{
 		
 	}
 	
+	public Intersection(Intersection other)
+	{
+		set(other);
+	}
+	
 	public boolean interact(Ray ray)
 	{
-		boolean keepSampling = m_model.getMaterial().sample(m_normal, ray);
+		boolean keepSampling = m_hitAtomicPrimitive.getModel().getMaterial().sample(this, ray);
 		
 		return keepSampling;
 	}
 	
 	public void clear()
 	{
-		m_model  = null;
-		m_point  = null;
-		m_normal = null;
+		m_hitPoint  = null;
+		m_hitNormal = null;
+		
+		m_hitAtomicPrimitive = null;
 	}
 	
-	public void setModel(Model model)
+	public void setHitPoint(Vector3f point)   { m_hitPoint = point;   }
+	public void setHitNormal(Vector3f normal) { m_hitNormal = normal; }
+	
+	public Vector3f getHitPoint()  { return m_hitPoint;  }
+	public Vector3f getHitNormal() { return m_hitNormal; }
+	
+	public void setHitAtomicPrimitive(AtomicPrimitive atomicPrimitive)
 	{
-		m_model = model;
+		m_hitAtomicPrimitive = atomicPrimitive;
 	}
 	
-	public void setPoint(Vector3f point)
+//	public AtomicPrimitive getHitAtomicPrimitive()
+//	{
+//		return m_hitAtomicPrimitive;
+//	}
+	
+	public void set(Intersection other)
 	{
-		m_point = point;
+		m_hitPoint           = other.m_hitPoint;
+		m_hitNormal          = other.m_hitNormal;
+		m_hitAtomicPrimitive = other.m_hitAtomicPrimitive;
 	}
 	
-	public void setNormal(Vector3f normal)
+	public Interpolator getInterpolator()
 	{
-		m_normal = normal;
-	}
-	
-	public Model getModel()
-	{
-		return m_model;
-	}
-	
-	public Vector3f getPoint()
-	{
-		return m_point;
-	}
-	
-	public Vector3f getNormal()
-	{
-		return m_normal;
+		return m_hitAtomicPrimitive.getInterpolator(this);
 	}
 }
