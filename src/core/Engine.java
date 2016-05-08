@@ -70,8 +70,8 @@ public class Engine
 		
 //		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
-//		scene = new LamborghiniScene();
-		scene = new SponzaScene();
+		scene = new LamborghiniScene();
+//		scene = new SponzaScene();
 		
 		scene.cookScene();
 		

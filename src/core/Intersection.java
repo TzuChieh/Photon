@@ -81,8 +81,8 @@ public class Intersection
 		m_hitAtomicPrimitive = other.m_hitAtomicPrimitive;
 	}
 	
-	public Interpolator getInterpolator()
+	public Interpolator genInterpolator()
 	{
-		return m_hitAtomicPrimitive.getInterpolator(this);
+		return m_hitAtomicPrimitive.genInterpolator(this);
 	}
 }

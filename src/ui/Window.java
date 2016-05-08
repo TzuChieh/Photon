@@ -55,6 +55,9 @@ public class Window
 		m_display = new Display(widthPx, heightPx);
 		m_jframe.add(m_display, BorderLayout.CENTER);
 		
+		m_jframe.pack();
+		m_jframe.revalidate();
+		
 //		CorePanel corePanel = new CorePanel();
 //		m_jframe.add(corePanel, BorderLayout.WEST);
 	}

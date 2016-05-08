@@ -176,7 +176,7 @@ public class Sphere extends AtomicPrimitive
 	}
 
 	@Override
-	public Interpolator getInterpolator(Intersection intersection)
+	public Interpolator genInterpolator(Intersection intersection)
 	{
 		return new SphereInterpolator(intersection.getHitPoint().sub(m_center).divLocal(m_radius));
 	}

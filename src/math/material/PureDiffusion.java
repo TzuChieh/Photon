@@ -61,9 +61,9 @@ public class PureDiffusion implements Material
 	@Override
 	public boolean sample(Intersection intersection, Ray ray)
 	{
-//		Vector3f N = intersection.getInterpolator().getSmoothNormal();
+		Vector3f N = intersection.genInterpolator().getSmoothNormal();
 //		Vector3f N = intersection.getHitNormal();
-		Vector3f N = intersection.getInterpolator().getFlatNormal();
+//		Vector3f N = intersection.getInterpolator().getFlatNormal();
 		
 		float rrSurviveProb = m_albedo.avg();
 		float rrScale = 1.0f / (rrSurviveProb + 0.00001f);

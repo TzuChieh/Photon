@@ -32,5 +32,5 @@ public abstract class AtomicPrimitive extends Primitive
 		super();
 	}
 	
-	public abstract Interpolator getInterpolator(Intersection intersection);
+	public abstract Interpolator genInterpolator(Intersection intersection);
 }

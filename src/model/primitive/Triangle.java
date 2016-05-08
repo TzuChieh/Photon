@@ -426,8 +426,10 @@ public class Triangle extends AtomicPrimitive
 	}
 
 	@Override
-	public Interpolator getInterpolator(Intersection intersection)
+	public Interpolator genInterpolator(Intersection intersection)
 	{
+		Vector3f localHitPoint = getModel().getTransform().getInverseModelMatrix().mul(intersection.getHitPoint(), 1.0f);
+		
 		// projected hit point
 		float hitPu, hitPv;
 		
@@ -440,8 +442,8 @@ public class Triangle extends AtomicPrimitive
 			// X dominant, projection plane is YZ
 			if(Math.abs(m_normal.x) > Math.abs(m_normal.z))
 			{
-				hitPu = intersection.getHitPoint().y - m_vA.y;
-				hitPv = intersection.getHitPoint().z - m_vA.z;
+				hitPu = localHitPoint.y - m_vA.y;
+				hitPv = localHitPoint.z - m_vA.z;
 				abPu  = m_eAB.y;
 				abPv  = m_eAB.z;
 				acPu  = m_eAC.y;
@@ -450,8 +452,8 @@ public class Triangle extends AtomicPrimitive
 			// Z dominant, projection plane is XY
 			else
 			{
-				hitPu = intersection.getHitPoint().x - m_vA.x;
-				hitPv = intersection.getHitPoint().y - m_vA.y;
+				hitPu = localHitPoint.x - m_vA.x;
+				hitPv = localHitPoint.y - m_vA.y;
 				abPu  = m_eAB.x;
 				abPv  = m_eAB.y;
 				acPu  = m_eAC.x;
@@ -461,8 +463,8 @@ public class Triangle extends AtomicPrimitive
 		// Y dominant, projection plane is ZX
 		else if(Math.abs(m_normal.y) > Math.abs(m_normal.z))
 		{
-			hitPu = intersection.getHitPoint().z - m_vA.z;
-			hitPv = intersection.getHitPoint().x - m_vA.x;
+			hitPu = localHitPoint.z - m_vA.z;
+			hitPv = localHitPoint.x - m_vA.x;
 			abPu  = m_eAB.z;
 			abPv  = m_eAB.x;
 			acPu  = m_eAC.z;
@@ -471,8 +473,8 @@ public class Triangle extends AtomicPrimitive
 		// Z dominant, projection plane is XY
 		else
 		{
-			hitPu = intersection.getHitPoint().x - m_vA.x;
-			hitPv = intersection.getHitPoint().y - m_vA.y;
+			hitPu = localHitPoint.x - m_vA.x;
+			hitPv = localHitPoint.y - m_vA.y;
 			abPu  = m_eAB.x;
 			abPv  = m_eAB.y;
 			acPu  = m_eAC.x;

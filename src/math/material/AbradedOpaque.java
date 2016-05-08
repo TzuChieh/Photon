@@ -125,7 +125,8 @@ public final class AbradedOpaque implements Material
 		
 		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
 		
-		Vector3f N = intersection.getInterpolator().getSmoothNormal();
+		Vector3f N = intersection.genInterpolator().getSmoothNormal();
+//		Vector3f N = intersection.genInterpolator().getFlatNormal();
 		Vector3f V = ray.getDir().mul(-1.0f);
 		Vector3f H = genMicrofacetNormalIS(N, V);
 		Vector3f L = V.mul(-1.0f).reflectLocal(H).normalizeLocal();
