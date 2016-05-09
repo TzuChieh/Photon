@@ -23,6 +23,7 @@
 package core;
 
 import scene.Scene;
+import util.Debug;
 
 public class TraceWorker implements Runnable
 {
@@ -42,10 +43,20 @@ public class TraceWorker implements Runnable
 	@Override
 	public void run()
 	{
-		while(true)
+		try
 		{
-			m_pathTracer.trace(m_scene, m_sampleResult);
-			m_sampleManager.addSample(m_sampleResult);
+			while(true)
+			{
+				m_pathTracer.trace(m_scene, m_sampleResult);
+				m_sampleManager.addSample(m_sampleResult);
+			}
+		}
+		catch(Exception e)
+		{
+			Debug.printErr("LALALA!!!");
+			Debug.printErr(e.getMessage());
+			e.printStackTrace();
+			Debug.exit();
 		}
 	}
 }

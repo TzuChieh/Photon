@@ -52,6 +52,7 @@ public class PathTracer
 				ray.reset();
 				scene.getCamera().calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
 				
+//				pathTraceIterative(scene, ray, intersection, 3);
 				pathTraceIterative(scene, ray, intersection, Integer.MAX_VALUE);
 				sampleResult.setPixelRgb(x, y, ray.getRadiance().x, ray.getRadiance().y, ray.getRadiance().z);
 			}

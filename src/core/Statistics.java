@@ -33,7 +33,7 @@ public final class Statistics
 	private static final int numAvgedData = 100;
 	private static final String UNIT = "k samples/sec";
 	
-	private static Object            rpsLock       = new Object();
+	private static Object            spsLock       = new Object();
 	private static LimitedList<Long> numRaysRecord = new LimitedList<>(numAvgedData);
 	private static LimitedList<Long> msTimeRecord  = new LimitedList<>(numAvgedData + 1);
 	
@@ -42,9 +42,9 @@ public final class Statistics
 		msTimeRecord.add(Time.getMilliTime());
 	}
 	
-	public static String getCurrentKrps()
+	public static String getCurrentKsps()
 	{
-		synchronized(rpsLock)
+		synchronized(spsLock)
 		{
 			long totalRays = 0L;
 			for(long numRays : numRaysRecord)
@@ -61,7 +61,7 @@ public final class Statistics
 	
 	public static void addNumRays(long numRays)
 	{
-		synchronized(rpsLock)
+		synchronized(spsLock)
 		{
 			numRaysRecord.add(numRays);
 			msTimeRecord.add(Time.getMilliTime());

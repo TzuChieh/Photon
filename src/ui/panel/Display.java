@@ -62,6 +62,8 @@ public class Display extends JPanel
 //					float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
 //					float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
 					
+					// TODO: gamma correction!
+					
 					// Reinhard tone mapping
 					float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
 					float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));

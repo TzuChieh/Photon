@@ -70,8 +70,8 @@ public class Engine
 		
 //		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
-		scene = new LamborghiniScene();
-//		scene = new SponzaScene();
+//		scene = new LamborghiniScene();
+		scene = new SponzaScene();
 		
 		scene.cookScene();
 		
@@ -97,7 +97,7 @@ public class Engine
 			
 			Debug.print("=============================================");
 			Debug.print("number of samples: " + numSamples);
-			Debug.print(Statistics.getCurrentKrps());
+			Debug.print(Statistics.getCurrentKsps());
 			
 			Util.threadSleep(1000);
 		}
