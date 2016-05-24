@@ -26,6 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Rand
 {
+	// returns a uniform random float in [0, 1)
 	public static float getFloat0_1()
 	{
 		return ThreadLocalRandom.current().nextFloat();

@@ -22,8 +22,8 @@
 
 package math.material;
 
-import core.Intersection;
 import core.Ray;
+import model.primitive.Intersection;
 
 public interface Material
 {

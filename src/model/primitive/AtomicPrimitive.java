@@ -22,7 +22,6 @@
 
 package model.primitive;
 
-import core.Intersection;
 import math.Vector3f;
 
 public abstract class AtomicPrimitive extends Primitive

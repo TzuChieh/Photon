@@ -25,10 +25,10 @@ package scene.partition.kdtree;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import model.boundingVolume.AABB;
 import model.primitive.AtomicPrimitive;
+import model.primitive.Intersection;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 import util.Debug;
@@ -37,7 +37,7 @@ public class Kdtree implements PartitionStrategy
 {
 	private List<AtomicPrimitive> m_atomicPrimitives;
 	
-	private KdtreeNode      m_rootKdtreeNode;
+	private KdtreeNode m_rootKdtreeNode;
 	
 	public Kdtree()
 	{

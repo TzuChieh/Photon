@@ -22,10 +22,10 @@
 
 package math.material;
 
-import core.Intersection;
 import core.Ray;
 import math.Rand;
 import math.Vector3f;
+import model.primitive.Intersection;
 import util.Func;
 
 public final class AbradedOpaque implements Material

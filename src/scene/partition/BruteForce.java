@@ -25,10 +25,10 @@ package scene.partition;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import math.Vector3f;
 import model.Model;
+import model.primitive.Intersection;
 import model.primitive.Primitive;
 
 public class BruteForce implements PartitionStrategy

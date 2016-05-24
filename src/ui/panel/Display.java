@@ -62,16 +62,23 @@ public class Display extends JPanel
 //					float g = Func.clamp(frame.getPixelG(x, y), 0.0f, 1.0f);
 //					float b = Func.clamp(frame.getPixelB(x, y), 0.0f, 1.0f);
 					
-					// TODO: gamma correction!
+					float r = frame.getPixelR(x, y);
+					float g = frame.getPixelG(x, y);
+					float b = frame.getPixelB(x, y);
 					
 					// Reinhard tone mapping
-					float r = frame.getPixelR(x, y) / (1.0f + frame.getPixelR(x, y));
-					float g = frame.getPixelG(x, y) / (1.0f + frame.getPixelG(x, y));
-					float b = frame.getPixelB(x, y) / (1.0f + frame.getPixelB(x, y));
+					r = r / (1.0f + r);
+					g = g / (1.0f + g);
+					b = b / (1.0f + b);
+					
+					r = (float)Math.pow(r, 1.0 / 2.2);
+					g = (float)Math.pow(g, 1.0 / 2.2);
+					b = (float)Math.pow(b, 1.0 / 2.2);
 					
 					if(r != r || g != g || b != b)
 					{
 						System.out.println("NaN!");
+						System.exit(1);
 					}
 					
 					m_bufferedImage.setRGB(x, inversedY, Color.toARGBInt(0.0f, r, g, b));

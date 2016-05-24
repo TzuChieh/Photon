@@ -22,10 +22,10 @@
 
 package math.material;
 
-import core.Intersection;
 import core.Ray;
 import math.Rand;
 import math.Vector3f;
+import model.primitive.Intersection;
 
 public class PureDiffusion implements Material
 {

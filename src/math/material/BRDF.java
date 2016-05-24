@@ -60,23 +60,6 @@ public final class BRDF
 			add(v.mulLocal(elevation)).normalizeLocal(); 
 	}
 	
-	public static Vector3f randomHemisphereDir(Vector3f N, Vector3f V)
-	{
-		float phi      = Rand.getFloat0_1() * 2.0f * 3.14159265f;
-		float cosTheta = Rand.getFloat0_1();
-		float sinTheta = (float)Math.sqrt(1.0f - cosTheta*cosTheta);
-		
-		Vector3f u = new Vector3f();
-		Vector3f v = new Vector3f(N);
-		Vector3f w = new Vector3f();
-		
-		v.calcOrthBasisAsYaxis(u, w);
-		
-		return  u.mulLocal((float)Math.cos(phi) * sinTheta).
-			add(w.mulLocal((float)Math.sin(phi) * sinTheta)).
-			add(v.mulLocal(cosTheta)).normalizeLocal(); 
-	}
-	
 //	public static Vector3f cookTorranceSpecularIS(Vector3f N, Vector3f V, Vector3f L, 
 //			                                      float roughness, Vector3f F0,
 //			                                      Vector3f inRadiance, Vector3f out_Ks)

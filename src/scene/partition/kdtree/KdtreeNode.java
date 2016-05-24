@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import math.Vector2f;
 import math.Vector3f;
 import model.Model;
 import model.boundingVolume.AABB;
 import model.primitive.AtomicPrimitive;
+import model.primitive.Intersection;
 import model.primitive.Primitive;
 import scene.partition.PartitionStrategy;
 import util.Debug;

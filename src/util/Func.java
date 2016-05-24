@@ -26,6 +26,11 @@ import math.Vector3f;
 
 public class Func
 {
+	public static int clamp(int value, int lowerBound, int upperBound)
+	{
+		return Math.max(lowerBound, Math.min(value, upperBound));
+	}
+	
 	public static float clamp(float value, float lowerBound, float upperBound)
 	{
 		return Math.max(lowerBound, Math.min(value, upperBound));

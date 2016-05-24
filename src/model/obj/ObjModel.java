@@ -62,8 +62,8 @@ public class ObjModel implements Model
 //		matl.setF0(0.9f, 0.9f, 0.9f);
 		matl.setF0(1.0f, 0.765557f, 0.336057f);// gold
 //		matl.setF0(0.11f, 0.1f, 0.12f);
-//		matl.setRoughness(0.03f);
-		matl.setRoughness(0.2f);
+		matl.setRoughness(0.03f);
+//		matl.setRoughness(0.2f);
 		matl.setMetalness(1.0f);
 		
 //		PureDiffusion matl = new PureDiffusion(0.9f, 0.9f, 0.9f);

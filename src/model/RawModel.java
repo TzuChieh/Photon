@@ -39,7 +39,7 @@ public class RawModel implements Model
 		m_primitive = primitive;
 		m_primitive.setModel(this);
 		
-		m_material  = material;
+		m_material = material;
 	}
 	
 	@Override

@@ -24,12 +24,12 @@ package model.boundingVolume;
 
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import math.Transform;
 import math.Vector2f;
 import math.Vector3f;
 import model.Model;
+import model.primitive.Intersection;
 import model.primitive.Primitive;
 import util.Debug;
 

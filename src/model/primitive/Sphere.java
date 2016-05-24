@@ -24,7 +24,6 @@ package model.primitive;
 
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import math.Vector3f;
 import model.boundingVolume.AABB;

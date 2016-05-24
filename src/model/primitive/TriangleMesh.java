@@ -25,7 +25,6 @@ package model.primitive;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.Intersection;
 import core.Ray;
 import math.Matrix4f;
 import math.Vector3f;

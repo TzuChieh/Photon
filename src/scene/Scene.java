@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.Camera;
-import core.Intersection;
 import core.Ray;
 import math.Vector3f;
 import model.Model;
+import model.primitive.Intersection;
 import scene.partition.BruteForce;
 import scene.partition.PartitionStrategy;
 import scene.partition.kdtree.Kdtree;

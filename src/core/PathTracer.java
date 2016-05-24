@@ -26,6 +26,7 @@ import math.Rand;
 import math.Vector3f;
 import math.material.BRDF;
 import math.material.Material;
+import model.primitive.Intersection;
 import scene.Scene;
 import util.Debug;
 import util.Func;
@@ -70,9 +71,7 @@ public class PathTracer
 			if(scene.findClosestIntersection(ray, intersection))
 			{
 				if(!intersection.interact(ray))
-				{
 					return;
-				}
 				
 				// offset a little to prevent self intersection artefact
 				ray.getOrigin().set(ray.getDir().mul(0.001f).addLocal(intersection.getHitPoint()));

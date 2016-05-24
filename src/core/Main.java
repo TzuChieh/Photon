@@ -59,6 +59,8 @@ public class Main
 //		
 //		System.out.println(sphere.isIntersect(aabb));
 		
+		new Test();
+		
 		Engine engine = new Engine();
 		
 		engine.run();
