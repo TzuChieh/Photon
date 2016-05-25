@@ -107,7 +107,8 @@ public class Merl implements Material
 		if(N.dot(V) < 0.0f)
 			N.mulLocal(-1.0f);
 		
-		Vector3f L = genRandomUniformHemisphereDir(N);
+//		Vector3f L = genRandomUniformHemisphereDir(N);
+		Vector3f L = genCosineWeightedSampleDir(N);
 		Vector3f H = V.add(L).normalizeLocal();
 		
 		Vector3f Hv = N.cross(H).normalizeLocal();
@@ -129,8 +130,9 @@ public class Merl implements Material
 		brdf.y = m_merlBrdf[index + 90 * 90 * 180] * (1.15f / 1500.0f);
 		brdf.z = m_merlBrdf[index + 90 * 90 * 180 * 2] * (1.66f / 1500.0f);
 		
-		brdf.mulLocal(N.dot(L));
-		brdf.mulLocal(2.0f * 3.1415926536f);
+//		brdf.mulLocal(N.dot(L));
+//		brdf.mulLocal(2.0f * 3.1415926536f);
+		brdf.mulLocal(3.1415926536f);
 
 		if(brdf.x < 0.0f || brdf.y < 0.0f || brdf.z < 0.0f)
 			Debug.print("negative");
@@ -213,5 +215,23 @@ public class Merl implements Material
 		return  u.mulLocal((float)Math.cos(phi) * planeR).
 			add(w.mulLocal((float)Math.sin(phi) * planeR)).
 			add(v.mulLocal(elevation)).normalizeLocal(); 
+	}
+	
+	// weighted by NoL
+	private Vector3f genCosineWeightedSampleDir(Vector3f N)
+	{
+		float phi       = Rand.getFloat0_1() * 2.0f * 3.14159265f;
+		float elevation = (float)Math.sqrt(Rand.getFloat0_1());
+		float planeR    = (float)Math.sqrt(1.0f - elevation*elevation);
+		
+		Vector3f u = new Vector3f();
+		Vector3f v = new Vector3f(N);
+		Vector3f w = new Vector3f();
+		
+		v.calcOrthBasisAsYaxis(u, w);
+		
+		return  u.mulLocal((float)Math.cos(phi) * planeR).
+			add(w.mulLocal((float)Math.sin(phi) * planeR)).
+			add(v.mulLocal(elevation)).normalizeLocal();
 	}
 }
