@@ -23,7 +23,6 @@
 package math.material;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -57,7 +56,8 @@ public class Merl implements Material
 		{
 			InputStream inputStream = new FileInputStream(DATA_DIRECTORY + materialName + DATA_EXTENSION);
 			
-			byte[] rawData = new byte[(180 * 90 * 90 * 3 * 8) + (3 * 4)];
+			int numSingleChannelSamples = 180 * 90 * 90;
+			byte[] rawData = new byte[(numSingleChannelSamples * 3 * 8) + (3 * 4)];
 			inputStream.read(rawData);
 			
 			ByteBuffer byteBuffer = ByteBuffer.wrap(rawData);
@@ -67,22 +67,16 @@ public class Merl implements Material
 			m_logger.printMsg("dimension check (thetaDiff): " + byteBuffer.getInt());
 			m_logger.printMsg("dimension check (phiDiff):   " + byteBuffer.getInt());
 			
-			int numFloats = 180 * 90 * 90 * 3;
-			m_merlBrdf = new float[numFloats];
-			for(int i = 0; i < numFloats; i++)
-			{
-//				double sRgbValue = byteBuffer.getDouble();
-//				float linearRgbValue;
-//				
-//				if(sRgbValue <= 0.03928)
-//					linearRgbValue = (float)(sRgbValue / 12.92);
-//				else
-//					linearRgbValue = (float)Math.pow((sRgbValue + 0.055) / 1.055, 2.4);
-//				
-//				m_merlBrdf[i] = linearRgbValue;
-				
-				m_merlBrdf[i] = (float)byteBuffer.getDouble();
-			}
+			m_merlBrdf = new float[numSingleChannelSamples * 3];
+			
+			for(int i = 0; i < numSingleChannelSamples; i++)
+				m_merlBrdf[i] = (float)(byteBuffer.getDouble() * (1.0 / 1500.0));
+			
+			for(int i = numSingleChannelSamples; i < numSingleChannelSamples * 2; i++)
+				m_merlBrdf[i] = (float)(byteBuffer.getDouble() * (1.15 / 1500.0));
+			
+			for(int i = numSingleChannelSamples * 2; i < numSingleChannelSamples * 3; i++)
+				m_merlBrdf[i] = (float)(byteBuffer.getDouble() * (1.66 / 1500.0));
 			
 			inputStream.close();
 		}
@@ -126,9 +120,9 @@ public class Merl implements Material
 		
 		Vector3f brdf = new Vector3f();
 
-		brdf.x = m_merlBrdf[index] * (1.0f / 1500.0f);
-		brdf.y = m_merlBrdf[index + 90 * 90 * 180] * (1.15f / 1500.0f);
-		brdf.z = m_merlBrdf[index + 90 * 90 * 180 * 2] * (1.66f / 1500.0f);
+		brdf.x = m_merlBrdf[index];
+		brdf.y = m_merlBrdf[index + 90 * 90 * 180];
+		brdf.z = m_merlBrdf[index + 90 * 90 * 180 * 2];
 		
 //		brdf.mulLocal(N.dot(L));
 //		brdf.mulLocal(2.0f * 3.1415926536f);
@@ -150,6 +144,10 @@ public class Merl implements Material
 		else
 		{
 			brdf.mulLocal(rrScale);
+			
+//			if(!(brdf.max() <= 100.0f))
+//				brdf.clampLocal(0.0f, 100.0f);
+				
 			ray.getWeight().mulLocal(brdf);
 			ray.getDir().set(L);
 			
@@ -157,12 +155,12 @@ public class Merl implements Material
 		}
 	}
 	
-	// Notice that this is a non-linear mapping!
+	// Beware that this is a non-linear mapping!
 	// input:  0 ~ pi/2
 	// output: 0 ~ 89
 	private int getThetaHalfIndex(float thetaHalf)
 	{
-		float thetaHalfDeg = thetaHalf / 3.1415926536f * 180.0f;
+		float thetaHalfDeg = thetaHalf / (3.1415926536f / 2.0f) * 90.0f;
 		int index = (int)Math.sqrt(thetaHalfDeg * 90.0f);
 		
 		// this should prevent any value out of [0, 89] including NaN and infinity
@@ -175,7 +173,7 @@ public class Merl implements Material
 	// output: 0 ~ 89
 	private int getThetaDiffIndex(float thetaDiff)
 	{
-		int index = (int)(thetaDiff / 3.1415926536f * 180.0f);
+		int index = (int)(thetaDiff / (3.1415926536f / 2.0f) * 90.0f);
 		
 		// this should prevent any value out of [0, 89] including NaN and infinity
 		index = Func.clamp(index, 0, 89);

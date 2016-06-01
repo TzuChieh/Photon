@@ -30,7 +30,7 @@ public class Logger
 	{
 		m_name = name;
 		
-		printMsg("logger started");
+//		printMsg("logger started");
 	}
 	
 	public void printMsg(Object object)

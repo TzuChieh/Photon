@@ -36,11 +36,16 @@ import scene.Scene;
 import scene.SponzaScene;
 import ui.Window;
 import util.Debug;
+import util.Logger;
 import util.Time;
 import util.Util;
 
 public class Engine
 {
+	public static enum OsType {UNKNOWN, WINDOWS, LINUX};
+	
+	private OsType m_osType;
+	
 //	private static final int FRAME_WIDTH_PX  = 1366;
 //	private static final int FRAME_HEIGHT_PX = 768;
 	
@@ -59,9 +64,14 @@ public class Engine
 	
 	private SampleManager sampleManager;
 	
+	private Logger m_logger;
+	
 	public Engine()
 	{
+		m_logger = new Logger("Photon Engine");
+		
 		initGui();
+		init();
 		
 		tracer = new PathTracer();
 		
@@ -85,6 +95,17 @@ public class Engine
 		}
 	}
 	
+	public void init()
+	{
+		m_logger.printMsg("initializing engine...");
+		
+		{
+			m_osType = checkOsType();
+		}
+		
+		m_logger.printMsg("engine initialized successfully");
+	}
+	
 	public void run()
 	{
 		final Frame frameResult = new Frame(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
@@ -105,6 +126,8 @@ public class Engine
 	
 	private void initGui()
 	{
+		m_logger.printMsg("initializing UI...");
+		
 		try
 		{
 			SwingUtilities.invokeAndWait(new Runnable()
@@ -118,9 +141,27 @@ public class Engine
 		}
 		catch(Exception e)
 		{
-			Debug.printErr("GUI initialization failed");
+			m_logger.printErr("UI initialization failed");
 			e.printStackTrace();
 			Debug.exit();
+		}
+		
+		m_logger.printMsg("UI initialized successfully");
+	}
+	
+	private OsType checkOsType()
+	{
+		String osName = System.getProperty("os.name");
+		
+		if(osName.toLowerCase().contains("windows"))
+		{
+			m_logger.printMsg("OS is Windows (" + osName + ")");
+			return OsType.WINDOWS;
+		}
+		else
+		{
+			m_logger.printWrn("OS is unknown/unsupported (" + osName + ")");
+			return OsType.UNKNOWN;
 		}
 	}
 }
