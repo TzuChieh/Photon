@@ -20,40 +20,31 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package image;
+package image.devil;
 
-import core.Engine;
-import util.Logger;
+import image.ImageLoader;
+import image.ImageLoadingException;
+import image.ImageResource;
+import image.ImageSavingException;
 
-public final class ImageManager
+public class DevilImageLoader implements ImageLoader
 {
-	private static ImageLoader imageLoader = null;
-	private static final Logger logger = new Logger(ImageManager.class.getSimpleName());
-	
-	public static boolean init(Engine engine)
+	public DevilImageLoader()
 	{
-		if(engine.getOsType() == Engine.OsType.WINDOWS)
-		{
-			// TODO instantiate some ImageLoader
-			
-			return true;
-		}
-		else
-		{
-			logger.printErr("there are no available ImageLoader implementations for current OS");
-			return false;
-		}
-	}
-	
-	public static ImageLoader getImageLoader()
-	{
-		if(imageLoader == null)
-		{
-			logger.printErr("ImageManager is not properly initialized (ImageLoader is null)");
-		}
 		
-		return imageLoader;
 	}
 	
-	private ImageManager() {}
+	@Override
+	public ImageResource load(String fullFilename) throws ImageLoadingException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(String fullFilename) throws ImageSavingException
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

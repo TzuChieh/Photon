@@ -100,7 +100,7 @@ public class Engine
 		m_logger.printMsg("initializing engine...");
 		
 		{
-			m_osType = checkOsType();
+			m_osType = retrieveOsType();
 		}
 		
 		m_logger.printMsg("engine initialized successfully");
@@ -149,7 +149,7 @@ public class Engine
 		m_logger.printMsg("UI initialized successfully");
 	}
 	
-	private OsType checkOsType()
+	private OsType retrieveOsType()
 	{
 		String osName = System.getProperty("os.name");
 		
@@ -163,5 +163,10 @@ public class Engine
 			m_logger.printWrn("OS is unknown/unsupported (" + osName + ")");
 			return OsType.UNKNOWN;
 		}
+	}
+	
+	public OsType getOsType()
+	{
+		return m_osType;
 	}
 }
