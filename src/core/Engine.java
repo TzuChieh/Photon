@@ -79,6 +79,25 @@ public class Engine
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		
+		while(true)
+		{
+			Input.update();
+			
+			if(Input.keyDown(Input.KEY_W))
+				Debug.print("down");
+			
+			if(Input.keyHold(Input.KEY_W))
+				Debug.print("hold");
+			
+			if(Input.keyUp(Input.KEY_W))
+				Debug.print("up");
+			
+			if(Input.keyUp(Input.KEY_E))
+				break;
+			
+			Util.threadSleep(1000 / 60);
+		}
+		
 		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 //		scene = new LamborghiniScene();
@@ -96,12 +115,14 @@ public class Engine
 		}
 	}
 	
-	public void init()
+	private void init()
 	{
 		m_logger.printMsg("initializing engine...");
 		
 		{
 			m_osType = retrieveOsType();
+			
+			Input.init();
 		}
 		
 		m_logger.printMsg("engine initialized successfully");
