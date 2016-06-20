@@ -24,8 +24,15 @@ package math;
 
 public class Matrix4f
 {
-	// FIXME: threadlocal???
-	private static Matrix4f TEMP = new Matrix4f().initIdentity();
+	// TODO: learn more about threadlocal
+	
+	private static ThreadLocal<Matrix4f> TEMP = new ThreadLocal<Matrix4f>() 
+	{
+		@Override public Matrix4f initialValue()
+		{
+            return new Matrix4f().initIdentity();
+        }
+	};
 	
 	public float[][] m;
 	
@@ -214,36 +221,39 @@ public class Matrix4f
 	public Matrix4f mulLocal(Matrix4f var)
 	{
 		// FIXME: do this without if statements!
+		
+		Matrix4f temp = TEMP.get();
+		
 		for(int i = 0; i < 4; i++)
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				TEMP.m[i][j] =   m[i][0] * var.m[0][j]
-							   + m[i][1] * var.m[1][j]
-							   + m[i][2] * var.m[2][j]
-							   + m[i][3] * var.m[3][j];
+				temp.m[i][j] = m[i][0] * var.m[0][j]
+							 + m[i][1] * var.m[1][j]
+							 + m[i][2] * var.m[2][j]
+						     + m[i][3] * var.m[3][j];
 			}
 		}
 		
-		m[0][0] = TEMP.m[0][0];
-		m[0][1] = TEMP.m[0][1];
-		m[0][2] = TEMP.m[0][2];
-		m[0][3] = TEMP.m[0][3];
+		m[0][0] = temp.m[0][0];
+		m[0][1] = temp.m[0][1];
+		m[0][2] = temp.m[0][2];
+		m[0][3] = temp.m[0][3];
 		
-		m[1][0] = TEMP.m[1][0];
-		m[1][1] = TEMP.m[1][1];
-		m[1][2] = TEMP.m[1][2];
-		m[1][3] = TEMP.m[1][3];
+		m[1][0] = temp.m[1][0];
+		m[1][1] = temp.m[1][1];
+		m[1][2] = temp.m[1][2];
+		m[1][3] = temp.m[1][3];
 		
-		m[2][0] = TEMP.m[2][0];
-		m[2][1] = TEMP.m[2][1];
-		m[2][2] = TEMP.m[2][2];
-		m[2][3] = TEMP.m[2][3];
+		m[2][0] = temp.m[2][0];
+		m[2][1] = temp.m[2][1];
+		m[2][2] = temp.m[2][2];
+		m[2][3] = temp.m[2][3];
 		
-		m[3][0] = TEMP.m[3][0];
-		m[3][1] = TEMP.m[3][1];
-		m[3][2] = TEMP.m[3][2];
-		m[3][3] = TEMP.m[3][3];
+		m[3][0] = temp.m[3][0];
+		m[3][1] = temp.m[3][1];
+		m[3][2] = temp.m[3][2];
+		m[3][3] = temp.m[3][3];
 		
 		return this;
 	}

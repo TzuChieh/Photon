@@ -66,6 +66,11 @@ public class KeyEventPublisher implements KeyEventDispatcher
 		m_keyMap.put(KeyEvent.VK_F10, Input.KEY_F10);
 		m_keyMap.put(KeyEvent.VK_F11, Input.KEY_F11);
 		m_keyMap.put(KeyEvent.VK_F12, Input.KEY_F12);
+		
+		m_keyMap.put(KeyEvent.VK_UP, Input.KEY_UP);
+		m_keyMap.put(KeyEvent.VK_DOWN, Input.KEY_DOWN);
+		m_keyMap.put(KeyEvent.VK_LEFT, Input.KEY_LEFT);
+		m_keyMap.put(KeyEvent.VK_RIGHT, Input.KEY_RIGHT);
 	}
 	
 	@Override

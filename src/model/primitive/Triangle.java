@@ -35,21 +35,21 @@ public class Triangle extends AtomicPrimitive
 	private static final float EPSILON = 0.0001f;
 	
 	// vertex position
-	private Vector3f m_vA;
-	private Vector3f m_vB;
-	private Vector3f m_vC;
+	protected Vector3f m_vA;
+	protected Vector3f m_vB;
+	protected Vector3f m_vC;
 	
 	// vertex normal
-	private Vector3f m_nA;
-	private Vector3f m_nB;
-	private Vector3f m_nC;
+	protected Vector3f m_nA;
+	protected Vector3f m_nB;
+	protected Vector3f m_nC;
 	
 	// edge vector
-	private Vector3f m_eAB;
-	private Vector3f m_eAC;
+	protected Vector3f m_eAB;
+	protected Vector3f m_eAC;
 	
 	// surface normal
-	private Vector3f m_normal;
+	protected Vector3f m_normal;
 	
 	// front facing: CCW vertex order
 	public Triangle(Vector3f vA, Vector3f vB, Vector3f vC)

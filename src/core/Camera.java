@@ -22,14 +22,15 @@
 
 package core;
 
+import math.Quaternion;
 import math.Rand;
 import math.Vector3f;
 
 public class Camera
 {
-	private float    m_fov;
-	private Vector3f m_pos;
-	private Vector3f m_dir;
+	private float      m_fov;
+	private Vector3f   m_pos;
+	private Vector3f   m_dir;
 	
 	public Camera()
 	{
@@ -86,6 +87,7 @@ public class Camera
 	public void calcRayThroughPixelDistributed(Ray ray, int xRes, int yRes, int xPx, int yPx)
 	{
 		// FIXME: this will fail when the camera is facing directly on y-axis
+		// TODO: reuse rightDir & upDir
 		
 		Vector3f rightDir = new Vector3f(-m_dir.z, 0.0f, m_dir.x).normalizeLocal();
 		Vector3f upDir    = rightDir.cross(m_dir).normalizeLocal();

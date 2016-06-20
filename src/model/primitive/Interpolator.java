@@ -28,4 +28,5 @@ public interface Interpolator
 {
 	public abstract Vector3f getFlatNormal();
 	public abstract Vector3f getSmoothNormal();
+	public abstract Vector3f getSmoothColor();
 }

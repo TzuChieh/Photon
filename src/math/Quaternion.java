@@ -24,7 +24,13 @@ package math;
 
 public class Quaternion
 {
-	public static Quaternion TEMP = new Quaternion(0, 0, 0, 1);
+	public static ThreadLocal<Quaternion> TEMP = new ThreadLocal<Quaternion>()
+	{
+		@Override public Quaternion initialValue()
+		{
+            return new Quaternion();
+        }
+	};
 	
 	public float x;
 	public float y;

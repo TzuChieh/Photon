@@ -20,53 +20,39 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package scene;
+package math.material;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
-import core.Camera;
 import core.Ray;
+import math.Rand;
 import math.Vector3f;
-import model.Model;
+import model.primitive.Interpolator;
 import model.primitive.Intersection;
-import scene.partition.BruteForce;
-import scene.partition.PartitionStrategy;
-import scene.partition.kdtree.Kdtree;
+import util.Debug;
+import util.Func;
+import util.Logger;
 
-public class Scene
+// Experimental data of isotropic BRDF.
+
+public class NoBounceVertexColor implements Material
 {
-	private List<Model> m_models;
-	private Camera      m_camera;
-	private PartitionStrategy m_partitioinStrategy;
-	
-	public Scene()
+	public NoBounceVertexColor()
 	{
-		m_models = new ArrayList<>();
-		m_camera = new Camera();
 		
-		m_partitioinStrategy = new BruteForce();
-//		m_partitioinStrategy = new Kdtree();
 	}
 	
-	public void addModel(Model model)
+	@Override
+	public boolean sample(Intersection intersection, Ray ray)
 	{
-		m_models.add(model);
-		m_partitioinStrategy.addPrimitive(model.getPrimitive());
-	}
-	
-	public boolean findClosestIntersection(Ray ray, Intersection intersection)
-	{
-		return m_partitioinStrategy.findClosestIntersection(ray, intersection);
-	}
-	
-	public Camera getCamera()
-	{
-		return m_camera;
-	}
-	
-	public void cookScene()
-	{
-		m_partitioinStrategy.processData();
+		Interpolator interpolator = intersection.genInterpolator();
+		
+		ray.getRadiance().set(interpolator.getSmoothColor());
+		
+		return true;
 	}
 }

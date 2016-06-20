@@ -182,9 +182,9 @@ public class Vector3f
 	// rotate
 	public Vector3f rotate(Quaternion rotation)
 	{
-		rotation.conjugate(Quaternion.TEMP);
+		rotation.conjugate(Quaternion.TEMP.get());
 
-		Quaternion w = rotation.mul(this).mulLocal(Quaternion.TEMP);
+		Quaternion w = rotation.mul(this).mulLocal(Quaternion.TEMP.get());
 
 		return new Vector3f(w.getX(), w.getY(), w.getZ());
 	}

@@ -75,4 +75,12 @@ public class SampleManager
 			m_numSamples++;
 		}
 	}
+	
+	public void refresh()
+	{
+		synchronized(m_lock)
+		{
+			m_numSamples = 0;
+		}
+	}
 }

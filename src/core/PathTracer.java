@@ -45,13 +45,19 @@ public class PathTracer
 		
 		Ray          ray          = new Ray();
 		Intersection intersection = new Intersection();
+		Camera       camera;
+		
+		synchronized(scene.getCamera())
+		{
+			camera = scene.getCamera();
+		}
 		
 		for(int x = 0; x < widthPx; x++)
 		{
 			for(int y = 0; y < heightPx; y++)
 			{
 				ray.reset();
-				scene.getCamera().calcRayThroughPixelDistributed(ray, widthPx, heightPx, x, y);
+				camera.calcRayThroughPixelDistributed(ray, widthPx, heightPx, x, y);
 				
 //				pathTraceIterative(scene, ray, intersection, 3);
 				pathTraceIterative(scene, ray, intersection, Integer.MAX_VALUE);

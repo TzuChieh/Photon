@@ -44,4 +44,10 @@ public class SphereInterpolator implements Interpolator
 	{
 		return m_hitNormal;
 	}
+
+	@Override
+	public Vector3f getSmoothColor()
+	{
+		return new Vector3f();
+	}
 }

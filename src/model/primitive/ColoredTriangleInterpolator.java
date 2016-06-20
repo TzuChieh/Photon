@@ -25,17 +25,17 @@ package model.primitive;
 import math.Matrix4f;
 import math.Vector3f;
 
-public class TriangleInterpolator implements Interpolator
+public class ColoredTriangleInterpolator implements Interpolator
 {
-	private Triangle m_triangle;
+	private ColoredTriangle m_coloredTriangle;
 	
 	private float m_baryA;
 	private float m_baryB;
 	private float m_baryC;
 	
-	public TriangleInterpolator(Triangle triangle, float baryA, float baryB, float baryC)
+	public ColoredTriangleInterpolator(ColoredTriangle coloredTriangle, float baryA, float baryB, float baryC)
 	{
-		m_triangle = triangle;
+		m_coloredTriangle = coloredTriangle;
 		
 		m_baryA = baryA;
 		m_baryB = baryB;
@@ -45,19 +45,19 @@ public class TriangleInterpolator implements Interpolator
 	@Override
 	public Vector3f getFlatNormal()
 	{
-		Matrix4f modelMatrix = m_triangle.getModel().getTransform().getModelMatrix();
+		Matrix4f modelMatrix = m_coloredTriangle.getModel().getTransform().getModelMatrix();
 		
-		return modelMatrix.mul(m_triangle.getNormal(), 0.0f).normalizeLocal();
+		return modelMatrix.mul(m_coloredTriangle.getNormal(), 0.0f).normalizeLocal();
 	}
 
 	@Override
 	public Vector3f getSmoothNormal()
 	{
-		Matrix4f modelMatrix = m_triangle.getModel().getTransform().getModelMatrix();
+		Matrix4f modelMatrix = m_coloredTriangle.getModel().getTransform().getModelMatrix();
 		
-		Vector3f nA = m_triangle.getNa();
-		Vector3f nB = m_triangle.getNb();
-		Vector3f nC = m_triangle.getNc();
+		Vector3f nA = m_coloredTriangle.getNa();
+		Vector3f nB = m_coloredTriangle.getNb();
+		Vector3f nC = m_coloredTriangle.getNc();
 		
 		Vector3f smoothN = new Vector3f(nA.x * m_baryA + nB.x * m_baryB + nC.x * m_baryC,
 				                        nA.y * m_baryA + nB.y * m_baryB + nC.y * m_baryC,
@@ -69,6 +69,14 @@ public class TriangleInterpolator implements Interpolator
 	@Override
 	public Vector3f getSmoothColor()
 	{
-		return new Vector3f(0, 0, 0);
+		Vector3f cA = m_coloredTriangle.getCa();
+		Vector3f cB = m_coloredTriangle.getCb();
+		Vector3f cC = m_coloredTriangle.getCc();
+		
+		Vector3f smoothC = new Vector3f(cA.x * m_baryA + cB.x * m_baryB + cC.x * m_baryC,
+				                        cA.y * m_baryA + cB.y * m_baryB + cC.y * m_baryC,
+				                        cA.z * m_baryA + cB.z * m_baryB + cC.z * m_baryC);
+		
+		return smoothC;
 	}
 }

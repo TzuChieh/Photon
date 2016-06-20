@@ -27,9 +27,12 @@ import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 
+import math.Quaternion;
+import math.Vector3f;
 import math.material.AbradedOpaque;
 import model.RawModel;
 import model.primitive.Sphere;
+import radiosity.RadiosityDatReader;
 import scene.ClassicMaterialScene;
 import scene.FiveBallsScene;
 import scene.LamborghiniScene;
@@ -50,11 +53,11 @@ public class Engine
 //	private static final int FRAME_WIDTH_PX  = 1366;
 //	private static final int FRAME_HEIGHT_PX = 768;
 	
-	private static final int FRAME_WIDTH_PX  = 800;
-	private static final int FRAME_HEIGHT_PX = 500;
+//	private static final int FRAME_WIDTH_PX  = 800;
+//	private static final int FRAME_HEIGHT_PX = 500;
 	
-//	private static final int FRAME_WIDTH_PX  = 400;
-//	private static final int FRAME_HEIGHT_PX = 250;
+	private static final int FRAME_WIDTH_PX  = 400;
+	private static final int FRAME_HEIGHT_PX = 250;
 	
 //	private static final int FRAME_WIDTH_PX  = 1280;
 //	private static final int FRAME_HEIGHT_PX = 800;
@@ -78,30 +81,16 @@ public class Engine
 		
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
-		
-		while(true)
-		{
-			Input.update();
-			
-			if(Input.keyDown(Input.KEY_W))
-				Debug.print("down");
-			
-			if(Input.keyHold(Input.KEY_W))
-				Debug.print("hold");
-			
-			if(Input.keyUp(Input.KEY_W))
-				Debug.print("up");
-			
-			if(Input.keyUp(Input.KEY_E))
-				break;
-			
-			Util.threadSleep(1000 / 60);
-		}
-		
-		scene = new FiveBallsScene();
+//		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 //		scene = new LamborghiniScene();
 //		scene = new SponzaScene();
+		
+		String filename = "./resource/radiosity/blocks.tri.7000.dat";
+//		String filename = "./resource/radiosity/church.tri.2000.dat";
+		RadiosityDatReader radReader = new RadiosityDatReader(filename);
+		scene = radReader.parse();
+		
 		
 		scene.cookScene();
 		
@@ -134,6 +123,85 @@ public class Engine
 		
 		while(true)
 		{
+			synchronized(scene.getCamera())
+			{
+				Camera camera = scene.getCamera();
+				boolean moved = false;
+				
+				if(Input.keyHold(Input.KEY_W))
+				{
+					camera.getPos().addLocal(camera.getDir().mul(0.1f));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_S))
+				{
+					camera.getPos().addLocal(camera.getDir().mul(-0.1f));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_A))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					camera.getPos().addLocal(rightDir.mul(-0.1f));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_D))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					camera.getPos().addLocal(rightDir.mul(0.1f));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_UP))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					Vector3f upDir    = rightDir.cross(cameraDir).normalizeLocal();
+					Quaternion rot = new Quaternion(rightDir, 0.05f);
+					camera.getDir().set(cameraDir.rotate(rot));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_DOWN))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					Vector3f upDir    = rightDir.cross(cameraDir).normalizeLocal();
+					Quaternion rot = new Quaternion(rightDir, -0.05f);
+					camera.getDir().set(cameraDir.rotate(rot));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_LEFT))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					Vector3f upDir    = rightDir.cross(cameraDir).normalizeLocal();
+					Quaternion rot = new Quaternion(upDir, 0.05f);
+					camera.getDir().set(cameraDir.rotate(rot));
+					moved = true;
+				}
+				
+				if(Input.keyHold(Input.KEY_RIGHT))
+				{
+					Vector3f cameraDir = camera.getDir();
+					Vector3f rightDir = new Vector3f(-cameraDir.z, 0.0f, cameraDir.x).normalizeLocal();
+					Vector3f upDir    = rightDir.cross(cameraDir).normalizeLocal();
+					Quaternion rot = new Quaternion(upDir, -0.05f);
+					camera.getDir().set(cameraDir.rotate(rot));
+					moved = true;
+				}
+				
+				if(moved)
+				{
+					sampleManager.refresh();
+				}
+			}
+			
 			int numSamples = sampleManager.getCombinedSample(frameResult);
 			
 			m_window.render(frameResult);
@@ -141,8 +209,12 @@ public class Engine
 			Debug.print("=============================================");
 			Debug.print("number of samples: " + numSamples);
 			Debug.print(Statistics.getCurrentKsps());
+			Debug.print("pos = " + scene.getCamera().getPos());
+			Debug.print("dir = " + scene.getCamera().getDir());
 			
-			Util.threadSleep(1000);
+			Util.threadSleep(20);
+			
+			Input.update();
 		}
 	}
 	
