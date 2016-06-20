@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import core.Frame;
+import core.HdrFrame;
 import math.Vector3f;
 import util.Color;
 import util.Func;
@@ -48,7 +48,7 @@ public class Display extends JPanel
 	}
 	
 	// safe to call from any thread since repaint() uses EDT internally
-	public void render(Frame frame)
+	public void render(HdrFrame frame)
 	{
 		synchronized(m_bufferedImage)
 		{

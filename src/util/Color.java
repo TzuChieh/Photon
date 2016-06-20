@@ -74,6 +74,15 @@ public class Color
 		return (alpha255 << 24) | (red255 << 16) | (green255 << 8) | blue255;
 	}
 	
+	public static int toRGBInt(float r, float g, float b)
+	{
+		int r255 = (int)(r * 255.0f + 0.5f);
+		int g255 = (int)(g * 255.0f + 0.5f);
+		int b255 = (int)(b * 255.0f + 0.5f);
+		
+		return (r255 << 16) | (g255 << 8) | b255;
+	}
+	
 	public static int toARGBInt(float a, float r, float g, float b)
 	{
 		int a255 = (int)(a * 255.0f + 0.5f);

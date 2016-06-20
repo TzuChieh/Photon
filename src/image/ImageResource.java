@@ -24,5 +24,8 @@ package image;
 
 public abstract class ImageResource
 {
-	
+	protected ImageResource()
+	{
+		
+	}
 }

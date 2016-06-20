@@ -70,9 +70,23 @@ public final class IOUtil
 		return null;
 	}// end loadTextFile
 	
+	/**
+	 * Retrieve the filename extension (without the dot) from a filename (path can be included).
+	 * @return Filename extension without the dot sign. If there's no filename extension found, 
+	 * an empty String is returned.
+	 */
 	public static String getFilenameExtension(String fullFilename)
 	{
-		return fullFilename.substring(fullFilename.lastIndexOf("."), fullFilename.length());
+		int lastDotIndex = fullFilename.lastIndexOf(".");
+		
+		if(lastDotIndex != -1)
+		{
+			return fullFilename.substring(lastDotIndex + 1, fullFilename.length());
+		}
+		else
+		{
+			return "";
+		}
 	}
 	
 	public static String getFullFilenameWithoutExtension(String fullFilename)

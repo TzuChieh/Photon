@@ -3,5 +3,7 @@
 /src/cloc-1.62.exe
 /src/count.bat
 
+/vs_project/
+
 .classpath
 .project

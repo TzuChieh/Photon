@@ -158,11 +158,11 @@ public class Vector3f
 	
 	public Vector3f setLength(float length)
 	{
-		float LENGTH = length();
+		float multiplier = length / length();
 		
-		x *= (length / LENGTH);
-		y *= (length / LENGTH);
-		z *= (length / LENGTH);
+		x *= multiplier;
+		y *= multiplier;
+		z *= multiplier;
 		
 		return this;
 	}
@@ -191,7 +191,7 @@ public class Vector3f
 
 	public Vector3f lerp(Vector3f destination, float lerpFactor)
 	{
-		return destination.sub(this).mul(lerpFactor).add(this);
+		return destination.sub(this).mulLocal(lerpFactor).addLocal(this);
 	}
 	
 	public Vector3f setLinearInterpolated(Vector3f start, Vector3f end, float fraction)
@@ -455,7 +455,6 @@ public class Vector3f
 	// (x, y, z) = (min, mid, max)
 	public void sort(Vector3f result)
 	{
-		// test AABB face normals (x-, y- and z-axes)
 		if(x > y)
 		{
 			if(x > z)

@@ -20,36 +20,9 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package core;
+package image;
 
-public abstract class Frame
+public class EmptyImageResource extends ImageResource
 {
-	public static final int R = 0;
-	public static final int G = 1;
-	public static final int B = 2;
 	
-	private int m_widthPx;
-	private int m_heightPx;
-	
-	protected Frame(int widthPx, int heightPx)
-	{
-		m_widthPx  = widthPx;
-		m_heightPx = heightPx;
-	}
-	
-	public int getWidthPx()
-	{
-		return m_widthPx;
-	}
-	
-	public int getHeightPx()
-	{
-		return m_heightPx;
-	}
-	
-	public abstract float getPixelR(int x, int y);
-	public abstract float getPixelG(int x, int y);
-	public abstract float getPixelB(int x, int y);
-	public abstract void setPixelRgb(int x, int y, float r, float g, float b);
-	public abstract void set(Frame other);
 }

@@ -26,7 +26,7 @@ import math.Vector3f;
 
 public class SampleManager
 {
-	private Frame m_frame;
+	private HdrFrame m_frame;
 	
 	private int m_numSamples;
 	
@@ -34,14 +34,14 @@ public class SampleManager
 	
 	public SampleManager(int resX, int resY)
 	{
-		m_frame = new Frame(resX, resY);
+		m_frame = new HdrFrame(resX, resY);
 		
 		m_numSamples = 0;
 		
 		m_lock = new Object();
 	}
 	
-	public int getCombinedSample(Frame result)
+	public int getCombinedSample(HdrFrame result)
 	{
 		synchronized(m_lock)
 		{
@@ -51,7 +51,7 @@ public class SampleManager
 		}
 	}
 	
-	public void addSample(Frame frame)
+	public void addSample(HdrFrame frame)
 	{
 		synchronized(m_lock)
 		{

@@ -22,34 +22,54 @@
 
 package core;
 
-public abstract class Frame
+import util.Color;
+
+public class LdrFrame extends Frame
 {
-	public static final int R = 0;
-	public static final int G = 1;
-	public static final int B = 2;
+	private int[][] m_pixels;
 	
-	private int m_widthPx;
-	private int m_heightPx;
-	
-	protected Frame(int widthPx, int heightPx)
+	public LdrFrame(int widthPx, int heightPx)
 	{
-		m_widthPx  = widthPx;
-		m_heightPx = heightPx;
+		super(widthPx, heightPx);
+		
+		m_pixels = new int[widthPx][heightPx];
 	}
 	
-	public int getWidthPx()
+	@Override
+	public float getPixelR(int x, int y)
 	{
-		return m_widthPx;
+		return Color.getRedNormalized(m_pixels[x][y]);
 	}
 	
-	public int getHeightPx()
+	@Override
+	public float getPixelG(int x, int y)
 	{
-		return m_heightPx;
+		return Color.getRedNormalized(m_pixels[x][y]);
 	}
 	
-	public abstract float getPixelR(int x, int y);
-	public abstract float getPixelG(int x, int y);
-	public abstract float getPixelB(int x, int y);
-	public abstract void setPixelRgb(int x, int y, float r, float g, float b);
-	public abstract void set(Frame other);
+	@Override
+	public float getPixelB(int x, int y)
+	{
+		return Color.getRedNormalized(m_pixels[x][y]);
+	}
+	
+	@Override
+	public void setPixelRgb(int x, int y, float r, float g, float b)
+	{
+		m_pixels[x][y] = Color.toRGBInt(r, g, b);
+	}
+	
+	@Override
+	public void set(Frame other)
+	{
+		for(int x = 0; x < getWidthPx(); x++)
+		{
+			for(int y = 0; y < getHeightPx(); y++)
+			{
+				m_pixels[x][y] = Color.toRGBInt(other.getPixelR(x, y), 
+						                        other.getPixelG(x, y), 
+						                        other.getPixelB(x, y));
+			}
+		}
+	}
 }

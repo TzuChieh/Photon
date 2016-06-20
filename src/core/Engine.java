@@ -23,6 +23,7 @@
 package core;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 
@@ -49,14 +50,14 @@ public class Engine
 //	private static final int FRAME_WIDTH_PX  = 1366;
 //	private static final int FRAME_HEIGHT_PX = 768;
 	
-//	private static final int FRAME_WIDTH_PX  = 800;
-//	private static final int FRAME_HEIGHT_PX = 500;
+	private static final int FRAME_WIDTH_PX  = 800;
+	private static final int FRAME_HEIGHT_PX = 500;
 	
 //	private static final int FRAME_WIDTH_PX  = 400;
 //	private static final int FRAME_HEIGHT_PX = 250;
 	
-	private static final int FRAME_WIDTH_PX  = 1280;
-	private static final int FRAME_HEIGHT_PX = 800;
+//	private static final int FRAME_WIDTH_PX  = 1280;
+//	private static final int FRAME_HEIGHT_PX = 800;
 	
 	private PathTracer tracer;
 	private Window m_window;
@@ -108,7 +109,7 @@ public class Engine
 	
 	public void run()
 	{
-		final Frame frameResult = new Frame(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
+		final HdrFrame frameResult = new HdrFrame(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
 		while(true)
 		{
@@ -153,7 +154,7 @@ public class Engine
 	{
 		String osName = System.getProperty("os.name");
 		
-		if(osName.toLowerCase().contains("windows"))
+		if(osName.toLowerCase(Locale.ROOT).contains("windows"))
 		{
 			m_logger.printMsg("OS is Windows (" + osName + ")");
 			return OsType.WINDOWS;

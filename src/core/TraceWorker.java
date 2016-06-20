@@ -30,14 +30,14 @@ public class TraceWorker implements Runnable
 	private Scene         m_scene;
 	private SampleManager m_sampleManager;
 	private PathTracer    m_pathTracer;
-	private Frame         m_sampleResult;
+	private HdrFrame         m_sampleResult;
 	
 	public TraceWorker(Scene scene, SampleManager sampleManager, int xRes, int yRes)
 	{
 		m_scene         = scene;
 		m_sampleManager = sampleManager;
 		m_pathTracer    = new PathTracer();
-		m_sampleResult  = new Frame(xRes, yRes);
+		m_sampleResult  = new HdrFrame(xRes, yRes);
 	}
 	
 	@Override

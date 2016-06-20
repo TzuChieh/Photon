@@ -22,6 +22,8 @@
 
 package core;
 
+import java.util.Locale;
+
 import math.material.Merl;
 import util.Debug;
 
@@ -29,6 +31,9 @@ public class Test
 {
 	public Test()
 	{
+//		Debug.print("AAA".toLowerCase(Locale.ROOT));
+//		Debug.exit();
+		
 //		Merl merl = new Merl("alum-bronze");
 //		Debug.exit();
 	}

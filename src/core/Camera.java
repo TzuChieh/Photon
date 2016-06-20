@@ -63,7 +63,7 @@ public class Camera
 		m_fov = deg / 180.0f * 3.14159265f;
 	}
 	
-	public void calcRayFromPixel(Ray ray, int xRes, int yRes, int xPx, int yPx)
+	public void calcRayTroughPixel(Ray ray, int xResPx, int yResPx, int xPx, int yPx)
 	{
 		// FIXME: this will fail when the camera is facing directly on y-axis
 		
@@ -71,10 +71,10 @@ public class Camera
 		Vector3f upDir    = rightDir.cross(m_dir).normalizeLocal();
 		
 		float halfWidth = (float)Math.tan(m_fov / 2.0f);
-		float halfHeight = halfWidth * (float)yRes / (float)xRes;
+		float halfHeight = halfWidth * (float)yResPx / (float)xResPx;
 		
-		float pixelPosX = ((xPx + 0.5f) / (xRes / 2.0f) - 1.0f) * halfWidth;
-		float pixelPosY = ((yPx + 0.5f) / (yRes / 2.0f) - 1.0f) * halfHeight;
+		float pixelPosX = ((xPx + 0.5f) / (xResPx / 2.0f) - 1.0f) * halfWidth;
+		float pixelPosY = ((yPx + 0.5f) / (yResPx / 2.0f) - 1.0f) * halfHeight;
 		
 		rightDir.mulLocal(pixelPosX);
 		upDir.mulLocal(pixelPosY);
@@ -83,7 +83,7 @@ public class Camera
 		ray.getOrigin().set(m_pos);
 	}
 	
-	public void calcRayFromPixelDistributed(Ray ray, int xRes, int yRes, int xPx, int yPx)
+	public void calcRayThroughPixelDistributed(Ray ray, int xRes, int yRes, int xPx, int yPx)
 	{
 		// FIXME: this will fail when the camera is facing directly on y-axis
 		

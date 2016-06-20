@@ -24,6 +24,7 @@ package math;
 
 public class Matrix4f
 {
+	// FIXME: threadlocal???
 	private static Matrix4f TEMP = new Matrix4f().initIdentity();
 	
 	public float[][] m;

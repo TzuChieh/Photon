@@ -22,8 +22,6 @@
 
 package math;
 
-import util.Debug;
-
 public class Transform
 {
 	private Matrix4f m_modelMatrix;

@@ -29,7 +29,7 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import core.Frame;
+import core.HdrFrame;
 import ui.panel.CorePanel;
 import ui.panel.Display;
 
@@ -62,7 +62,7 @@ public class Window
 //		m_jframe.add(corePanel, BorderLayout.WEST);
 	}
 	
-	public void render(Frame frame)
+	public void render(HdrFrame frame)
 	{
 		m_display.render(frame);
 	}

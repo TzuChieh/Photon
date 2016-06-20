@@ -22,34 +22,54 @@
 
 package core;
 
-public abstract class Frame
+public class HdrFrame extends Frame
 {
-	public static final int R = 0;
-	public static final int G = 1;
-	public static final int B = 2;
+	private float[][][] m_pixelRgb;
 	
-	private int m_widthPx;
-	private int m_heightPx;
-	
-	protected Frame(int widthPx, int heightPx)
+	public HdrFrame(int widthPx, int heightPx)
 	{
-		m_widthPx  = widthPx;
-		m_heightPx = heightPx;
+		super(widthPx, heightPx);
+		
+		m_pixelRgb = new float[widthPx][heightPx][3];
 	}
 	
-	public int getWidthPx()
+	@Override
+	public float getPixelR(int x, int y)
 	{
-		return m_widthPx;
+		return m_pixelRgb[x][y][R];
 	}
 	
-	public int getHeightPx()
+	@Override
+	public float getPixelG(int x, int y)
 	{
-		return m_heightPx;
+		return m_pixelRgb[x][y][G];
 	}
 	
-	public abstract float getPixelR(int x, int y);
-	public abstract float getPixelG(int x, int y);
-	public abstract float getPixelB(int x, int y);
-	public abstract void setPixelRgb(int x, int y, float r, float g, float b);
-	public abstract void set(Frame other);
+	@Override
+	public float getPixelB(int x, int y)
+	{
+		return m_pixelRgb[x][y][B];
+	}
+	
+	@Override
+	public void setPixelRgb(int x, int y, float r, float g, float b)
+	{
+		m_pixelRgb[x][y][R] = r;
+		m_pixelRgb[x][y][G] = g;
+		m_pixelRgb[x][y][B] = b;
+	}
+	
+	@Override
+	public void set(Frame other)
+	{
+		for(int x = 0; x < getWidthPx(); x++)
+		{
+			for(int y = 0; y < getHeightPx(); y++)
+			{
+				m_pixelRgb[x][y][R] = other.getPixelR(x, y);
+				m_pixelRgb[x][y][G] = other.getPixelG(x, y);
+				m_pixelRgb[x][y][B] = other.getPixelB(x, y);
+			}
+		}
+	}
 }

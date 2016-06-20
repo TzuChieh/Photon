@@ -38,7 +38,7 @@ public class PathTracer
 		
 	}
 	
-	public void trace(Scene scene, Frame sampleResult)
+	public void trace(Scene scene, HdrFrame sampleResult)
 	{
 		int widthPx  = sampleResult.getWidthPx();
 		int heightPx = sampleResult.getHeightPx();
@@ -51,7 +51,7 @@ public class PathTracer
 			for(int y = 0; y < heightPx; y++)
 			{
 				ray.reset();
-				scene.getCamera().calcRayFromPixelDistributed(ray, widthPx, heightPx, x, y);
+				scene.getCamera().calcRayThroughPixelDistributed(ray, widthPx, heightPx, x, y);
 				
 //				pathTraceIterative(scene, ray, intersection, 3);
 				pathTraceIterative(scene, ray, intersection, Integer.MAX_VALUE);

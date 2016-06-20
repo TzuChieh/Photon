@@ -62,12 +62,12 @@ public class FiveBallsScene extends Scene
 //		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
 //		addModel(bunnyModel);
 		
-		ObjModel dragonModel = new ObjModel("./resource/model/bunny.obj");
+		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
 //		Merl dragonMatl = new Merl("alum-bronze");
 //		Merl dragonMatl = new Merl("chrome");
 //		Merl dragonMatl = new Merl("gold-paint");
 //		Merl dragonMatl = new Merl("two-layer-gold");
-		Merl dragonMatl = new Merl("brass");
+//		Merl dragonMatl = new Merl("brass");
 //		Merl dragonMatl = new Merl("steel");
 //		AbradedTranslucent dragonMatl = new AbradedTranslucent();
 //		dragonMatl.setIor(1.55f);
@@ -75,8 +75,8 @@ public class FiveBallsScene extends Scene
 //		dragonMatl.setRoughness(0.0f);
 //		RawModel dragonRawModel = new RawModel(dragonModel.getPrimitive(), dragonMatl);
 		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
-//		dragonRawModel.getTransform().setScale(1.8f);// for dragon
-		dragonModel.getTransform().setScale(2.2f);// for bunny
+		dragonModel.getTransform().setScale(1.8f);// for dragon
+//		dragonModel.getTransform().setScale(2.2f);// for bunny
 		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
 //		addModel(dragonRawModel);
 		addModel(dragonModel);
@@ -87,17 +87,17 @@ public class FiveBallsScene extends Scene
 //		sphereLightMatl.setEmissivity(5.0f, 20.0f, 5.0f);
 //		addModel(sphereLight);
 		
-		AbradedOpaque sphereLightMatl = new AbradedOpaque();
-		RawModel sphereLight = new RawModel(new Sphere(-3.0f, -3.3f, -3.0f, 0.5f), sphereLightMatl);
-		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
-		sphereLightMatl.setEmissivity(10.0f, 20.0f, 10.0f);
-		addModel(sphereLight);
-		
-		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
-		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
-		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
-		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
-		addModel(sphereLight2);
+//		AbradedOpaque sphereLightMatl = new AbradedOpaque();
+//		RawModel sphereLight = new RawModel(new Sphere(-3.0f, -3.3f, -3.0f, 0.5f), sphereLightMatl);
+//		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
+//		sphereLightMatl.setEmissivity(10.0f, 20.0f, 10.0f);
+//		addModel(sphereLight);
+//		
+//		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
+//		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
+//		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
+//		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
+//		addModel(sphereLight2);
 		
 		
 //		ObjModel bunnyModel = new ObjModel("./resource/model/venusm_low_poly.obj");

@@ -20,36 +20,55 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package core;
+package image.intrinsic;
 
-public abstract class Frame
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import image.EmptyImageResource;
+import image.ImageLoader;
+import image.ImageLoadingException;
+import image.ImageResource;
+import image.ImageSavingException;
+import util.IOUtil;
+
+public class IntrinsicImageLoader implements ImageLoader
 {
-	public static final int R = 0;
-	public static final int G = 1;
-	public static final int B = 2;
+	private static final Set<String> SUPPORTED_IMAGE_TYPES = new HashSet<>();
 	
-	private int m_widthPx;
-	private int m_heightPx;
-	
-	protected Frame(int widthPx, int heightPx)
+	static
 	{
-		m_widthPx  = widthPx;
-		m_heightPx = heightPx;
+		SUPPORTED_IMAGE_TYPES.add("png");
 	}
 	
-	public int getWidthPx()
+	public IntrinsicImageLoader()
 	{
-		return m_widthPx;
+		
 	}
 	
-	public int getHeightPx()
+	@Override
+	public ImageResource load(String fullFilename) throws ImageLoadingException
 	{
-		return m_heightPx;
+		String imageType = IOUtil.getFilenameExtension(fullFilename);
+		imageType.toLowerCase(Locale.ROOT);
+		
+		if(SUPPORTED_IMAGE_TYPES.contains(imageType))
+		{
+			// TODO load image
+			
+			return null;
+		}
+		else
+		{
+			return new EmptyImageResource();
+		}
 	}
-	
-	public abstract float getPixelR(int x, int y);
-	public abstract float getPixelG(int x, int y);
-	public abstract float getPixelB(int x, int y);
-	public abstract void setPixelRgb(int x, int y, float r, float g, float b);
-	public abstract void set(Frame other);
+
+	@Override
+	public void save(String fullFilename) throws ImageSavingException
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

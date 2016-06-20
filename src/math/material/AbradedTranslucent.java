@@ -94,8 +94,8 @@ public final class AbradedTranslucent implements Material
 	@Override
 	public boolean sample(Intersection intersection, Ray ray)
 	{
-//		Vector3f N = intersection.genInterpolator().getSmoothNormal();
-		Vector3f N = intersection.genInterpolator().getFlatNormal();
+		Vector3f N = intersection.genInterpolator().getSmoothNormal();
+//		Vector3f N = intersection.genInterpolator().getFlatNormal();
 		Vector3f V = ray.getDir().mul(-1.0f);
 		Vector3f H = genMicrofacetNormalIS(N, V);
 		Vector3f L = new Vector3f();
