@@ -28,7 +28,8 @@ public class Matrix4f
 	
 	private static ThreadLocal<Matrix4f> TEMP = new ThreadLocal<Matrix4f>() 
 	{
-		@Override public Matrix4f initialValue()
+		@Override
+		public Matrix4f initialValue()
 		{
             return new Matrix4f().initIdentity();
         }

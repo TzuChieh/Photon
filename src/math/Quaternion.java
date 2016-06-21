@@ -26,7 +26,8 @@ public class Quaternion
 {
 	public static ThreadLocal<Quaternion> TEMP = new ThreadLocal<Quaternion>()
 	{
-		@Override public Quaternion initialValue()
+		@Override
+		public Quaternion initialValue()
 		{
             return new Quaternion();
         }

@@ -51,8 +51,8 @@ public class NoBounceVertexColor implements Material
 	{
 		Interpolator interpolator = intersection.genInterpolator();
 		
-		ray.getRadiance().set(interpolator.getSmoothColor());
+		ray.getRadiance().addLocal(ray.getWeight().mul(interpolator.getSmoothColor()));
 		
-		return true;
+		return false;
 	}
 }

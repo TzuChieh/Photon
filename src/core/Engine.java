@@ -59,6 +59,9 @@ public class Engine
 	private static final int FRAME_WIDTH_PX  = 400;
 	private static final int FRAME_HEIGHT_PX = 250;
 	
+//	private static final int FRAME_WIDTH_PX  = 120;
+//	private static final int FRAME_HEIGHT_PX = 75;
+	
 //	private static final int FRAME_WIDTH_PX  = 1280;
 //	private static final int FRAME_HEIGHT_PX = 800;
 	
@@ -81,15 +84,18 @@ public class Engine
 		
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
-//		scene = new FiveBallsScene();
+		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 //		scene = new LamborghiniScene();
 //		scene = new SponzaScene();
 		
-		String filename = "./resource/radiosity/blocks.tri.7000.dat";
-//		String filename = "./resource/radiosity/church.tri.2000.dat";
-		RadiosityDatReader radReader = new RadiosityDatReader(filename);
-		scene = radReader.parse();
+//		String filename = "./resource/radiosity/blocks.tri.7000";
+////		String filename = "./resource/radiosity/church.tri.9300";
+////		String filename = "./resource/radiosity/blocks.tri.fin";
+////		String filename = "./resource/radiosity/hall.tri.4500";
+////		String filename = "./resource/radiosity/room.tri.12100";
+//		RadiosityDatReader radReader = new RadiosityDatReader(filename);
+//		scene = radReader.parse();
 		
 		
 		scene.cookScene();
