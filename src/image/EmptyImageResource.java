@@ -22,7 +22,24 @@
 
 package image;
 
+import math.Vector3f;
+
 public class EmptyImageResource extends ImageResource
 {
+	public EmptyImageResource()
+	{
+		super(0);
+	}
 	
+	@Override
+	public void getPixel(int d1, int d2, Vector3f result)
+	{
+		// left empty
+	}
+
+	@Override
+	public void setPixel(int d1, int d2, Vector3f pixel)
+	{
+		// left empty
+	}
 }

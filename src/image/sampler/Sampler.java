@@ -20,38 +20,9 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package image;
+package image.sampler;
 
-import math.Vector4f;
-import math.Vector2f;
-import math.Vector3f;
-
-public abstract class ImageResource
+public interface Sampler
 {
-	private int   m_numComponents;
-	private int[] m_dimensions;
 	
-	protected ImageResource(int numComponents, int... dimensions)
-	{
-		m_numComponents = numComponents;
-		m_dimensions    = new int[dimensions.length];
-		
-		for(int i = 0; i < dimensions.length; i++)
-		{
-			m_dimensions[i] = dimensions[i];
-		}
-	}
-	
-	public int[] getDimensions()
-	{
-		return m_dimensions;
-	}
-	
-	public int getNumComponents()
-	{
-		return m_numComponents;
-	}
-	
-	public abstract void getPixel(int d1, int d2, Vector3f result);
-	public abstract void setPixel(int d1, int d2, Vector3f pixel);
 }

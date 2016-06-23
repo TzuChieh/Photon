@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import javax.swing.SwingUtilities;
 
+import image.ImageManager;
 import math.Quaternion;
 import math.Vector3f;
 import math.material.AbradedOpaque;
@@ -84,18 +85,18 @@ public class Engine
 		
 		sampleManager = new SampleManager(FRAME_WIDTH_PX, FRAME_HEIGHT_PX);
 		
-//		scene = new FiveBallsScene();
+		scene = new FiveBallsScene();
 //		scene = new ClassicMaterialScene();
 //		scene = new LamborghiniScene();
 //		scene = new SponzaScene();
 		
-//		String filename = "./resource/radiosity/blocks.tri.7000";
-		String filename = "./resource/radiosity/church.tri.9300";
-//		String filename = "./resource/radiosity/blocks.tri.fin";
-//		String filename = "./resource/radiosity/hall.tri.4500";
-//		String filename = "./resource/radiosity/room.tri.12100";
-		RadiosityDatReader radReader = new RadiosityDatReader(filename);
-		scene = radReader.parse();
+////		String filename = "./resource/radiosity/blocks.tri.7000";
+//		String filename = "./resource/radiosity/church.tri.9300";
+////		String filename = "./resource/radiosity/blocks.tri.fin";
+////		String filename = "./resource/radiosity/hall.tri.4500";
+////		String filename = "./resource/radiosity/room.tri.12100";
+//		RadiosityDatReader radReader = new RadiosityDatReader(filename);
+//		scene = radReader.parse();
 		
 		
 		scene.cookScene();
@@ -118,6 +119,7 @@ public class Engine
 			m_osType = retrieveOsType();
 			
 			Input.init();
+			ImageManager.init(this);
 		}
 		
 		m_logger.printMsg("engine initialized successfully");

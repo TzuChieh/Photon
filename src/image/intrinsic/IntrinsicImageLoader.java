@@ -22,15 +22,22 @@
 
 package image.intrinsic;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 
 import image.EmptyImageResource;
 import image.ImageLoader;
 import image.ImageLoadingException;
 import image.ImageResource;
 import image.ImageSavingException;
+import image.LdrRectImageResource;
+import math.Vector3f;
 import util.IOUtil;
 
 public class IntrinsicImageLoader implements ImageLoader
@@ -53,15 +60,15 @@ public class IntrinsicImageLoader implements ImageLoader
 		String imageType = IOUtil.getFilenameExtension(fullFilename);
 		imageType.toLowerCase(Locale.ROOT);
 		
-		if(SUPPORTED_IMAGE_TYPES.contains(imageType))
+		if(imageType.equals("png"))
 		{
-			// TODO load image
-			
-			return null;
+			return loadPng(fullFilename);
 		}
 		else
 		{
-			return new EmptyImageResource();
+			ImageLoadingException exception = new ImageLoadingException();
+			exception.setMessage("image type <" + imageType + "> is unsupported");
+			throw new ImageLoadingException();
 		}
 	}
 
@@ -70,5 +77,47 @@ public class IntrinsicImageLoader implements ImageLoader
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private static ImageResource loadPng(String fullFilename) throws ImageLoadingException
+	{
+		try
+		{
+			BufferedImage bufferedImage = ImageIO.read(new File(fullFilename));
+			
+			int width         = bufferedImage.getWidth();
+			int height        = bufferedImage.getHeight();
+			int numComponents = bufferedImage.getColorModel().getNumComponents();
+			
+			ImageResource imageResource = new LdrRectImageResource(width, height, numComponents);
+			
+			int[]    pixels = bufferedImage.getRGB(0, 0, width, height, null, 0, width);
+			Vector3f pixel  = new Vector3f();
+			
+			for(int y = 0; y < height; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+					// TODO: support for other number of components (currently only rgb is supported)
+					
+					int pixel255 = pixels[(height - y - 1) * width + x];
+
+					float r = (float)((pixel255 >> 16) & 0xFF) / 255.0f;
+					float g = (float)((pixel255 >>  8) & 0xFF) / 255.0f;
+					float b = (float)((pixel255      ) & 0xFF) / 255.0f;
+					
+					pixel.set(r, g, b);
+					imageResource.setPixel(x, y, pixel);
+				}
+			}
+			
+			return imageResource;
+		}
+		catch(IOException e)
+		{
+			ImageLoadingException exception = new ImageLoadingException();
+			exception.setMessage("couldn't load <" + fullFilename + ">, info: " + e.getMessage());
+			throw new ImageLoadingException();
+		}
 	}
 }

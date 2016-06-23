@@ -23,6 +23,7 @@
 package image;
 
 import core.Engine;
+import image.intrinsic.IntrinsicImageLoader;
 import util.Logger;
 
 public final class ImageManager
@@ -34,7 +35,7 @@ public final class ImageManager
 	{
 		if(engine.getOsType() == Engine.OsType.WINDOWS)
 		{
-			// TODO instantiate some ImageLoader
+			imageLoader = new IntrinsicImageLoader();
 			
 			return true;
 		}

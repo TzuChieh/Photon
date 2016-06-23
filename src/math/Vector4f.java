@@ -20,38 +20,70 @@
 //	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //	SOFTWARE.
 
-package image;
+package math;
 
-import math.Vector4f;
-import math.Vector2f;
-import math.Vector3f;
-
-public abstract class ImageResource
+public class Vector4f
 {
-	private int   m_numComponents;
-	private int[] m_dimensions;
+	public float x;
+	public float y;
+	public float z;
+	public float w;
 	
-	protected ImageResource(int numComponents, int... dimensions)
+	public Vector4f()
 	{
-		m_numComponents = numComponents;
-		m_dimensions    = new int[dimensions.length];
+		this(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	public Vector4f(float right)
+	{
+		this(right, right, right, right);
+	}
+	
+	public Vector4f(float r, float g, float b, float a)
+	{
+		this.x = r;
+		this.x = g;
+		this.x = b;
+		this.x = a;
+	}
+	
+	public Vector4f mulLocal(float right)
+	{
+		x *= right;
+		y *= right;
+		z *= right;
+		w *= right;
 		
-		for(int i = 0; i < dimensions.length; i++)
-		{
-			m_dimensions[i] = dimensions[i];
-		}
+		return this;
 	}
 	
-	public int[] getDimensions()
+	public Vector4f divLocal(float right)
 	{
-		return m_dimensions;
+		x /= right;
+		y /= right;
+		z /= right;
+		w /= right;
+		
+		return this;
 	}
 	
-	public int getNumComponents()
+	public Vector4f addLocal(float right)
 	{
-		return m_numComponents;
+		x += right;
+		y += right;
+		z += right;
+		w += right;
+		
+		return this;
 	}
 	
-	public abstract void getPixel(int d1, int d2, Vector3f result);
-	public abstract void setPixel(int d1, int d2, Vector3f pixel);
+	public Vector4f subLocal(float right)
+	{
+		x -= right;
+		y -= right;
+		z -= right;
+		w -= right;
+		
+		return this;
+	}
 }

@@ -22,36 +22,12 @@
 
 package image;
 
-import math.Vector4f;
-import math.Vector2f;
-import math.Vector3f;
-
-public abstract class ImageResource
+public class Texutre
 {
-	private int   m_numComponents;
-	private int[] m_dimensions;
+	private ImageResource m_imageResource;
 	
-	protected ImageResource(int numComponents, int... dimensions)
+	public Texutre(ImageResource imageResource)
 	{
-		m_numComponents = numComponents;
-		m_dimensions    = new int[dimensions.length];
-		
-		for(int i = 0; i < dimensions.length; i++)
-		{
-			m_dimensions[i] = dimensions[i];
-		}
+		m_imageResource = imageResource;
 	}
-	
-	public int[] getDimensions()
-	{
-		return m_dimensions;
-	}
-	
-	public int getNumComponents()
-	{
-		return m_numComponents;
-	}
-	
-	public abstract void getPixel(int d1, int d2, Vector3f result);
-	public abstract void setPixel(int d1, int d2, Vector3f pixel);
 }

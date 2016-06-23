@@ -22,12 +22,36 @@
 
 package image;
 
+import math.Vector3f;
+
 public class LdrRectImageResource extends ImageResource
 {
 	private byte[] m_data;
 	
-	public LdrRectImageResource(int numBytes)
+	public LdrRectImageResource(int widthPx, int heightPx, int numComponents)
 	{
-		m_data = new byte[numBytes];
+		super(numComponents, widthPx, heightPx);
+		
+		m_data = new byte[widthPx * heightPx * numComponents];
+	}
+
+	@Override
+	public void getPixel(int d1, int d2, Vector3f result)
+	{
+		int baseIndex = getNumComponents() * (d2 * getDimensions()[0] + d1);
+		
+		result.x = (float)(m_data[baseIndex + 0] & 0xFF) / 255.0f;
+		result.y = (float)(m_data[baseIndex + 1] & 0xFF) / 255.0f;
+		result.z = (float)(m_data[baseIndex + 2] & 0xFF) / 255.0f;
+	}
+
+	@Override
+	public void setPixel(int d1, int d2, Vector3f pixel)
+	{
+		int baseIndex = getNumComponents() * (d2 * getDimensions()[0] + d1);
+		
+		m_data[baseIndex + 0] = (byte)(pixel.x * 255.0f + 0.5f);
+		m_data[baseIndex + 1] = (byte)(pixel.y * 255.0f + 0.5f);
+		m_data[baseIndex + 2] = (byte)(pixel.z * 255.0f + 0.5f);
 	}
 }
