@@ -26,9 +26,19 @@ import image.Texture;
 import math.Vector2f;
 import math.Vector3f;
 
-public interface Sampler
+public class NearestSampler implements Sampler
 {
-	public static final Sampler NEAREST = new NearestSampler();
+	protected NearestSampler()
+	{
+		
+	}
 	
-	public abstract void sample(Texture texture, Vector2f texCoord, Vector3f result);
+	@Override
+	public void sample(Texture texture, Vector2f texCoord, Vector3f result)
+	{
+		int coordX = (int)(texCoord.x * (float)texture.getWidthPx()) % texture.getWidthPx();
+		int coordY = (int)(texCoord.y * (float)texture.getHeightPx()) % texture.getHeightPx();
+		
+		texture.getPixel(coordX, coordY, result);
+	}
 }

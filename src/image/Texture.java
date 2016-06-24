@@ -22,12 +22,54 @@
 
 package image;
 
-public class Texutre
+import image.sampler.Sampler;
+import math.Vector2f;
+import math.Vector3f;
+import util.Logger;
+
+public class Texture
 {
-	private ImageResource m_imageResource;
+	private static final Logger LOGGER = new Logger("Texture");
 	
-	public Texutre(ImageResource imageResource)
+	private ImageResource m_imageResource;
+	private Sampler       m_sampler;
+	
+	public Texture(String fullFilename, Sampler sampler)
 	{
-		m_imageResource = imageResource;
+		m_sampler = sampler;
+		
+		try
+		{
+			m_imageResource = ImageManager.getImageLoader().load(fullFilename);
+		}
+		catch(ImageLoadingException e)
+		{
+			LOGGER.printWrn(e.getMessage());
+			LOGGER.printWrn("due to some problem, an EmptyImageResource is being used");
+		}
+		finally
+		{
+			m_imageResource = new EmptyImageResource();
+		}
+	}
+	
+	public void sample(Vector2f texCoord, Vector3f result)
+	{
+		m_sampler.sample(this, texCoord, result);
+	}
+	
+	public void getPixel(int x, int y, Vector3f result)
+	{
+		m_imageResource.getPixel(x, y, result);
+	}
+	
+	public int getWidthPx()
+	{
+		return m_imageResource.getDimensions()[0];
+	}
+	
+	public int getHeightPx()
+	{
+		return m_imageResource.getDimensions()[1];
 	}
 }

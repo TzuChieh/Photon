@@ -28,6 +28,8 @@ import java.util.Locale;
 import javax.swing.SwingUtilities;
 
 import image.ImageManager;
+import image.Texture;
+import image.sampler.Sampler;
 import math.Quaternion;
 import math.Vector3f;
 import math.material.AbradedOpaque;
@@ -80,6 +82,11 @@ public class Engine
 		
 		initGui();
 		init();
+		
+		
+		Texture texture = new Texture("./resource/texture/test.png", Sampler.NEAREST);
+		
+		Debug.exit();
 		
 		tracer = new PathTracer();
 		
