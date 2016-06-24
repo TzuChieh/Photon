@@ -63,7 +63,7 @@ public class RadiosityDatReader
 				
 				Sphere sphereWall = new Sphere(0, -1003.75f, 0.0f, 1000.0f);
 				AbradedOpaque sphereWallMatl = new AbradedOpaque();
-				sphereWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+				sphereWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 				sphereWallMatl.setRoughness(0.5f);
 //				sphereWallMatl.setEmissivity(1, 0, 0);
 				RawModel sphereWallModel = new RawModel(sphereWall, sphereWallMatl);
@@ -79,7 +79,7 @@ public class RadiosityDatReader
 				
 				Sphere sphereWall = new Sphere(0, -1002.0f, 0.0f, 1000.0f);
 				AbradedOpaque sphereWallMatl = new AbradedOpaque();
-				sphereWallMatl.setAlbedo(0.95f, 0.95f, 0.95f);
+				sphereWallMatl.setConstAlbedo(0.95f, 0.95f, 0.95f);
 				sphereWallMatl.setRoughness(0.5f);
 //				sphereWallMatl.setEmissivity(1, 0, 0);
 				RawModel sphereWallModel = new RawModel(sphereWall, sphereWallMatl);
@@ -112,7 +112,7 @@ public class RadiosityDatReader
 			{
 				Sphere sphereWall = new Sphere(0, 0, 1000.0f, 1000.0f);
 				AbradedOpaque sphereWallMatl = new AbradedOpaque();
-				sphereWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+				sphereWallMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
 				sphereWallMatl.setF0(1.0f, 1.0f, 1.0f);
 				sphereWallMatl.setRoughness(0.0f);
 				sphereWallMatl.setMetalness(1.0f);

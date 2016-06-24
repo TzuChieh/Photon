@@ -22,8 +22,6 @@
 
 package model.primitive;
 
-import math.Vector3f;
-
 public abstract class AtomicPrimitive extends Primitive
 {
 	protected AtomicPrimitive()
@@ -32,4 +30,6 @@ public abstract class AtomicPrimitive extends Primitive
 	}
 	
 	public abstract Interpolator genInterpolator(Intersection intersection);
+	
+	public abstract boolean hasTexCoord();
 }

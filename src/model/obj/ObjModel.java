@@ -23,6 +23,7 @@
 package model.obj;
 
 import math.Transform;
+import math.Vector2f;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
@@ -57,7 +58,7 @@ public class ObjModel implements Model
 		AbradedOpaque matl = new AbradedOpaque();
 		m_defaultMaterial = matl;
 //		matl.setAlbedo(0.1f, 0.1f, 0.1f);
-		matl.setAlbedo(0.0f, 0.0f, 0.0f);
+		matl.setConstAlbedo(0.0f, 0.0f, 0.0f);
 //		matl.setEmissivity(0.5f, 0.5f, 0.5f);
 //		matl.setF0(0.9f, 0.9f, 0.9f);
 		matl.setF0(1.0f, 0.765557f, 0.336057f);// gold
@@ -81,8 +82,13 @@ public class ObjModel implements Model
 			Vector3f normalB = indexedMesh.getNormals().get(indexedMesh.getIndices().get(i + 1));
 			Vector3f normalC = indexedMesh.getNormals().get(indexedMesh.getIndices().get(i + 2));
 			
+			Vector2f texCoordA = indexedMesh.getTexCoords().get(indexedMesh.getIndices().get(i));
+			Vector2f texCoordB = indexedMesh.getTexCoords().get(indexedMesh.getIndices().get(i + 1));
+			Vector2f texCoordC = indexedMesh.getTexCoords().get(indexedMesh.getIndices().get(i + 2));
+			
 			Triangle triangle = new Triangle(positionA, positionB, positionC);
 			triangle.setNormals(normalA, normalB, normalC);
+			triangle.setTexCoords(texCoordA, texCoordB, texCoordC);
 			m_triangleMesh.addTriangle(triangle);
 		}
 	}

@@ -23,6 +23,8 @@
 package scene;
 
 import core.Camera;
+import image.Texture;
+import image.sampler.Sampler;
 import math.Vector3f;
 import math.material.AbradedOpaque;
 import math.material.AbradedTranslucent;
@@ -52,6 +54,13 @@ public class FiveBallsScene extends Scene
 		float wallR = 1000.0f;
 		float halfSize = 5.0f;
 		
+		ObjModel reliefCubeObjModel = new ObjModel("./resource/model/reliefCube.obj");
+		AbradedOpaque reliefModelMatl = new AbradedOpaque();
+		reliefModelMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
+		reliefModelMatl.setTextureAlbedo(new Texture("./resource/texture/wood.png", Sampler.NEAREST));
+		RawModel reliefCubeModel = new RawModel(reliefCubeObjModel.getPrimitive(), reliefModelMatl);
+		addModel(reliefCubeModel);
+		
 //		ObjModel bunnyModel = new ObjModel("./resource/model/bunny.obj");
 //		bunnyModel.getTransform().setPos(-1.0f, 0.5f, 0.0f);
 //		bunnyModel.getTransform().setScale(2.0f);
@@ -62,24 +71,24 @@ public class FiveBallsScene extends Scene
 //		bunnyModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
 //		addModel(bunnyModel);
 		
-		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
-//		Merl dragonMatl = new Merl("alum-bronze");
-//		Merl dragonMatl = new Merl("chrome");
-//		Merl dragonMatl = new Merl("gold-paint");
-//		Merl dragonMatl = new Merl("two-layer-gold");
-//		Merl dragonMatl = new Merl("brass");
-//		Merl dragonMatl = new Merl("steel");
-//		AbradedTranslucent dragonMatl = new AbradedTranslucent();
-//		dragonMatl.setIor(1.55f);
-//		dragonMatl.setAlbedo(0.9f, 0.9f, 0.9f);
-//		dragonMatl.setRoughness(0.0f);
-//		RawModel dragonRawModel = new RawModel(dragonModel.getPrimitive(), dragonMatl);
-		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
-		dragonModel.getTransform().setScale(1.8f);// for dragon
-//		dragonModel.getTransform().setScale(2.2f);// for bunny
-		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
-//		addModel(dragonRawModel);
-		addModel(dragonModel);
+//		ObjModel dragonModel = new ObjModel("./resource/model/dragon.obj");
+////		Merl dragonMatl = new Merl("alum-bronze");
+////		Merl dragonMatl = new Merl("chrome");
+////		Merl dragonMatl = new Merl("gold-paint");
+////		Merl dragonMatl = new Merl("two-layer-gold");
+////		Merl dragonMatl = new Merl("brass");
+////		Merl dragonMatl = new Merl("steel");
+////		AbradedTranslucent dragonMatl = new AbradedTranslucent();
+////		dragonMatl.setIor(1.55f);
+////		dragonMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+////		dragonMatl.setRoughness(0.0f);
+////		RawModel dragonRawModel = new RawModel(dragonModel.getPrimitive(), dragonMatl);
+//		dragonModel.getTransform().setPos(-3.3f, -4.98f, -1.5f);
+//		dragonModel.getTransform().setScale(1.8f);// for dragon
+////		dragonModel.getTransform().setScale(2.2f);// for bunny
+//		dragonModel.getTransform().setRotDeg(new Vector3f(0, 1, 0), 180);
+////		addModel(dragonRawModel);
+//		addModel(dragonModel);
 		
 //		AbradedOpaque sphereLightMatl = new AbradedOpaque();
 //		RawModel sphereLight = new RawModel(new Sphere(-3.55f, -3.6f, -3.0f, 0.5f), sphereLightMatl);
@@ -167,7 +176,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
-		leftWallMatl.setAlbedo(0.9f, 0.2f, 0.2f);
+		leftWallMatl.setConstAlbedo(0.9f, 0.2f, 0.2f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		leftWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -177,7 +186,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque rightWallMatl = new AbradedOpaque();
 		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
-		rightWallMatl.setAlbedo(0.2f, 0.2f, 0.9f);
+		rightWallMatl.setConstAlbedo(0.2f, 0.2f, 0.9f);
 //		rightWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		rightWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		rightWallMatl.setRoughness(0.1f);
@@ -185,7 +194,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque backWallMatl = new AbradedOpaque();
 		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize - 10.0f, wallR), backWallMatl);
-		backWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		backWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
 //		backWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setRoughness(0.1f);
@@ -193,7 +202,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque groundWallMatl = new AbradedOpaque();
 		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
-		groundWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		groundWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
 //		groundWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setRoughness(0.8f);
@@ -201,7 +210,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
-		topWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		topWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		topWallMatl.setEmissivity(0.1f, 0.1f, 0.1f);
 		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
@@ -209,7 +218,7 @@ public class FiveBallsScene extends Scene
 		
 		AbradedOpaque frontWallMatl = new AbradedOpaque();
 		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + 5.5f, wallR), frontWallMatl);
-		frontWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		frontWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setRoughness(0.1f);
 		addModel(frontWall);

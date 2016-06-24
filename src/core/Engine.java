@@ -59,14 +59,14 @@ public class Engine
 //	private static final int FRAME_WIDTH_PX  = 800;
 //	private static final int FRAME_HEIGHT_PX = 500;
 	
-	private static final int FRAME_WIDTH_PX  = 400;
-	private static final int FRAME_HEIGHT_PX = 250;
+//	private static final int FRAME_WIDTH_PX  = 400;
+//	private static final int FRAME_HEIGHT_PX = 250;
 	
 //	private static final int FRAME_WIDTH_PX  = 120;
 //	private static final int FRAME_HEIGHT_PX = 75;
 	
-//	private static final int FRAME_WIDTH_PX  = 1280;
-//	private static final int FRAME_HEIGHT_PX = 800;
+	private static final int FRAME_WIDTH_PX  = 1280;
+	private static final int FRAME_HEIGHT_PX = 800;
 	
 	private PathTracer tracer;
 	private Window m_window;
@@ -84,9 +84,9 @@ public class Engine
 		init();
 		
 		
-		Texture texture = new Texture("./resource/texture/test.png", Sampler.NEAREST);
-		
-		Debug.exit();
+//		Texture texture = new Texture("./resource/texture/test.png", Sampler.NEAREST);
+//		
+//		Debug.exit();
 		
 		tracer = new PathTracer();
 		

@@ -179,4 +179,10 @@ public class Sphere extends AtomicPrimitive
 	{
 		return new SphereInterpolator(intersection.getHitPoint().sub(m_center).divLocal(m_radius));
 	}
+
+	@Override
+	public boolean hasTexCoord()
+	{
+		return false;
+	}
 }

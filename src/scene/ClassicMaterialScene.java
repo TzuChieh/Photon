@@ -114,7 +114,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
-		leftWallMatl.setAlbedo(1.0f, 0.0f, 0.0f);
+		leftWallMatl.setConstAlbedo(1.0f, 0.0f, 0.0f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		leftWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -124,7 +124,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque rightWallMatl = new AbradedOpaque();
 		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
-		rightWallMatl.setAlbedo(0.0f, 0.0f, 1.0f);
+		rightWallMatl.setConstAlbedo(0.0f, 0.0f, 1.0f);
 //		rightWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		rightWallMatl.setF0(1.0f, 1.0f, 1.0f);
 		rightWallMatl.setRoughness(0.2f);
@@ -132,7 +132,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque backWallMatl = new AbradedOpaque();
 		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize, wallR), backWallMatl);
-		backWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+		backWallMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
 //		backWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setRoughness(0.1f);
@@ -140,7 +140,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque groundWallMatl = new AbradedOpaque();
 		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
-		groundWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+		groundWallMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
 //		groundWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setRoughness(0.2f);
@@ -148,7 +148,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
-		topWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+		topWallMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
 //		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
@@ -156,7 +156,7 @@ public class ClassicMaterialScene extends Scene
 		
 		AbradedOpaque frontWallMatl = new AbradedOpaque();
 		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + halfSize, wallR), frontWallMatl);
-		frontWallMatl.setAlbedo(1.0f, 1.0f, 1.0f);
+		frontWallMatl.setConstAlbedo(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setRoughness(0.0f);
 		addModel(frontWall);

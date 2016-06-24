@@ -52,13 +52,13 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque sphereLightMatl = new AbradedOpaque();
 		RawModel sphereLight = new RawModel(new Sphere(-4.0f, -3.3f, -3.0f, 0.5f), sphereLightMatl);
-		sphereLightMatl.setAlbedo(0.8f, 1.0f, 0.8f);
+		sphereLightMatl.setConstAlbedo(0.8f, 1.0f, 0.8f);
 		sphereLightMatl.setEmissivity(10.0f, 20.0f, 10.0f);
 		addModel(sphereLight);
 		
 		AbradedOpaque sphereLightMatl2 = new AbradedOpaque();
 		RawModel sphereLight2 = new RawModel(new Sphere(-2.5f, -4.7f, -0.5f, 0.3f), sphereLightMatl2);
-		sphereLightMatl2.setAlbedo(0.8f, 1.0f, 0.8f);
+		sphereLightMatl2.setConstAlbedo(0.8f, 1.0f, 0.8f);
 		sphereLightMatl2.setEmissivity(20.0f, 20.0f, 20.0f);
 		addModel(sphereLight2);
 		
@@ -97,7 +97,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque leftWallMatl = new AbradedOpaque();
 		RawModel leftWall = new RawModel(new Sphere(-wallR - halfSize, 0.0f, 0.0f, wallR), leftWallMatl);
-		leftWallMatl.setAlbedo(0.9f, 0.2f, 0.2f);
+		leftWallMatl.setConstAlbedo(0.9f, 0.2f, 0.2f);
 //		leftWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		leftWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
 //		leftWallMatl.setF0(1.0f, 1.0f, 1.0f);
@@ -107,7 +107,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque rightWallMatl = new AbradedOpaque();
 		RawModel rightWall = new RawModel(new Sphere(wallR + halfSize, 0.0f, 0.0f, wallR), rightWallMatl);
-		rightWallMatl.setAlbedo(0.2f, 0.2f, 0.9f);
+		rightWallMatl.setConstAlbedo(0.2f, 0.2f, 0.9f);
 //		rightWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		rightWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		rightWallMatl.setRoughness(0.1f);
@@ -115,7 +115,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque backWallMatl = new AbradedOpaque();
 		RawModel backWall = new RawModel(new Sphere(0.0f, 0.0f, -wallR - halfSize - 10.0f, wallR), backWallMatl);
-		backWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		backWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		backWallMatl.setEmissivity(2.0f, 2.0f, 2.0f);
 //		backWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		backWallMatl.setRoughness(0.1f);
@@ -123,7 +123,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque groundWallMatl = new AbradedOpaque();
 		RawModel groundWall = new RawModel(new Sphere(0.0f, -wallR - halfSize, 0.0f, wallR), groundWallMatl);
-		groundWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		groundWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		groundWallMatl.setAlbedo(0.1f, 0.1f, 0.1f);
 //		groundWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		groundWallMatl.setRoughness(0.8f);
@@ -131,7 +131,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + halfSize, 0.0f, wallR), topWallMatl);
-		topWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		topWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
 		topWallMatl.setEmissivity(1.5f, 1.5f, 1.5f);
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);
@@ -139,7 +139,7 @@ public class LamborghiniScene extends Scene
 		
 		AbradedOpaque frontWallMatl = new AbradedOpaque();
 		RawModel frontWall = new RawModel(new Sphere(0.0f, 0.0f, wallR + 5.5f, wallR), frontWallMatl);
-		frontWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		frontWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		frontWallMatl.setF0(1.0f, 1.0f, 1.0f);
 //		frontWallMatl.setRoughness(0.1f);
 		addModel(frontWall);

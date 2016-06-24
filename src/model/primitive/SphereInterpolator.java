@@ -22,6 +22,7 @@
 
 package model.primitive;
 
+import math.Vector2f;
 import math.Vector3f;
 
 public class SphereInterpolator implements Interpolator
@@ -49,5 +50,11 @@ public class SphereInterpolator implements Interpolator
 	public Vector3f getSmoothColor()
 	{
 		return new Vector3f();
+	}
+
+	@Override
+	public Vector2f getSmoothTexCoord()
+	{
+		return new Vector2f();
 	}
 }
