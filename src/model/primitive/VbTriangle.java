@@ -27,12 +27,15 @@ import java.util.List;
 import core.Ray;
 import math.Matrix4f;
 import math.Vector3f;
+import model.VertexBuffer;
 import model.boundingVolume.AABB;
 import util.Debug;
 
 public class VbTriangle extends AtomicPrimitive
 {
 	private static final float EPSILON = 0.0001f;
+	
+	private VertexBuffer m_vertexBuffer;
 	
 	// vertex position
 	protected Vector3f m_vA;
@@ -500,5 +503,12 @@ public class VbTriangle extends AtomicPrimitive
 		float baryC = (hitPv*abPu - hitPu*abPv) * multiplier;
 		
 		return new VbTriangleInterpolator(this, 1.0f - baryB - baryC, baryB, baryC);
+	}
+
+	@Override
+	public boolean hasTexCoord()
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

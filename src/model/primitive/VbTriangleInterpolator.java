@@ -23,6 +23,7 @@
 package model.primitive;
 
 import math.Matrix4f;
+import math.Vector2f;
 import math.Vector3f;
 
 public class VbTriangleInterpolator implements Interpolator
@@ -70,5 +71,12 @@ public class VbTriangleInterpolator implements Interpolator
 	public Vector3f getSmoothColor()
 	{
 		return new Vector3f(0, 0, 0);
+	}
+
+	@Override
+	public Vector2f getSmoothTexCoord()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
