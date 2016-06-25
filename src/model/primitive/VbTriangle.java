@@ -30,7 +30,7 @@ import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
 
-public class Triangle extends AtomicPrimitive
+public class VbTriangle extends AtomicPrimitive
 {
 	private static final float EPSILON = 0.0001f;
 	
@@ -52,7 +52,7 @@ public class Triangle extends AtomicPrimitive
 	protected Vector3f m_normal;
 	
 	// front facing: CCW vertex order
-	public Triangle(Vector3f vA, Vector3f vB, Vector3f vC)
+	public VbTriangle(Vector3f vA, Vector3f vB, Vector3f vC)
 	{
 		super();
 		
@@ -499,6 +499,6 @@ public class Triangle extends AtomicPrimitive
 		// barycentric coordinate of vertex C in the projected plane
 		float baryC = (hitPv*abPu - hitPu*abPv) * multiplier;
 		
-		return new TriangleInterpolator(this, 1.0f - baryB - baryC, baryB, baryC);
+		return new VbTriangleInterpolator(this, 1.0f - baryB - baryC, baryB, baryC);
 	}
 }

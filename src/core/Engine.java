@@ -84,9 +84,9 @@ public class Engine
 		init();
 		
 		
-		Texture texture = new Texture("./resource/texture/test.png", Sampler.NEAREST);
-		
-		Debug.exit();
+//		Texture texture = new Texture("./resource/texture/test.png", Sampler.NEAREST);
+//		
+//		Debug.exit();
 		
 		tracer = new PathTracer();
 		
