@@ -22,6 +22,7 @@
 
 package model.primitive;
 
+import math.Vector2f;
 import math.Vector3f;
 
 public interface Interpolator
@@ -29,4 +30,5 @@ public interface Interpolator
 	public abstract Vector3f getFlatNormal();
 	public abstract Vector3f getSmoothNormal();
 	public abstract Vector3f getSmoothColor();
+	public abstract Vector2f getSmoothTexCoord();
 }

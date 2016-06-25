@@ -26,6 +26,7 @@ import java.util.List;
 
 import core.Ray;
 import math.Matrix4f;
+import math.Vector2f;
 import math.Vector3f;
 import model.boundingVolume.AABB;
 import util.Debug;
@@ -51,6 +52,13 @@ public class Triangle extends AtomicPrimitive
 	// surface normal
 	protected Vector3f m_normal;
 	
+	// texture coordinates
+	protected Vector2f m_txA;
+	protected Vector2f m_txB;
+	protected Vector2f m_txC;
+	
+	protected boolean m_hasTexCoord;
+	
 	// front facing: CCW vertex order
 	public Triangle(Vector3f vA, Vector3f vB, Vector3f vC)
 	{
@@ -68,6 +76,12 @@ public class Triangle extends AtomicPrimitive
 		m_nA = new Vector3f(m_normal);
 		m_nB = new Vector3f(m_normal);
 		m_nC = new Vector3f(m_normal);
+		
+		m_txA = new Vector2f();
+		m_txB = new Vector2f();
+		m_txC = new Vector2f();
+		
+		m_hasTexCoord = false;
 	}
 	
 	@Override
@@ -419,6 +433,15 @@ public class Triangle extends AtomicPrimitive
 		m_nC.set(nC);
 	}
 	
+	public void setTexCoords(Vector2f txA, Vector2f txB, Vector2f txC)
+	{
+		m_txA.set(txA);
+		m_txB.set(txB);
+		m_txC.set(txC);
+		
+		m_hasTexCoord = true;
+	}
+	
 	public Vector3f getNa()
 	{
 		return m_nA;
@@ -432,6 +455,21 @@ public class Triangle extends AtomicPrimitive
 	public Vector3f getNc()
 	{
 		return m_nC;
+	}
+	
+	public Vector2f getTxA()
+	{
+		return m_txA;
+	}
+	
+	public Vector2f getTxB()
+	{
+		return m_txB;
+	}
+	
+	public Vector2f getTxC()
+	{
+		return m_txC;
 	}
 
 	@Override
@@ -500,5 +538,11 @@ public class Triangle extends AtomicPrimitive
 		float baryC = (hitPv*abPu - hitPu*abPv) * multiplier;
 		
 		return new TriangleInterpolator(this, 1.0f - baryB - baryC, baryB, baryC);
+	}
+
+	@Override
+	public boolean hasTexCoord()
+	{
+		return m_hasTexCoord;
 	}
 }

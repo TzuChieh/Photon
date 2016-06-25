@@ -25,6 +25,7 @@ package image;
 import image.sampler.Sampler;
 import math.Vector2f;
 import math.Vector3f;
+import util.Debug;
 import util.Logger;
 
 public class Texture
@@ -41,14 +42,13 @@ public class Texture
 		try
 		{
 			m_imageResource = ImageManager.getImageLoader().load(fullFilename);
+			
+//			Debug.print(m_imageResource);
 		}
 		catch(ImageLoadingException e)
 		{
 			LOGGER.printWrn(e.getMessage());
 			LOGGER.printWrn("due to some problem, an EmptyImageResource is being used");
-		}
-		finally
-		{
 			m_imageResource = new EmptyImageResource();
 		}
 	}
@@ -65,6 +65,7 @@ public class Texture
 	
 	public int getWidthPx()
 	{
+//		Debug.print(m_imageResource);
 		return m_imageResource.getDimensions()[0];
 	}
 	

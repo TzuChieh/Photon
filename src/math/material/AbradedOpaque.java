@@ -23,9 +23,12 @@
 package math.material;
 
 import core.Ray;
+import image.Texture;
 import math.Rand;
 import math.Vector3f;
+import model.primitive.Interpolator;
 import model.primitive.Intersection;
+import util.Debug;
 import util.Func;
 
 public final class AbradedOpaque implements Material
@@ -44,8 +47,10 @@ public final class AbradedOpaque implements Material
 	private float    m_roughness;
 	private float    m_metalness;
 	private Vector3f m_f0;
-	private Vector3f m_albedo;
+	private Vector3f m_constAlbedo;
 	private Vector3f m_emissivity;
+	
+	private Texture m_textureAlbedo;
 	
 	public AbradedOpaque()
 	{
@@ -55,7 +60,7 @@ public final class AbradedOpaque implements Material
 		// around plastic
 		m_f0 = new Vector3f(0.04f, 0.04f, 0.04f);
 		
-		m_albedo = new Vector3f(0.0f, 0.0f, 0.0f);
+		m_constAlbedo = new Vector3f(0.0f, 0.0f, 0.0f);
 		m_emissivity = new Vector3f(0.0f, 0.0f, 0.0f);
 	}
 	
@@ -125,7 +130,9 @@ public final class AbradedOpaque implements Material
 		
 		Vector3f reflectance = new Vector3f(0.0f, 0.0f, 0.0f);
 		
-		Vector3f N = intersection.genInterpolator().getSmoothNormal();
+		Interpolator interpolator = intersection.genInterpolator();
+		
+		Vector3f N = interpolator.getSmoothNormal();
 //		Vector3f N = intersection.genInterpolator().getFlatNormal();
 		Vector3f V = ray.getDir().mul(-1.0f);
 		Vector3f H = genMicrofacetNormalIS(N, V);
@@ -173,7 +180,15 @@ public final class AbradedOpaque implements Material
 			// account for probability
 			diffuseReflectivity.divLocal(1.0f - reflectionProb);
 			
-			reflectance.set(diffuseReflectivity.mulLocal(m_albedo));
+			Vector3f albedo = new Vector3f(m_constAlbedo);
+			
+			if(m_textureAlbedo != null)
+			{
+//				Debug.print("LLL");
+				m_textureAlbedo.sample(interpolator.getSmoothTexCoord(), albedo);
+			}
+			
+			reflectance.set(diffuseReflectivity.mulLocal(albedo));
 		}
 		
 		float rrSurviveProb = Func.clamp(reflectance.avg(), 0.0f, 1.0f);
@@ -198,12 +213,12 @@ public final class AbradedOpaque implements Material
 	
 	public Vector3f getAlbedo()
 	{
-		return m_albedo;
+		return m_constAlbedo;
 	}
 	
-	public void setAlbedo(float r, float g, float b)
+	public void setConstAlbedo(float r, float g, float b)
 	{
-		m_albedo.set(r, g, b);
+		m_constAlbedo.set(r, g, b);
 	}
 	
 	public Vector3f getEmissivity()
@@ -244,5 +259,10 @@ public final class AbradedOpaque implements Material
 	public float getMetalness()
 	{
 		return m_metalness;
+	}
+	
+	public void setTextureAlbedo(Texture albedo)
+	{
+		m_textureAlbedo = albedo;
 	}
 }

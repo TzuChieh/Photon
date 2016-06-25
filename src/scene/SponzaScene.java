@@ -57,7 +57,7 @@ public class SponzaScene extends Scene
 		
 		AbradedOpaque topWallMatl = new AbradedOpaque();
 		RawModel topWall = new RawModel(new Sphere(0.0f, wallR + 50.0f, 0.0f, wallR), topWallMatl);
-		topWallMatl.setAlbedo(0.9f, 0.9f, 0.9f);
+		topWallMatl.setConstAlbedo(0.9f, 0.9f, 0.9f);
 //		topWallMatl.setEmissivity(0.5f, 0.5f, 0.5f);
 		topWallMatl.setEmissivity(4.0f, 4.0f, 4.0f);
 //		topWallMatl.setEmissivity(5.5f, 5.5f, 5.5f);

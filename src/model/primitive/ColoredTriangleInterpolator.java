@@ -23,6 +23,7 @@
 package model.primitive;
 
 import math.Matrix4f;
+import math.Vector2f;
 import math.Vector3f;
 
 public class ColoredTriangleInterpolator implements Interpolator
@@ -78,5 +79,18 @@ public class ColoredTriangleInterpolator implements Interpolator
 				                        cA.z * m_baryA + cB.z * m_baryB + cC.z * m_baryC);
 		
 		return smoothC;
+	}
+
+	@Override
+	public Vector2f getSmoothTexCoord()
+	{
+		Vector2f txA = m_coloredTriangle.getTxA();
+		Vector2f txB = m_coloredTriangle.getTxB();
+		Vector2f txC = m_coloredTriangle.getTxC();
+		
+		Vector2f smoothTx = new Vector2f(txA.x * m_baryA + txB.x * m_baryB + txC.x * m_baryC,
+				                         txA.y * m_baryA + txB.y * m_baryB + txC.y * m_baryC);
+		
+		return smoothTx;
 	}
 }

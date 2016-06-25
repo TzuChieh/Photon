@@ -38,6 +38,7 @@ import image.ImageResource;
 import image.ImageSavingException;
 import image.LdrRectImageResource;
 import math.Vector3f;
+import util.Debug;
 import util.IOUtil;
 
 public class IntrinsicImageLoader implements ImageLoader
